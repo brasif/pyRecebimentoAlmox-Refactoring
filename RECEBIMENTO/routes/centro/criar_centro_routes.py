@@ -31,7 +31,7 @@ def criar_centro():
     
     if form.validate_on_submit():
         try:
-            # Cria uma nova instância de Centro usando o método cadastro_centro
+            # Cria uma nova instância de Centro usando o método criar_centro
             novo_centro = Centro.criar_centro(form)
             db.session.add(novo_centro)
             db.session.commit()
