@@ -1,8 +1,8 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.forms import CentroForm
-from RECEBIMENTO.models import Centro
+from RECEBIMENTO.models import Centro, Filiais
 from flask_login import login_required
 from . import centro_bp
 
@@ -14,6 +14,24 @@ def editar_centro(id_centro):
     centro = Centro.query.get_or_404(id_centro)
     form = CentroForm(obj=centro)
 
+    try:
+        if not Filiais:
+            flash("Nenhuma filial encontrada. Por favor, abra um chamado para a T.I. para que o problema possa ser solucionado.", "danger")
+            form.filial.choices = []
+        else:
+            form.filial.choices = [("", "Selecione uma filial")] + [(filial.name, filial.value) for filial in Filiais]
+            if request.method == 'GET':
+                form.filial.data = centro.filial.name
+            
+    except SQLAlchemyError as e:
+        flash(f"Erro ao acessar o banco de dados ao carregar as empresas: {str(e)}", "danger")
+        form.filial.choices = []
+        
+    except Exception as e:
+        flash(f"Erro inesperado ao carregar as opções: {str(e)}", "danger")
+        form.filial.choices = []
+    
+    
     if form.validate_on_submit():
         try:
             # Atualiza os dados do centro

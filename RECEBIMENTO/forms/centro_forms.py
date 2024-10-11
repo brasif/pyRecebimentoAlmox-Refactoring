@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Length, Regexp
-from RECEBIMENTO.models import Filiais
 
 class CentroForm(FlaskForm):
     # Nome do centro
@@ -11,9 +10,9 @@ class CentroForm(FlaskForm):
         Regexp('^\d{1,4}$', message="O nome do centro deve ser um número inteiro.")
     ])
     
-    # Filial
-    filial = SelectField('Filial', choices=[(filial.name, filial.value) for filial in Filiais], validators=[
-        DataRequired(message="A filial é obrigatória.")
+    # Campo para selecionar o a filial
+    filial = SelectField('Filial', choices=[], validators=[
+        DataRequired(message="Por favor, selecione uma filial.")
     ])
     
     submit = SubmitField('Salvar')

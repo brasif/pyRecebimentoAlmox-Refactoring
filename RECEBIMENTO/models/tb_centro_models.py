@@ -32,7 +32,7 @@ class Centro(db.Model):
         # Verifica se o centro já existe e é diferente do atual
         centro_existente = Centro.query.filter_by(nome_centro=form.nome_centro.data).first()
 
-        if centro_existente and centro_existente.id_marca != self.id_marca:
+        if centro_existente and centro_existente.id_centro != self.id_centro:
             raise ValueError(f"O nome do centro '{form.nome_centro.data}' já está em uso por outro registro.")
 
         # Atualiza os atributos da instância com os dados do formulário

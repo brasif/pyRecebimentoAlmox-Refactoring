@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap');
 
-
 * {
     font-family: 'Exo 2', sans-serif;
     margin: 0;
@@ -56,23 +55,42 @@ button[type=submit]:hover {
     font-size: 1.1rem;
 }
 
+.form-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 80%;
+    flex-direction: row;
+    padding: 1rem;
+}
+
 .form-group {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     width: 50%;
     flex-direction: column;
+    margin: 0 auto;
+}
+
+.form-line .form-group .a_menu, .button_menu {
+    width: 80%;
+    height: 3.5rem;
+    text-transform: uppercase;
 }
 
 .form-group label {
-    display: flex;
-    align-items: left;
     font-size: 1.2rem;
+    align-self: flex-start;
 }
 
 .form-group input[type='text'], input[type='number'], input[type='password'] {
-    display: flex;
-    text-align: left;
     height: 3rem;
     font-size: 1.3rem;
+    width: 100%;
+    text-align: left;
 }
 
 .container-home {
@@ -95,14 +113,4 @@ button[type=submit]:hover {
     text-align: center;
     flex-direction: column;
     gap: .5rem;
-}
-
-#go-back {
-    text-transform: uppercase;
-    width: 50%;
-    transition: font-size .3s ease;
-}
-
-#go-back:hover {
-    font-size: 1.1rem;
 }
