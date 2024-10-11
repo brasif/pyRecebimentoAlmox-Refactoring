@@ -41,3 +41,10 @@ class Responsavel(db.Model):
     def get_id(self):
         # Retorna o ID do usuário
         return str(self.id_responsavel)
+    
+    def atualizacao_responsavel(self, form):
+        # Atualiza os atributos da instância com os dados do formulário
+        self.permissao = form.permissao.data
+        self.status = form.status.data
+
+        return self

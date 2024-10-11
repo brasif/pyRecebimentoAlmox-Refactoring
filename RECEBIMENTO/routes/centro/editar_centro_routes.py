@@ -35,7 +35,7 @@ def editar_centro(id_centro):
     if form.validate_on_submit():
         try:
             # Atualiza os dados do centro
-            centro.atualizacao_centro(form)
+            Centro.atualizacao_centro(centro, form)
             db.session.commit()
 
             flash('Centro atualizado com sucesso!', 'success')

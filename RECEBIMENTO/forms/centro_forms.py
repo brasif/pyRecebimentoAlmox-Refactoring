@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Length, Regexp
 
+
 class CentroForm(FlaskForm):
     # Nome do centro
     nome_centro = StringField('Nome do Centro (número)', validators=[
