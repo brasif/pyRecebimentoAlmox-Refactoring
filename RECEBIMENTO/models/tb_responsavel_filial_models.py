@@ -17,3 +17,29 @@ class ResponsavelFilial(db.Model):
 
     def __repr__(self):
         return f"<ResponsavelFilial - Responsavel: {self.id_responsavel} - Filial: {self.filial}>"
+
+
+    @classmethod
+    def criar_responsavel_filial(cls, form):
+        # Verifica se o responsável já existe para a combinação de responsável e filial
+        if cls.query.filter_by(id_responsavel=form.id_responsavel.data, filial=form.filial.data).first():
+            raise ValueError("Já existe um responsável cadastrado para esta filial com os dados fornecidos. Por favor, verifique e tente novamente.")
+        
+        # Cria e retorna uma nova instância de Responsável
+        return cls(
+            id_responsavel=form.id_responsavel.data,
+            filial=form.filial.data
+        )
+    
+    def atualizacao_responsavel_filial(self, form):
+        # Verifica se o responsável já existe para a combinação de responsável e filial, exceto para o responsável atual
+        responsavel_filial_existente = ResponsavelFilial.query.filter_by(id_responsavel=form.id_responsavel.data, filial=form.filial.data).first()
+
+        if responsavel_filial_existente and responsavel_filial_existente.id_responsavel_filial != self.id_responsavel_filial:
+            raise ValueError("Já existe um responsável cadastrado para esta filial com os dados fornecidos. Por favor, verifique e tente novamente.")
+
+        # Atualiza os atributos da instância com os dados do formulário
+        self.id_responsavel = form.id_responsavel.data
+        self.filial = form.filial.data
+
+        return self
