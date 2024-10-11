@@ -37,7 +37,7 @@ def criar_centro():
             db.session.commit()
 
             flash('Centro criado com sucesso!', 'success')
-            return redirect(url_for('menu.menu'))
+            return redirect(url_for('tabela.tabela_centros'))
 
         except ValueError as ve:
             db.session.rollback()

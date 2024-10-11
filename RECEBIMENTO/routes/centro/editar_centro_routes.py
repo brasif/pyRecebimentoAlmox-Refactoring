@@ -39,7 +39,7 @@ def editar_centro(id_centro):
             db.session.commit()
 
             flash('Centro atualizado com sucesso!', 'success')
-            return redirect(url_for('menu.menu'))
+            return redirect(url_for('tabela.tabela_centros'))
         
         except ValueError as ve:
             db.session.rollback()
