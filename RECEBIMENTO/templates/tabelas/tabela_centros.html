@@ -36,9 +36,9 @@
                     <td>{{ centro.nome_centro }}</td>
                     <td>{{ centro.filial.value }}</td>
                     <td>
-                        <a href="{{ url_for('centro.editar_centro', id_centro=centro.id_centro) }}">
-                            Editar
-                        </a>
+                        <form method="GET" action="{{ url_for('centro.editar_centro', id_centro=centro.id_centro) }}">
+                            <input type="submit" value="Editar" class="btn btn-warning">
+                        </form>
                     </td>
                 </tr>
                 {% endfor %}

@@ -40,9 +40,9 @@
                     <td>{{ 'Administrador' if responsavel.permissao else 'Usuário' }}</td>
                     <td>{{ 'Ativo' if responsavel.status else 'Inativo' }}</td>
                     <td>
-                        <a href="{{ url_for('responsavel.editar_responsavel', id_responsavel=responsavel.id_responsavel) }}">
-                            Editar
-                        </a>
+                        <form method="GET" action="{{ url_for('responsavel.editar_responsavel', id_responsavel=responsavel.id_responsavel) }}">
+                            <input type="submit" value="Editar" class="btn btn-warning">
+                        </form>
                     </td>
                 </tr>
                 {% endfor %}
