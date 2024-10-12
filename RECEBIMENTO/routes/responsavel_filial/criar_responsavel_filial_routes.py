@@ -29,10 +29,12 @@ def criar_responsavel_filial():
         
     except SQLAlchemyError as e:
         flash(f"Erro ao acessar o banco de dados ao carregar as empresas: {str(e)}", "danger")
+        form.id_responsavel.choices = []
         form.filial.choices = []
         
     except Exception as e:
         flash(f"Erro inesperado ao carregar as opções: {str(e)}", "danger")
+        form.id_responsavel.choices = []
         form.filial.choices = []
     
     
