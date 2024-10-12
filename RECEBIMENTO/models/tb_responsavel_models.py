@@ -22,7 +22,7 @@ class Responsavel(db.Model):
     def __repr__(self):
         return f"<Responsavel {self.nome_responsavel} - Email: {self.email}>"
     
-    # Métodos exigidos pelo Flask-Login
+    # Propriedades exigidas pelo Flask-Login
     @property
     def is_active(self):
         # Verifica se o usuário está ativo
