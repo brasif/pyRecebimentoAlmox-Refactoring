@@ -42,7 +42,7 @@ CREATE TABLE tb_nota_fiscal (
     codigo_cte VARCHAR(20) NOT NULL,
     volumes INT CHECK (volumes >= 0 AND volumes <= 999),
     filial enum_filiais NOT NULL,
-    nome_centro VARCHAR(4) NOT NULL,
+    nome_centro VARCHAR(4) NOT NULL, -- Referência ao centro como texto, não mais uma FK
     data_vinculacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_alteracao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -70,7 +70,7 @@ CREATE INDEX idx_registro_responsavel ON tb_registro(id_responsavel);
 CREATE INDEX idx_nota_fiscal_filial ON tb_nota_fiscal(filial);
 
 -- Ver notas fiscais por empresa (filial)
-CREATE INDEX idx_nota_fiscal_centro ON tb_nota_fiscal(id_centro);
+CREATE INDEX idx_nota_fiscal_centro ON tb_nota_fiscal(nome_centro);
 
 -- Ver notas fiscais por responsável (associado por registros)
 CREATE INDEX idx_nota_fiscal_responsavel ON tb_registro(id_responsavel);
