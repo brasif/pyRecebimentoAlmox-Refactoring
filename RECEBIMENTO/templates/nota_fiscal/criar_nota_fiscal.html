@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% set title = "Cadastrar Nota Fiscal" %}
+
+{% block content %}
+<div class="container">
+    <div class="container-home">
+
+        <h1 class="text-center">Cadastrar Nota Fiscal</h1>
+
+        <!-- Seção para exibir mensagens flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('nota_fiscal.criar_nota_fiscal') }}">
+
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.chave_acesso.label(class="form-label") }}
+                {{ form.chave_acesso(class="form-control", placeholder="Informe a chave de acesso") }}
+                {% for error in form.chave_acesso.errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">{{ error }}<button
+                        type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.codigo_cte.label(class="form-label") }}
+                {{ form.codigo_cte(class="form-control", placeholder="Informe a o código CTE") }}
+                {% for error in form.codigo_cte.errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">{{ error }}<button
+                        type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.volumes.label(class="form-label") }}
+                {{ form.volumes(class="form-control", placeholder="Informe a quantidade de volumes") }}
+                {% for error in form.volumes.errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">{{ error }}<button
+                        type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.filial.label(class="form-label") }}
+                {{ form.filial(class="form-control", id="filial-select", placeholder="Seleciona uma filial") }}
+                {% for error in form.filial.errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">{{ error }}<button
+                        type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.nome_centro.label(class="form-label") }}
+                {{ form.nome_centro(class="form-control", placeholder="Seleciona um centro", id="centro-select", disabled=True) }}
+                {% for error in form.nome_centro.errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">{{ error }}<button
+                        type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Inclusão do arquivo JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/criar_nota_fiscal.js') }}"></script>
+
+{% endblock %}

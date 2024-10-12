@@ -10,3 +10,4 @@ class Filiais(Enum):
     BRASILIA = "Brasília"
     GOIANIA = "Goiânia"
     CURITIBA = "Curitiba"
+    ESPIRITO_SANTO = "Espírito Santo"

@@ -12,7 +12,7 @@ class NotaFiscal(db.Model):
     volumes = db.Column(db.Integer, nullable=False)
     filial = db.Column(db.Enum(Filiais), nullable=False)
     nome_centro = db.Column(db.String(4), nullable=False)
-    data_vinculacao = db.Column(db.DateTime, default=datetime.utcnow)
+    data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
     data_alteracao = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relacionamentos
