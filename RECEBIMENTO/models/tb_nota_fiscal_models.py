@@ -13,7 +13,7 @@ class NotaFiscal(db.Model):
     codigo_cte = db.Column(db.String(20), nullable=False)
     volumes = db.Column(db.Integer, nullable=False)
     filial = db.Column(db.Enum(Filiais), nullable=False)
-    id_centro = db.Column(db.Integer, db.ForeignKey('tb_centro.id_centro'), nullable=False)
+    nome_centro = db.Column(db.String(4), nullable=False)
     data_vinculacao = db.Column(db.DateTime, default=datetime.utcnow)
     data_alteracao = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

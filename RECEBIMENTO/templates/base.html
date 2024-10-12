@@ -24,7 +24,6 @@
                             aria-haspopup="true" aria-expanded="false">Tabelas</a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ url_for('tabela.tabela_responsaveis') }}">Responsáveis</a>
-                            <a class="dropdown-item" href="{{ url_for('tabela.tabela_centros') }}">Centros</a>
                             <a class="dropdown-item" href="{{ url_for('tabela.tabela_responsaveis_filial') }}">Responsáveis por filial</a>
                         </div>
                     </li>
@@ -34,7 +33,6 @@
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">Cadastrar</a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url_for('centro.criar_centro') }}">Cadastrar Centro</a>
                             <a class="dropdown-item" href="{{ url_for('responsavel_filial.criar_responsavel_filial') }}">Vinculo responsável x filial</a>
                         </div>
                     </li>

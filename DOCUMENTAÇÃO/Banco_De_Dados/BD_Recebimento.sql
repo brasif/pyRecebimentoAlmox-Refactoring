@@ -11,15 +11,6 @@ CREATE TYPE enum_filiais AS ENUM (
     'Curitiba'
 );
 
--- Tabela tb_centro
-CREATE TABLE tb_centro (
-    id_centro SERIAL PRIMARY KEY,
-    nome_centro VARCHAR(4) UNIQUE NOT NULL,
-    filial enum_filiais NOT NULL,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    data_alteracao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
 -- Tabela tb_responsavel
 CREATE TABLE tb_responsavel (
     id_responsavel SERIAL PRIMARY KEY,
@@ -51,7 +42,7 @@ CREATE TABLE tb_nota_fiscal (
     codigo_cte VARCHAR(20) NOT NULL,
     volumes INT CHECK (volumes >= 0 AND volumes <= 999),
     filial enum_filiais NOT NULL,
-    id_centro INT REFERENCES tb_centro(id_centro),
+    nome_centro VARCHAR(4) NOT NULL,
     data_vinculacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_alteracao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
