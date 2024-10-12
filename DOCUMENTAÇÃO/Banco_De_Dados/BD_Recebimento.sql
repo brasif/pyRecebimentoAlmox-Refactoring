@@ -37,7 +37,7 @@ CREATE TABLE tb_responsavel_filial (
 CREATE TABLE tb_nota_fiscal (
     id_nota_fiscal SERIAL PRIMARY KEY,
     chave_acesso VARCHAR(44) UNIQUE NOT NULL,
-    codigo_cte VARCHAR(20) NOT NULL,
+    codigo_cte VARCHAR(20),
     volumes INT CHECK (volumes >= 0 AND volumes <= 999),
     filial enum_filiais NOT NULL,
     nome_centro VARCHAR(4) NOT NULL, -- Referência ao centro como texto, não mais uma FK
