@@ -8,7 +8,7 @@ class NotaFiscal(db.Model):
     
     id_nota_fiscal = db.Column(db.Integer, primary_key=True)
     chave_acesso = db.Column(db.String(44), unique=True, nullable=False)
-    codigo_cte = db.Column(db.String(20), nullable=False)
+    codigo_cte = db.Column(db.String(20), nullable=True)
     volumes = db.Column(db.Integer, nullable=False)
     filial = db.Column(db.Enum(Filiais), nullable=False)
     nome_centro = db.Column(db.String(4), nullable=False)
@@ -17,6 +17,6 @@ class NotaFiscal(db.Model):
 
     # Relacionamentos
     registros = db.relationship('Registro', back_populates='nota_fiscal')
-
+    
     def __repr__(self):
         return f"<NotaFiscal {self.chave_acesso} - Filial: {self.filial} - Centro: {self.id_centro}>"
