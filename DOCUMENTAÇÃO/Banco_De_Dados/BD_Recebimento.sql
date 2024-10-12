@@ -37,8 +37,6 @@ CREATE TABLE tb_responsavel_filial (
 CREATE TABLE tb_nota_fiscal (
     id_nota_fiscal SERIAL PRIMARY KEY,
     chave_acesso VARCHAR(44) UNIQUE NOT NULL,
-    CNPJ VARCHAR(14) NOT NULL,
-    numero_nfe VARCHAR(6) NOT NULL,
     codigo_cte VARCHAR(20) NOT NULL,
     volumes INT CHECK (volumes >= 0 AND volumes <= 999),
     filial enum_filiais NOT NULL,
