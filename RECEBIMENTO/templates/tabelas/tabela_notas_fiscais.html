@@ -26,8 +26,10 @@
             <thead>
                 <tr>
                     <th>Chave de acesso</th>
-                    <th>Código CTE</th>
+                    <th>Nota Fiscal</th>
                     <th>Volumes</th>
+                    <th>Código CTE</th>
+                    <th>CNPJ</th>
                     <th>Filial</th>
                     <th>Centro</th>
                 </tr>
@@ -36,14 +38,17 @@
                 {% for nota_fiscal in notas_fiscais.items %}
                 <tr>
                     <td>{{ nota_fiscal.chave_acesso }}</td>
-                    <td>{{ nota_fiscal.codigo_cte }}</td>
+                    <td>{{ nota_fiscal.numero_nf }}</td>
                     <td>{{ nota_fiscal.volumes }}</td>
+                    <td>{{ nota_fiscal.codigo_cte }}</td>
+                    <td>{{ nota_fiscal.cnpj }}</td>
                     <td>{{ nota_fiscal.filial.value }}</td>
                     <td>{{ nota_fiscal.nome_centro }}</td>
                 </tr>
                 {% endfor %}
             </tbody>            
         </table>
+        
     </div>
 
     <nav aria-label="Page navigation example">

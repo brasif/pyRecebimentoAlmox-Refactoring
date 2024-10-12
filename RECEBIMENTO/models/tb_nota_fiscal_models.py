@@ -20,8 +20,19 @@ class NotaFiscal(db.Model):
     
     def __repr__(self):
         return f"<NotaFiscal {self.chave_acesso} - Filial: {self.filial} - Centro: {self.id_centro}>"
+    
+    
+    @property
+    # Propriedade para extrair CNPJ a partir da chave de acesso
+    def cnpj(self):
+        return self.chave_acesso[6:20]
 
+    @property
+    # Propriedade para extrair o número da NF a partir da chave de acesso
+    def numero_nf(self):
+        return self.chave_acesso[25:34]
 
+    
     @classmethod
     def criar_nota_fiscal(cls, form):
         # Verifica se a chave de acesso já existe
