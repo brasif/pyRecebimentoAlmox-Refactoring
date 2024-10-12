@@ -41,7 +41,7 @@ CREATE TABLE tb_nota_fiscal (
     volumes INT CHECK (volumes >= 0 AND volumes <= 999),
     filial enum_filiais NOT NULL,
     nome_centro VARCHAR(4) NOT NULL, -- Referência ao centro como texto, não mais uma FK
-    data_vinculacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     data_alteracao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
