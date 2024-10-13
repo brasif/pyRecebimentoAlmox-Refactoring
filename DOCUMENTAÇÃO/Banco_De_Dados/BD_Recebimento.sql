@@ -53,6 +53,8 @@ CREATE TABLE tb_registro (
     status_registro VARCHAR(50) NOT NULL,
     data_guarda TIMESTAMP,
     prioridade BOOLEAN DEFAULT FALSE,
+    avaria BOOLEAN DEFAULT FALSE,
+    recusa BOOLEAN DEFAULT FALSE,
     id_responsavel INT REFERENCES tb_responsavel(id_responsavel),
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
