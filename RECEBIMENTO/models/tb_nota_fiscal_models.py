@@ -29,6 +29,7 @@ class NotaFiscal(db.Model):
         return str(self.chave_acesso[6:20])
 
     @property
+    # Propriedade para extrair o número da NF da chave de acesso
     def numero_nf(self):
         return self.chave_acesso[27:27+7]
 
