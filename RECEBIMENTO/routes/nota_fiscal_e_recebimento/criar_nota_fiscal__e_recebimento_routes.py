@@ -1,17 +1,17 @@
 from flask import render_template, redirect, url_for, flash
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
-from RECEBIMENTO.forms import NotaFiscalForm
-from RECEBIMENTO.models import NotaFiscal, Filiais, CENTROS_POR_FILIAL
-from flask_login import login_required
+from RECEBIMENTO.forms import NotaFiscalRecebimentoForm
+from RECEBIMENTO.models import NotaFiscal, Filiais, CENTROS_POR_FILIAL, Registro
+from RECEBIMENTO.utils import definicao_status_recebimento
+from flask_login import login_required, current_user
 from . import nota_fiscal_bp
 
 
-# Rota para criar nota fiscal e registrar recebimento
-@nota_fiscal_bp.route('/cadastro', methods=['GET', 'POST'])
+@nota_fiscal_bp.route('/recebimento/cadastro', methods=['GET', 'POST'])
 @login_required
 def criar_nota_fiscal():
-    form = NotaFiscalForm()
+    form = NotaFiscalRecebimentoForm()
     
     try:
         if not Filiais:
@@ -22,7 +22,7 @@ def criar_nota_fiscal():
 
         centros = [centro for centros in CENTROS_POR_FILIAL.values() for centro in centros]
         if not centros:
-            form.centro.choices = [("", "Selecione um centro")]
+            form.nome_centro.choices = [("", "Selecione um centro")]
         else:
             form.nome_centro.choices = [("", "Selecione um centro")] + [(centro, centro) for centro in centros]
 
@@ -36,15 +36,25 @@ def criar_nota_fiscal():
         form.nome_centro.choices = []
         form.filial.choices = []
     
-    
     if form.validate_on_submit():
         try:
-            # Cria uma nova instância de NotaFiscal usando o método criar_nota_fiscal
+            # Inicia uma nova transação manualmente
             nova_nota_fiscal = NotaFiscal.criar_nota_fiscal(form)
             db.session.add(nova_nota_fiscal)
+            db.session.flush()  # Envia as mudanças para o banco para gerar o ID
+            
+            # Acessa o ID da nova nota fiscal corretamente
+            id_nota_fiscal = nova_nota_fiscal.id_nota_fiscal
+            
+            # Cria uma nova instância de Registro
+            status = definicao_status_recebimento(form.recusa.data, form.avaria.data)
+            recebimento = Registro.criar_registro(form, id_nota_fiscal, current_user.id_responsavel, status)
+            db.session.add(recebimento)
+
+            # Comita as alterações
             db.session.commit()
 
-            flash('Nota fiscal criada com sucesso!', 'success')
+            flash('Registro criado com sucesso!', 'success')
             return redirect(url_for('tabela.tabela_notas_fiscais'))
 
         except ValueError as ve:
@@ -58,5 +68,11 @@ def criar_nota_fiscal():
         except Exception as e:
             db.session.rollback()
             flash(f"Erro inesperado: {str(e)}", "danger")
+    
+    # Se houver erros de validação no formulário
+    elif form.errors:
+        for campo, erros in form.errors.items():
+            for erro in erros:
+                flash(f'{campo.upper()} ERRO: {erro}', 'warning')
 
-    return render_template('/nota_fiscal/criar_nota_fiscal.html', form=form)
+    return render_template('/nota_fiscal_e_recebimento/criar_nota_fiscal_e_recebimento.html', form=form)

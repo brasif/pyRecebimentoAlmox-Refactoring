@@ -3,7 +3,7 @@ from wtforms import StringField, IntegerField, SelectField, SubmitField, Boolean
 from wtforms.validators import DataRequired, Length, Regexp, NumberRange
 
 
-class NotaFiscalForm(FlaskForm):
+class NotaFiscalRecebimentoForm(FlaskForm):
     # Chave de acesso
     chave_acesso = StringField("Chave de acesso", validators=[
         DataRequired(message="A chave de acesso é obrigatória."),
@@ -32,5 +32,14 @@ class NotaFiscalForm(FlaskForm):
     nome_centro = SelectField('Centro', choices=[], validators=[
         DataRequired(message="Por favor, selecione um centro.")
     ])
-    
+
+    # Prioridade (Sim/Não)
+    prioridade = BooleanField("Prioridade", default=False)
+
+    # Avaria (Sim/Não)
+    avaria = BooleanField("Avaria", default=False)
+
+    # Recusa (Sim/Não)
+    recusa = BooleanField("Recusa", default=False)
+
     submit = SubmitField('Salvar')

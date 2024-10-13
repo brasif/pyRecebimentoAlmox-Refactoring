@@ -23,5 +23,6 @@ def get_centros():
 
     except KeyError:
         return jsonify({"error": "Filial não encontrada."}), 404
+    
     except Exception as e:
         return jsonify({"error": f"Erro ao buscar centros: {str(e)}"}), 500

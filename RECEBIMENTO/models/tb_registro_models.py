@@ -25,20 +25,25 @@ class Registro(db.Model):
 
 
     @classmethod
-    def criar_registro(cls, id_responsavel, form):
+    def criar_registro(cls, form, id_nota_fiscal, id_responsavel, status):
         # Verifica se a nota fiscal tem algum registro
-        if not cls.query.filter_by(id_nota_fiscal=form.id_nota_fiscal.data).first():
-            data_recebimento = datetime.utcnow
+        registro = cls.query.filter_by(id_nota_fiscal=id_nota_fiscal).first()
+        if registro:
+            data_recebimento = registro.data_recebimento
+        else:
+            data_recebimento = datetime.utcnow()
 
         # Verifica se o status é igual a "NF finalizada"
-        if form.status_registro.data == "NF finalizada":
-            data_guarda = datetime.utcnow
+        if status == "NF finalizada":
+            data_guarda = datetime.utcnow()
+        else:
+            data_guarda = None
 
         # Cria e retorna uma nova instância de registro
         return cls(
-            id_nota_fiscal=form.id_nota_fiscal.data,
+            id_nota_fiscal=id_nota_fiscal,
             data_recebimento=data_recebimento,
-            status_registro=form.status_registro.data,
+            status_registro=status,
             data_guarda=data_guarda,
             prioridade=form.prioridade.data,
             avaria=form.avaria.data,
