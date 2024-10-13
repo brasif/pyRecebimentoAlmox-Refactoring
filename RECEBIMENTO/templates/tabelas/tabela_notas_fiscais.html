@@ -32,6 +32,7 @@
                     <th>CNPJ</th>
                     <th>Filial</th>
                     <th>Centro</th>
+                    <th>Editar</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,6 +45,11 @@
                     <td>{{ nota_fiscal.cnpj }}</td>
                     <td>{{ nota_fiscal.filial.value }}</td>
                     <td>{{ nota_fiscal.nome_centro }}</td>
+                    <td>
+                        <form method="GET" action="{{ url_for('nota_fiscal.editar_nota_fiscal', id_nota_fiscal=nota_fiscal.id_nota_fiscal) }}">
+                            <input type="submit" value="Editar" class="btn btn-warning">
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>            

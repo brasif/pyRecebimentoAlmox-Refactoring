@@ -33,4 +33,4 @@ class NotaFiscalForm(FlaskForm):
         DataRequired(message="Por favor, selecione um centro.")
     ])
     
-    submit = SubmitField('Vincular')
+    submit = SubmitField('Salvar')

@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% set title = "Cadastrar Nota Fiscal" %}
+{% set title = "Editar Nota Fiscal" %}
 
 {% block content %}
 <div class="container">
     <div class="container-home">
 
-        <h1 class="text-center">Cadastrar Nota Fiscal</h1>
+        <h1 class="text-center">Editar Nota Fiscal</h1>
 
         <!-- Seção para exibir mensagens flash -->
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -22,7 +22,7 @@
         {% endif %}
         {% endwith %}
 
-        <form method="POST" action="{{ url_for('nota_fiscal.criar_nota_fiscal') }}">
+        <form method="POST" action="{{ url_for('nota_fiscal.editar_nota_fiscal', id_nota_fiscal=nota_fiscal.id_nota_fiscal) }}">
 
             {{ form.hidden_tag() }}
 
@@ -72,7 +72,7 @@
 
             <div class="form-group">
                 {{ form.nome_centro.label(class="form-label") }}
-                {{ form.nome_centro(class="form-control", placeholder="Seleciona um centro", id="centro-select", disabled=True) }}
+                {{ form.nome_centro(class="form-control", placeholder="Seleciona um centro", id="centro-select") }}
                 {% for error in form.nome_centro.errors %}
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">{{ error }}<button
                         type="button" class="close" data-dismiss="alert" aria-label="Close"><span
