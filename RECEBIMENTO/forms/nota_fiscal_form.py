@@ -7,8 +7,8 @@ class NotaFiscalForm(FlaskForm):
     # Chave de acesso
     chave_acesso = StringField("Chave de acesso", validators=[
         DataRequired(message="A chave de acesso é obrigatória."),
-        Length(min=42, max=44),
-        Regexp(r'^\d{42,44}$', message="A chave de acesso deve ser composta apenas por números. (máximo 44 dígitos)")
+        Length(min=44, max=44),
+        Regexp(r'^\d{44,44}$', message="A chave de acesso deve ser composta apenas por números. (máximo 44 dígitos)")
     ])
 
     # Código CTE

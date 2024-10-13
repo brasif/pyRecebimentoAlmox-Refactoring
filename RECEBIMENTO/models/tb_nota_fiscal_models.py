@@ -1,6 +1,7 @@
 from RECEBIMENTO import db
 from datetime import datetime
 from .enum_filiais import Filiais
+import re
 
 
 class NotaFiscal(db.Model):
@@ -25,14 +26,13 @@ class NotaFiscal(db.Model):
     @property
     # Propriedade para extrair CNPJ a partir da chave de acesso
     def cnpj(self):
-        return self.chave_acesso[6:20]
+        return str(self.chave_acesso[6:20])
 
     @property
-    # Propriedade para extrair o número da NF a partir da chave de acesso
     def numero_nf(self):
-        return self.chave_acesso[25:34]
+        return self.chave_acesso[27:27+7]
 
-    
+
     @classmethod
     def criar_nota_fiscal(cls, form):
         # Verifica se a chave de acesso já existe
