@@ -9,7 +9,7 @@ class NotaFiscal(db.Model):
     
     id_nota_fiscal = db.Column(db.Integer, primary_key=True)
     chave_acesso = db.Column(db.String(44), unique=True, nullable=False)
-    codigo_cte = db.Column(db.String(20), nullable=True)
+    codigo_cte = db.Column(db.String(20))
     volumes = db.Column(db.Integer, nullable=False)
     filial = db.Column(db.Enum(Filiais), nullable=False)
     nome_centro = db.Column(db.String(4), nullable=False)
