@@ -11,6 +11,8 @@ class Registro(db.Model):
     status_registro = db.Column(db.String(50), nullable=False)
     data_guarda = db.Column(db.DateTime)
     prioridade = db.Column(db.Boolean, default=False)
+    avaria = db.Column(db.Boolean, default=False)
+    recusa = db.Column(db.Boolean, default=False)
     id_responsavel = db.Column(db.Integer, db.ForeignKey('tb_responsavel.id_responsavel'), nullable=False)
     data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
 
