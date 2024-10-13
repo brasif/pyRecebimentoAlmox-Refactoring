@@ -55,6 +55,18 @@ button[type=submit]:hover {
     font-size: 1.1rem;
 }
 
+th, td {
+    text-align: center;
+    align-items: center;
+    white-space: nowrap;
+}
+
+td.descricao {
+    white-space: normal;
+    word-break: break-word;
+    text-align: left;
+}
+
 .form-line {
     display: flex;
     align-items: center;

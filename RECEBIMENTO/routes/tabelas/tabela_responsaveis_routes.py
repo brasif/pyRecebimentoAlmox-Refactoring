@@ -1,6 +1,6 @@
 from flask import render_template, request
 from RECEBIMENTO import db
-from flask_login import login_required
+from flask_login import login_required, current_user
 from RECEBIMENTO.models import Responsavel
 from sqlalchemy import desc
 from . import tabela_bp
@@ -18,4 +18,4 @@ def tabela_responsaveis():
         .order_by(desc(Responsavel.data_alteracao))\
         .paginate(page=page, per_page=per_page, error_out=False)
     
-    return render_template('/tabelas/tabela_responsaveis.html', responsaveis=responsaveis)
+    return render_template('/tabelas/tabela_responsaveis.html', responsaveis=responsaveis, id_responsavel=current_user.id_responsavel)
