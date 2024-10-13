@@ -22,3 +22,26 @@ class Registro(db.Model):
 
     def __repr__(self):
         return f"<Registro {self.id_registro} - Nota Fiscal: {self.id_nota_fiscal} - Responsavel: {self.id_responsavel}>"
+
+
+    @classmethod
+    def criar_registro(cls, id_responsavel, form):
+        # Verifica se a nota fiscal tem algum registro
+        if not cls.query.filter_by(id_nota_fiscal=form.id_nota_fiscal.data).first():
+            data_recebimento = datetime.utcnow
+
+        # Verifica se o status é igual a "NF finalizada"
+        if form.status_registro.data == "NF finalizada":
+            data_guarda = datetime.utcnow
+
+        # Cria e retorna uma nova instância de registro
+        return cls(
+            id_nota_fiscal=form.id_nota_fiscal.data,
+            data_recebimento=data_recebimento,
+            status_registro=form.status_registro.data,
+            data_guarda=data_guarda,
+            prioridade=form.prioridade.data,
+            avaria=form.avaria.data,
+            recusa=form.recusa.data,
+            id_responsavel=id_responsavel
+        )
