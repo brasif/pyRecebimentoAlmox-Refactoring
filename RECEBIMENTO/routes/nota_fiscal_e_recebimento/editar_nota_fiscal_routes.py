@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
-from RECEBIMENTO.forms import NotaFiscalRecebimentoForm
+from RECEBIMENTO.forms import NotaFiscalForm
 from RECEBIMENTO.models import NotaFiscal, Filiais, ResponsavelFilial, CENTROS_POR_FILIAL
 from flask_login import login_required, current_user
 from . import nota_fiscal_bp
@@ -12,7 +12,7 @@ from . import nota_fiscal_bp
 @login_required
 def editar_nota_fiscal(id_nota_fiscal):
     nota_fiscal = NotaFiscal.query.get_or_404(id_nota_fiscal)
-    form = NotaFiscalRecebimentoForm(obj=nota_fiscal)
+    form = NotaFiscalForm(obj=nota_fiscal)
     
     try:
         # Busca as filiais associadas ao responsável logado
