@@ -1,0 +1,18 @@
+# Banco de dados
+DEBUG_MODE=True
+DATABASE_URL='sqlite:///database.db'
+SECRET_KEY='sua-chave-secreta-aqui'
+
+
+# Autenticação
+# ID do Cliente (Client ID) da aplicação registrada no Azure AD
+CLIENT_ID=seu-id-do-cliente-aqui
+
+# Segredo do Cliente (Client Secret) da aplicação registrada no Azure AD
+CLIENT_SECRET=seu-segredo-do-cliente-aqui
+
+# ID do Inquilino (Tenant ID) do diretório do Azure AD
+TENANT_ID=seu-id-do-tenant-aqui
+
+# Chave secreta usada pela aplicação (Diferente da 'SECRET_KEY' do banco de dados)
+SECRET_KEY=usa-outra-chave-secreta-aqui
