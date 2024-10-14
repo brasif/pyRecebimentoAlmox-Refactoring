@@ -2,8 +2,8 @@ from flask import render_template, redirect, url_for, flash, request
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.forms import NotaFiscalRecebimentoForm
-from RECEBIMENTO.models import NotaFiscal, Filiais, CENTROS_POR_FILIAL
-from flask_login import login_required
+from RECEBIMENTO.models import NotaFiscal, Filiais, ResponsavelFilial, CENTROS_POR_FILIAL
+from flask_login import login_required, current_user
 from . import nota_fiscal_bp
 
 
@@ -15,16 +15,21 @@ def editar_nota_fiscal(id_nota_fiscal):
     form = NotaFiscalRecebimentoForm(obj=nota_fiscal)
     
     try:
-        if not Filiais:
-            flash("Nenhuma filial encontrada. Por favor, abra um chamado para a T.I. para que o problema possa ser solucionado.", "danger")
+        # Busca as filiais associadas ao responsável logado
+        filiais_vinculadas = db.session.query(ResponsavelFilial).filter_by(id_responsavel=current_user.id_responsavel).all()
+
+        if not filiais_vinculadas:
+            flash("Nenhuma filial vinculada ao responsável.", "warning")
             form.filial.choices = []
         else:
-            form.filial.choices = [("", "Selecione uma filial")] + [(filial.name, filial.value) for filial in Filiais]
-            if request.method == 'GET':
+            form.filial.choices = [("", "Selecione uma filial")] + [(filial.filial.name, filial.filial.value) for filial in filiais_vinculadas]
+
+            # Se for uma requisição 'GET' e a filial já vinculada for associada ao responsável logado
+            if request.method == 'GET' and any(filial.filial == nota_fiscal.filial for filial in filiais_vinculadas):
                 form.filial.data = nota_fiscal.filial.name
 
         centros = [centro for centros in CENTROS_POR_FILIAL.values() for centro in centros]
-        if request.method == 'GET':
+        if request.method == 'GET' and any(filial.filial == nota_fiscal.filial for filial in filiais_vinculadas):
             centros = CENTROS_POR_FILIAL.get(Filiais[nota_fiscal.filial.name], [])
             form.nome_centro.choices = [("", "Selecione um centro")] + [(centro, centro) for centro in centros]
             form.nome_centro.data = nota_fiscal.nome_centro
@@ -66,4 +71,4 @@ def editar_nota_fiscal(id_nota_fiscal):
             db.session.rollback()
             flash(f"Erro inesperado: {str(e)}", "danger")
 
-    return render_template('/nota_fiscal/editar_nota_fiscal.html', form=form, nota_fiscal=nota_fiscal)
+    return render_template('/nota_fiscal_e_recebimento/editar_nota_fiscal.html', form=form, nota_fiscal=nota_fiscal)

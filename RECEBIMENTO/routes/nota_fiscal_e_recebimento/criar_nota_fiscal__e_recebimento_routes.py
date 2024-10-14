@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.forms import NotaFiscalRecebimentoForm
-from RECEBIMENTO.models import NotaFiscal, Filiais, CENTROS_POR_FILIAL, Registro
+from RECEBIMENTO.models import NotaFiscal, ResponsavelFilial, CENTROS_POR_FILIAL, Registro
 from RECEBIMENTO.utils import definicao_status_recebimento
 from flask_login import login_required, current_user
 from . import nota_fiscal_bp
@@ -14,11 +14,14 @@ def criar_nota_fiscal():
     form = NotaFiscalRecebimentoForm()
     
     try:
-        if not Filiais:
-            flash("Nenhuma filial encontrada. Por favor, abra um chamado para a T.I. para que o problema possa ser solucionado.", "danger")
+        # Busca as filiais associadas ao responsável logado
+        filiais_vinculadas = db.session.query(ResponsavelFilial).filter_by(id_responsavel=current_user.id_responsavel).all()
+
+        if not filiais_vinculadas:
+            flash("Nenhuma filial vinculada ao responsável.", "warning")
             form.filial.choices = []
         else:
-            form.filial.choices = [("", "Selecione uma filial")] + [(filial.name, filial.value) for filial in Filiais]
+            form.filial.choices = [("", "Selecione uma filial")] + [(filial.filial.name, filial.filial.value) for filial in filiais_vinculadas]
 
         centros = [centro for centros in CENTROS_POR_FILIAL.values() for centro in centros]
         if not centros:
