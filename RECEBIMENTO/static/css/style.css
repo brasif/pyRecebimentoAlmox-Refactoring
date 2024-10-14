@@ -132,3 +132,10 @@ td.descricao {
     flex-direction: column;
     gap: .5rem;
 }
+
+
+@media screen and (max-width: 1210px) {
+    .tabela_menu {
+        display: none;
+    }
+}

@@ -45,6 +45,7 @@ def get_token():
 
         # Faz login do usuário
         login_user(user)
+        session['_user_permissao'] = user.permissao
         return redirect(url_for("menu.menu"))
     else:
         error = result.get("error")
