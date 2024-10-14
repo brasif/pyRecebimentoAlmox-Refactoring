@@ -13,6 +13,9 @@ class NotaFiscal(db.Model):
     volumes = db.Column(db.Integer, nullable=False)
     filial = db.Column(db.Enum(Filiais), nullable=False)
     nome_centro = db.Column(db.String(4), nullable=False)
+    prioridade = db.Column(db.Boolean, default=False)
+    avaria = db.Column(db.Boolean, default=False)
+    recusa = db.Column(db.Boolean, default=False)
     data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
     data_alteracao = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -46,7 +49,10 @@ class NotaFiscal(db.Model):
             codigo_cte=form.codigo_cte.data,
             volumes=form.volumes.data,
             filial=form.filial.data,
-            nome_centro=form.nome_centro.data
+            nome_centro=form.nome_centro.data,
+            prioridade=form.prioridade.data,
+            avaria=form.avaria.data,
+            recusa=form.recusa.data
         )
 
     def atualizacao_nota_fiscal(self, form):
@@ -62,5 +68,8 @@ class NotaFiscal(db.Model):
         self.volumes = form.volumes.data
         self.filial = form.filial.data
         self.nome_centro = form.nome_centro.data
-
+        self.prioridade = form.prioridade.data
+        self.avaria = form.avaria.data
+        self.recusa = form.recusa.data
+        
         return self

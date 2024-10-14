@@ -7,3 +7,4 @@ from .tabela_responsaveis_routes import *
 from .tabela_responsaveis_filial_routes import *
 from .tabela_notas_fiscais_routes import *
 from .tabela_registros_routes import *
+from .tabela_registros_por_nota_fiscal_routes import *
