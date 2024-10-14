@@ -38,7 +38,6 @@ def criar_nota_fiscal():
     
     if form.validate_on_submit():
         try:
-            # Inicia uma nova transação manualmente
             nova_nota_fiscal = NotaFiscal.criar_nota_fiscal(form)
             db.session.add(nova_nota_fiscal)
             db.session.flush()  # Envia as mudanças para o banco para gerar o ID
@@ -68,11 +67,5 @@ def criar_nota_fiscal():
         except Exception as e:
             db.session.rollback()
             flash(f"Erro inesperado: {str(e)}", "danger")
-    
-    # Se houver erros de validação no formulário
-    elif form.errors:
-        for campo, erros in form.errors.items():
-            for erro in erros:
-                flash(f'{campo.upper()} ERRO: {erro}', 'warning')
-
+        
     return render_template('/nota_fiscal_e_recebimento/criar_nota_fiscal_e_recebimento.html', form=form)
