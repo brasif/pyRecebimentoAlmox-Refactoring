@@ -1,5 +1,6 @@
 from RECEBIMENTO import db
 from datetime import datetime
+from babel.dates import format_date
 
 
 class Registro(db.Model):
@@ -22,6 +23,12 @@ class Registro(db.Model):
 
     def __repr__(self):
         return f"<Registro {self.id_registro} - Nota Fiscal: {self.id_nota_fiscal} - Responsavel: {self.id_responsavel}>"
+    
+
+    @property
+    # Propriedade para extrair o nome do mês em portugês
+    def mes(self):
+        return format_date(self.data_recebimento, "MMMM", locale='pt_BR')
 
 
     @classmethod
