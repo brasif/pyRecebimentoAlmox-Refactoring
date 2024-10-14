@@ -33,6 +33,11 @@ class NotaFiscalRecebimentoForm(FlaskForm):
         DataRequired(message="Por favor, selecione um centro.")
     ])
 
+    # Campo para selecionar o ID do responsável
+    id_responsavel = SelectField('Responsável', coerce=int, validators=[
+        DataRequired(message="Por favor, selecione um responsável.")
+    ])
+
     # Prioridade (Sim/Não)
     prioridade = BooleanField("Prioridade", default=False)
 

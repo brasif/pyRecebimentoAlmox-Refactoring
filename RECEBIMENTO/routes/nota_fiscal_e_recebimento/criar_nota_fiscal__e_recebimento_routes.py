@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for, flash
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.forms import NotaFiscalRecebimentoForm
-from RECEBIMENTO.models import NotaFiscal, ResponsavelFilial, CENTROS_POR_FILIAL, Registro
+from RECEBIMENTO.models import NotaFiscal, ResponsavelFilial, Responsavel, Registro, CENTROS_POR_FILIAL
 from RECEBIMENTO.utils import definicao_status_recebimento
 from flask_login import login_required, current_user
 from . import nota_fiscal_bp
@@ -23,6 +23,20 @@ def criar_nota_fiscal():
         else:
             form.filial.choices = [("", "Selecione uma filial")] + [(filial.filial.name, filial.filial.value) for filial in filiais_vinculadas]
 
+            # Lista de filiais vinculadas (extraindo o valor de 'filial' do enum)
+            filiais = [filial.filial for filial in filiais_vinculadas]
+
+            # Busca os responsáveis associados às mesmas filiais vinculadas ao responsável logado
+            responsaveis_vinculados = db.session.query(Responsavel).join(ResponsavelFilial).filter(ResponsavelFilial.filial.in_(filiais)).all()
+
+            if not responsaveis_vinculados:
+                flash("Nenhum responsável encontrado nas filiais vinculadas.", "warning")
+                form.id_responsavel.choices = []
+            else:
+                # Preencher choices com os responsáveis vinculados
+                form.id_responsavel.choices = [(0, "Selecione um responsável")] + [(resp.id_responsavel, resp.nome_responsavel) for resp in responsaveis_vinculados]
+
+        # Busca os centros
         centros = [centro for centros in CENTROS_POR_FILIAL.values() for centro in centros]
         if not centros:
             form.nome_centro.choices = [("", "Selecione um centro")]
@@ -32,13 +46,16 @@ def criar_nota_fiscal():
     except SQLAlchemyError as e:
         flash(f"Erro ao acessar o banco de dados ao carregar as empresas: {str(e)}", "danger")
         form.nome_centro.choices = []
+        form.id_responsavel.choices = []
         form.filial.choices = []
         
     except Exception as e:
         flash(f"Erro inesperado ao carregar as opções: {str(e)}", "danger")
         form.nome_centro.choices = []
+        form.id_responsavel.choices = []
         form.filial.choices = []
     
+
     if form.validate_on_submit():
         try:
             nova_nota_fiscal = NotaFiscal.criar_nota_fiscal(form)

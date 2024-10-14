@@ -82,6 +82,17 @@
             </div>
 
             <div class="form-group">
+                {{ form.id_responsavel.label(class="form-label") }}
+                {{ form.id_responsavel(class="form-control", placeholder="Seleciona um responsável", id="id_responsavel-select", disabled=True) }}
+                {% for error in form.id_responsavel.errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">{{ error }}<button
+                        type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
                 {{ form.prioridade.label(class="form-label") }}
                 {{ form.prioridade() }} Prioridade
                 {% for error in form.prioridade.errors %}
@@ -123,7 +134,8 @@
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Inclusão do arquivo JavaScript -->
+<!-- Inclusão dos arquivos JavaScript -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/centros_por_filial.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/responsaveis_por_filial.js') }}"></script>
 
 {% endblock %}
