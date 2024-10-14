@@ -1,10 +1,10 @@
 from flask import request, jsonify
 from flask_login import login_required
 from RECEBIMENTO.models import Filiais, CENTROS_POR_FILIAL
-from . import nota_fiscal_bp
+from . import ajax_get_bp
 
 
-@nota_fiscal_bp.route("/get_centros", methods=["GET"])
+@ajax_get_bp.route("/get_centros", methods=["GET"])
 @login_required
 def get_centros():
     filial = request.args.get('filial')

@@ -6,7 +6,7 @@ $(document).ready(function () {
         if (filial_name && filial_name !== "") {
             // Realiza a chamada AJAX para buscar os responsáveis associados
             $.ajax({
-                url: "/nota_fiscal/get_responsaveis",
+                url: "/ajax_get/get_responsaveis",
                 type: 'GET',
                 data: { filial: filial_name },
                 success: function (data) {

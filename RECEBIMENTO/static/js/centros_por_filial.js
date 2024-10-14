@@ -6,7 +6,7 @@ $(document).ready(function () {
         if (filial_name && filial_name !== "") {
             // Realiza a chamada AJAX para buscar os centros associados
             $.ajax({
-                url: "/nota_fiscal/get_centros",
+                url: "/ajax_get/get_centros",
                 type: 'GET',
                 data: { filial: filial_name },
                 success: function (data) {
