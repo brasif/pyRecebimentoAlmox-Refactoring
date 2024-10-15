@@ -52,9 +52,8 @@ def editar_nota_fiscal(id_nota_fiscal):
     
     if form.validate_on_submit():
         try:
-            chave_acesso = 111
             # Atualiza os dados da nota fiscal
-            nota_fiscal = NotaFiscal.atualizacao_nota_fiscal(nota_fiscal, chave_acesso, form)
+            nota_fiscal = NotaFiscal.atualizacao_nota_fiscal(nota_fiscal, form)
             db.session.commit()
 
             flash('Nota fiscal atualizada com sucesso!', 'success')

@@ -13,8 +13,8 @@ class NotaFiscalForm(FlaskForm):
 
     # Código CTE
     codigo_cte = StringField("Código CTE", validators=[
-        Length(min=20, max=20),
-        Regexp(r'^\d{20,20}$', message="A chave de acesso deve ser composta apenas por números. (máximo 20 dígitos)")
+        Length(min=0, max=20),
+        Regexp(r'^\d{0,20}$', message="A chave de acesso deve ser composta apenas por números. (máximo 20 dígitos)")
     ])
 
     # Volumes
