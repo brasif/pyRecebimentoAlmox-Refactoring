@@ -34,18 +34,18 @@ class NotaFiscal(db.Model):
     @property
     # Propriedade para extrair o número da NF da chave de acesso
     def numero_nf(self):
-        return self.chave_acesso[27:27+7]
+        return self.chave_acesso[27:34]
 
 
     @classmethod
-    def criar_nota_fiscal(cls, form):
+    def criar_nota_fiscal(cls, chave_acesso, form):
         # Verifica se a chave de acesso já existe
-        if cls.query.filter_by(chave_acesso=form.chave_acesso.data).first():
+        if cls.query.filter_by(chave_acesso=chave_acesso).first():
             raise ValueError("A chave de acesso já foi cadastrada. Por favor, verifique e tente novamente.")
         
         # Cria e retorna uma nova instância de Nota Fiscal
         return cls(
-            chave_acesso=form.chave_acesso.data,
+            chave_acesso=chave_acesso,
             codigo_cte=form.codigo_cte.data,
             volumes=form.volumes.data,
             filial=form.filial.data,
@@ -55,15 +55,15 @@ class NotaFiscal(db.Model):
             recusa=form.recusa.data
         )
 
-    def atualizacao_nota_fiscal(self, form):
+    def atualizacao_nota_fiscal(self, chave_acesso, form):
         # Verifica se a chave de acesso já existe, exceto para a chave de acesso atual
-        nota_fiscal_existe = NotaFiscal.query.filter_by(chave_acesso=form.chave_acesso.data).first()
+        nota_fiscal_existe = NotaFiscal.query.filter_by(chave_acesso=chave_acesso).first()
 
         if nota_fiscal_existe and nota_fiscal_existe.id_nota_fiscal != self.id_nota_fiscal:
             raise ValueError("A chave de acesso já foi cadastrada. Por favor, verifique e tente novamente.")
 
         # Atualiza os atributos da instância com os dados do formulário
-        self.chave_acesso = form.chave_acesso.data
+        self.chave_acesso = chave_acesso
         self.codigo_cte = form.codigo_cte.data
         self.volumes = form.volumes.data
         self.filial = form.filial.data

@@ -3,14 +3,14 @@ from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.forms import NotaFiscalRecebimentoForm
 from RECEBIMENTO.models import NotaFiscal, ResponsavelFilial, Responsavel, Registro, CENTROS_POR_FILIAL
-from RECEBIMENTO.utils import definicao_status_recebimento
+from RECEBIMENTO.utils import definicao_status_recebimento, obter_numero_nf
 from flask_login import login_required, current_user
 from . import nota_fiscal_bp
 
 
-@nota_fiscal_bp.route('/recebimento/cadastro', methods=['GET', 'POST'])
+@nota_fiscal_bp.route('/recebimento/cadastro/<string:chave_acesso>', methods=['GET', 'POST'])
 @login_required
-def criar_nota_fiscal():
+def criar_nota_fiscal(chave_acesso):
     form = NotaFiscalRecebimentoForm()
     
     try:
@@ -58,7 +58,7 @@ def criar_nota_fiscal():
 
     if form.validate_on_submit():
         try:
-            nova_nota_fiscal = NotaFiscal.criar_nota_fiscal(form)
+            nova_nota_fiscal = NotaFiscal.criar_nota_fiscal(chave_acesso, form)
             db.session.add(nova_nota_fiscal)
             db.session.flush()  # Envia as mudanças para o banco para gerar o ID
             
@@ -87,5 +87,5 @@ def criar_nota_fiscal():
         except Exception as e:
             db.session.rollback()
             flash(f"Erro inesperado: {str(e)}", "danger")
-        
-    return render_template('/nota_fiscal_e_recebimento/criar_nota_fiscal_e_recebimento.html', form=form)
+    
+    return render_template('/nota_fiscal_e_recebimento/criar_nota_fiscal_e_recebimento.html', form=form, chave_acesso=chave_acesso, numero_nf=obter_numero_nf(chave_acesso))

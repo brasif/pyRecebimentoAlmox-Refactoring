@@ -4,17 +4,11 @@ from wtforms.validators import DataRequired, Length, Regexp, NumberRange
 
 
 class NotaFiscalRecebimentoForm(FlaskForm):
-    # Chave de acesso
-    chave_acesso = StringField("Chave de acesso", validators=[
-        DataRequired(message="A chave de acesso é obrigatória."),
-        Length(min=44, max=44),
-        Regexp(r'^\d{44,44}$', message="A chave de acesso deve ser composta apenas por números. (máximo 44 dígitos)")
-    ])
 
-    # Código CTE
+    # Código CTE (opcional)
     codigo_cte = StringField("Código CTE", validators=[
-        Length(min=20, max=20),
-        Regexp(r'^\d{20,20}$', message="A chave de acesso deve ser composta apenas por números. (máximo 20 dígitos)")
+        Length(min=0, max=20),
+        Regexp(r'^\d{0,20}$', message="O código CTE deve ser composto apenas por números. (máximo 20 dígitos)")
     ])
 
     # Volumes

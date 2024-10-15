@@ -6,7 +6,7 @@
 <div class="container">
     <div class="container-home">
 
-        <h1 class="text-center">Recebimento - Cadastro NF</h1>
+        <h1 class="text-center">Recebimento<br>NF: {{ numero_nf }}</h1>
 
         <!-- Seção para exibir mensagens flash -->
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -22,20 +22,9 @@
         {% endif %}
         {% endwith %}
 
-        <form method="POST" action="{{ url_for('nota_fiscal.criar_nota_fiscal') }}">
+        <form method="POST" action="{{ url_for('nota_fiscal.criar_nota_fiscal', chave_acesso=chave_acesso) }}">
 
             {{ form.hidden_tag() }}
-
-            <div class="form-group">
-                {{ form.chave_acesso.label(class="form-label") }}
-                {{ form.chave_acesso(class="form-control", placeholder="Informe a chave de acesso") }}
-                {% for error in form.chave_acesso.errors %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">{{ error }}<button
-                        type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                            aria-hidden="true">×</span></button>
-                </div>
-                {% endfor %}
-            </div>
 
             <div class="form-group">
                 {{ form.codigo_cte.label(class="form-label") }}

@@ -22,25 +22,26 @@
 
     <div class="form-line">
         <div class="form-group">
-            <form method="POST">
+            <form method="POST" action="{{ url_for('menu.menu') }}">
+                
                 {{ form.hidden_tag() }}
 
-                    <div class="form_opcao">
-                        {{ form.chave_acesso.label(class="form-label") }}
-                        {{ form.chave_acesso(class="form-control", placeholder="Informe a chave de acesso") }}
-                        {% for error in form.chave_acesso.errors %}
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                {{ error }}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    <a href="{{ url_for('nota_fiscal.criar_nota_fiscal') }}" class="btn btn-primary w-100">Registrar recebimento</a>
-                    <a href="#" class="btn btn-primary w-100">Mudar Status</a>
-                    <a href="#" class="btn btn-primary w-100">Estorno</a>
+                <div class="form_opcao">
+                    {{ form.chave_acesso.label(class="form-label") }}
+                    {{ form.chave_acesso(class="form-control", placeholder="Informe a chave de acesso") }}
+                    {% for error in form.chave_acesso.errors %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ error }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <button type="submit" name="acao" value="registrar" class="btn btn-primary w-100">Registrar recebimento</button>
+                <button type="submit" name="acao" value="mudar_status" class="btn btn-primary w-100">Mudar Status</button>
+                <button type="submit" name="acao" value="estorno" class="btn btn-primary w-100">Estorno</button>
             </form>
         </div>
 
