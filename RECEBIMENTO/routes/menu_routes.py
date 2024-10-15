@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, flash, request
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.forms import ChaveAcessoForm
-from RECEBIMENTO.utils import operacao_recebimento, operacao_mudar_status
+from RECEBIMENTO.utils import operacao_recebimento, operacao_mudar_status, operacao_estorno
 from flask_login import login_required, current_user
 
 
@@ -17,18 +17,21 @@ def menu():
             # Obtem qual operação foi selecionada pelo usuário
             acao = request.form.get("acao")
             
+            # Obtem chave de acesso inserida pelo usuário
+            chave_acesso = form.chave_acesso.data
+            
             # Verifica se a operação escolhida
             if acao == "registrar":
                 # Recebimento
-                return operacao_recebimento(form.chave_acesso.data)
+                return operacao_recebimento(chave_acesso)
             
             elif acao == "mudar_status":
                 # Mudar status
-                return operacao_mudar_status(form.chave_acesso.data)
+                return operacao_mudar_status(chave_acesso)
             
             elif acao == "estorno":
-                # Estorno (None por enquanto)
-                return None
+                # Estorno
+                return operacao_estorno(chave_acesso)
         
         except ValueError as ve:
             flash(str(ve), "warning")

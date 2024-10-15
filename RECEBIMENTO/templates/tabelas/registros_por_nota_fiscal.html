@@ -19,11 +19,25 @@
     {% endif %}
     {% endwith %}
     
-    <h1 class="text-center">Registros por Nota Fiscal
-        <form method="GET" action="{{ url_for('mudar_status.registro_mudar_status', id_nota_fiscal=id_nota_fiscal) }}">
-            <input type="submit" value="Editar" class="btn btn-warning">
-        </form>
-    </h1>
+    <h1 class="text-center">Registros por Nota Fiscal</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <form method="GET" action="{{ url_for('nota_fiscal.editar_nota_fiscal', id_nota_fiscal=id_nota_fiscal) }}">
+                <input type="submit" value="Editar Nota Fiscal" class="btn btn-warning">
+            </form>
+        </div>
+        <div class="col-auto">
+            <form method="GET" action="{{ url_for('mudar_status.registro_mudar_status', id_nota_fiscal=id_nota_fiscal) }}">
+                <input type="submit" value="Mudar Status" class="btn btn-warning">
+            </form>
+        </div>
+        <div class="col-auto">
+            <form method="GET" action="{{ url_for('estorno.registro_estorno', id_nota_fiscal=id_nota_fiscal) }}">
+                <input type="submit" value="Estornar" class="btn btn-warning">
+            </form>
+        </div>
+    </div>    
 
     <div class="table-responsive">
         <table class="table table-striped">

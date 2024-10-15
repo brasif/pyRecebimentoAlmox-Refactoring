@@ -29,7 +29,7 @@ class Registro(db.Model):
 
 
     @classmethod
-    def criar_registro(cls, form, id_nota_fiscal, id_responsavel, status):
+    def criar_registro(cls, id_nota_fiscal, id_responsavel, status):
         # Verifica se a nota fiscal tem algum registro
         registro = cls.query.filter_by(id_nota_fiscal=id_nota_fiscal).first()
         if registro:

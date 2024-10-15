@@ -116,3 +116,47 @@ def operacao_mudar_status(chave_acesso):
     except Exception as e:
         flash(f"Erro inesperado: {str(e)}", "danger")
         return redirect(url_for("menu.menu"))
+
+
+# HANDLER ESTORNO
+def operacao_estorno(chave_acesso):
+    try:
+        if validacao_chave_acesso(chave_acesso):
+            # Busca a nota fiscal no banco de dados
+            nota_fiscal = NotaFiscal.query.filter_by(chave_acesso=chave_acesso).first()
+            
+            # Verifica se a chave de acesso já existe no banco de dados
+            if nota_fiscal:
+                
+                # Busca o último registro na tabela de registro referente ao ID da NF
+                registro = Registro.query.filter_by(id_nota_fiscal=nota_fiscal.id_nota_fiscal).order_by(Registro.id_registro.desc()).first()
+                
+                # Verifica se existe registro no banco de dados
+                if registro:
+                    # Verifica se o último status registrado da nota é igual a "Estornado"
+                    if registro.status_registro == "Estornado":
+                        flash("A NF já esta estornada.", "warning")
+                        return redirect(url_for("menu.menu"))
+                    else:
+                        return redirect(url_for("estorno.registro_estorno", id_nota_fiscal=nota_fiscal.id_nota_fiscal))
+                else:
+                    flash(f"ERRO: Abra um chamado para a T.I., não foi possível encontrar um registro referente à nota fiscal. ID NF: {nota_fiscal.id_nota_fiscal}", "danger")
+                    return redirect(url_for("menu.menu"))
+            else:
+                flash("A chave de acesso não foi cadastrada anteriormente. Por favor, registre o recebimento.", "warning")
+                return redirect(url_for("menu.menu"))
+        else:
+            flash("Por favor, insira uma chave de acesso válida para continuar.", "warning")
+            return redirect(url_for("menu.menu"))
+    
+    except ValueError as ve:
+        flash(str(ve), "warning")
+        return redirect(url_for("menu.menu"))
+
+    except SQLAlchemyError as e:
+        flash(f"Erro ao acessar o banco de dados: {str(e)}", "danger")
+        return redirect(url_for("menu.menu"))
+
+    except Exception as e:
+        flash(f"Erro inesperado: {str(e)}", "danger")
+        return redirect(url_for("menu.menu"))

@@ -35,8 +35,9 @@
                     <th>Data guarda</th>
                     <th>Prioridade</th>
                     <th>Resp. Atualização</th>
-                    <th>Mudar Status</th>
                     <th>Histórico</th>
+                    <th>Mudar Status</th>
+                    <th>Estornar</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,13 +58,18 @@
                     <td>{{ 'Sim' if registro.prioridade else 'Não' }}</td>
                     <td>{{ registro.responsavel.nome_responsavel }}</td>
                     <td>
+                        <form method="GET" action="{{ url_for('tabela.registros_por_nota_fiscal', id_nota_fiscal=registro.nota_fiscal.id_nota_fiscal) }}">
+                            <input type="submit" value="Histórico" class="btn btn-warning">
+                        </form>
+                    </td>
+                    <td>
                         <form method="GET" action="{{ url_for('mudar_status.registro_mudar_status', id_nota_fiscal=registro.nota_fiscal.id_nota_fiscal) }}">
                             <input type="submit" value="Mudar Status" class="btn btn-warning">
                         </form>
                     </td>
                     <td>
-                        <form method="GET" action="{{ url_for('tabela.registros_por_nota_fiscal', id_nota_fiscal=registro.nota_fiscal.id_nota_fiscal) }}">
-                            <input type="submit" value="Histórico" class="btn btn-warning">
+                        <form method="GET" action="{{ url_for('estorno.registro_estorno', id_nota_fiscal=registro.nota_fiscal.id_nota_fiscal) }}">
+                            <input type="submit" value="Estornar" class="btn btn-warning">
                         </form>
                     </td>
                 </tr>

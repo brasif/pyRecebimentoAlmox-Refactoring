@@ -67,7 +67,7 @@ def criar_nota_fiscal(chave_acesso):
             
             # Cria uma nova instância de Registro
             status = definicao_status_recebimento(form.recusa.data, form.avaria.data)
-            recebimento = Registro.criar_registro(form, id_nota_fiscal, current_user.id_responsavel, status)
+            recebimento = Registro.criar_registro(id_nota_fiscal, current_user.id_responsavel, status)
             db.session.add(recebimento)
 
             # Comita as alterações
