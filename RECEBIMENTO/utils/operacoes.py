@@ -94,7 +94,7 @@ def operacao_mudar_status(chave_acesso):
                         flash("A NF foi estornada. Por favor, registre o Recebimento novamente para continuar.", "warning")
                         return redirect(url_for("menu.menu"))
                     else:
-                        return redirect(url_for("nota_fiscal.criar_nota_fiscal", chave_acesso=chave_acesso))
+                        return redirect(url_for("mudar_status.registro_mudar_status", id_nota_fiscal=nota_fiscal.id_nota_fiscal))
                 else:
                     flash(f"ERRO: Abra um chamado para a T.I., não foi possível encontrar um registro referente à nota fiscal. ID NF: {nota_fiscal.id_nota_fiscal}", "danger")
                     return redirect(url_for("menu.menu"))
