@@ -16,7 +16,7 @@ def get_responsaveis():
         # Busca os responsáveis associados à filial selecionada
         responsaveis = (Responsavel.query
                         .join(ResponsavelFilial)
-                        .filter(ResponsavelFilial.filial == filial, Responsavel.status == True)  # Ajustado para booleano
+                        .filter(ResponsavelFilial.filial == filial, Responsavel.status == True)
                         .all())
 
         # Cria a lista de opções para o dropdown
