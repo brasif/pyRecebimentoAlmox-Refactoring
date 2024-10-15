@@ -1,6 +1,12 @@
-from flask import flash, redirect, url_for
+from flask import flash, redirect, url_for, request
 from RECEBIMENTO.models import NotaFiscal, Registro
 from sqlalchemy.exc import SQLAlchemyError
+
+# ========== Função auxiliar de redirecionamento ==========
+
+def redirect_back(default='menu.menu'):
+    # Tenta redirecionar para a página anterior
+    return redirect(request.referrer or url_for(default))
 
 
 # ========== Chave de acesso ==========
@@ -23,7 +29,7 @@ def obter_numero_nf(chave_acesso):
             return chave_acesso[27:34]
         else:
             flash("ERRO: Não foi possível obter o número da NF, chave de acesso inválida!", "danger")
-            return redirect(url_for("menu.menu"))
+            return redirect_back()
     except Exception as e:
         # Caso haja erro
         raise ValueError(f"Erro na extração do número da NF a partir da chave de acesso: {str(e)}")
@@ -51,28 +57,27 @@ def operacao_recebimento(chave_acesso):
                         return redirect(url_for("nota_fiscal.criar_nota_fiscal", chave_acesso=chave_acesso))
                     else:
                         flash("A chave de acesso já foi registrada anteriormente.", "warning")
-                        return redirect(url_for("menu.menu"))
+                        return redirect_back()
                 else:
                     flash(f"ERRO: Abra um chamado para a T.I., não foi possível encontrar um registro referente à nota fiscal. ID NF: {nota_fiscal.id_nota_fiscal}", "danger")
-                    return redirect(url_for("menu.menu"))
+                    return redirect_back()
             else:
                 return redirect(url_for("nota_fiscal.criar_nota_fiscal", chave_acesso=chave_acesso))
         else:
             flash("Por favor, insira uma chave de acesso válida para continuar.", "warning")
-            return redirect(url_for("menu.menu"))
+            return redirect_back()
     
     except ValueError as ve:
         flash(str(ve), "warning")
-        return redirect(url_for("menu.menu"))
+        return redirect_back()
 
     except SQLAlchemyError as e:
         flash(f"Erro ao acessar o banco de dados: {str(e)}", "danger")
-        return redirect(url_for("menu.menu"))
+        return redirect_back()
 
     except Exception as e:
         flash(f"Erro inesperado: {str(e)}", "danger")
-        return redirect(url_for("menu.menu"))
-
+        return redirect_back()
 
 # HANDLER MUDAR STATUS
 def operacao_mudar_status(chave_acesso):
@@ -92,31 +97,30 @@ def operacao_mudar_status(chave_acesso):
                     # Verifica se o último status registrado da nota é igual a "Estornado"
                     if registro.status_registro == "Estornado":
                         flash("A NF foi estornada. Por favor, registre o Recebimento novamente para continuar.", "warning")
-                        return redirect(url_for("menu.menu"))
+                        return redirect_back()
                     else:
                         return redirect(url_for("mudar_status.registro_mudar_status", id_nota_fiscal=nota_fiscal.id_nota_fiscal))
                 else:
                     flash(f"ERRO: Abra um chamado para a T.I., não foi possível encontrar um registro referente à nota fiscal. ID NF: {nota_fiscal.id_nota_fiscal}", "danger")
-                    return redirect(url_for("menu.menu"))
+                    return redirect_back()
             else:
                 flash("A chave de acesso não foi cadastrada anteriormente. Por favor, registre o recebimento.", "warning")
-                return redirect(url_for("menu.menu"))
+                return redirect_back()
         else:
             flash("Por favor, insira uma chave de acesso válida para continuar.", "warning")
-            return redirect(url_for("menu.menu"))
+            return redirect_back()
     
     except ValueError as ve:
         flash(str(ve), "warning")
-        return redirect(url_for("menu.menu"))
+        return redirect_back()
 
     except SQLAlchemyError as e:
         flash(f"Erro ao acessar o banco de dados: {str(e)}", "danger")
-        return redirect(url_for("menu.menu"))
+        return redirect_back()
 
     except Exception as e:
         flash(f"Erro inesperado: {str(e)}", "danger")
-        return redirect(url_for("menu.menu"))
-
+        return redirect_back()
 
 # HANDLER ESTORNO
 def operacao_estorno(chave_acesso):
@@ -135,28 +139,28 @@ def operacao_estorno(chave_acesso):
                 if registro:
                     # Verifica se o último status registrado da nota é igual a "Estornado"
                     if registro.status_registro == "Estornado":
-                        flash("A NF já esta estornada.", "warning")
-                        return redirect(url_for("menu.menu"))
+                        flash("A NF já está estornada.", "warning")
+                        return redirect_back()
                     else:
                         return redirect(url_for("estorno.registro_estorno", id_nota_fiscal=nota_fiscal.id_nota_fiscal))
                 else:
                     flash(f"ERRO: Abra um chamado para a T.I., não foi possível encontrar um registro referente à nota fiscal. ID NF: {nota_fiscal.id_nota_fiscal}", "danger")
-                    return redirect(url_for("menu.menu"))
+                    return redirect_back()
             else:
                 flash("A chave de acesso não foi cadastrada anteriormente. Por favor, registre o recebimento.", "warning")
-                return redirect(url_for("menu.menu"))
+                return redirect_back()
         else:
             flash("Por favor, insira uma chave de acesso válida para continuar.", "warning")
-            return redirect(url_for("menu.menu"))
+            return redirect_back()
     
     except ValueError as ve:
         flash(str(ve), "warning")
-        return redirect(url_for("menu.menu"))
+        return redirect_back()
 
     except SQLAlchemyError as e:
         flash(f"Erro ao acessar o banco de dados: {str(e)}", "danger")
-        return redirect(url_for("menu.menu"))
+        return redirect_back()
 
     except Exception as e:
         flash(f"Erro inesperado: {str(e)}", "danger")
-        return redirect(url_for("menu.menu"))
+        return redirect_back()
