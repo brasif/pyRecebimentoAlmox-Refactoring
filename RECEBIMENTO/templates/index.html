@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container-home">
-    <h1 class="text-center">Recebimento - Almox.</h1>
+    <h1 class="text-center">Recebimento Almox.</h1>
 
     <!-- Seção para exibir mensagens flash -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -21,31 +21,31 @@
     {% endwith %}
 
     <div class="form-line">
-        <form method="POST">
-            {{ form.hidden_tag() }}
+        <div class="form-group">
+            <form method="POST">
+                {{ form.hidden_tag() }}
 
-            <div class="form-group" style="margin-bottom: 50px;">
-                {{ form.chave_acesso.label(class="form-label") }}
-                {{ form.chave_acesso(class="form-control", placeholder="Informe a chave de acesso") }}
-                {% for error in form.chave_acesso.errors %}
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ error }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
+                    <div class="form_opcao">
+                        {{ form.chave_acesso.label(class="form-label") }}
+                        {{ form.chave_acesso(class="form-control", placeholder="Informe a chave de acesso") }}
+                        {% for error in form.chave_acesso.errors %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ error }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
-            </div>
 
-            <div class="form-group" style="gap: 2rem;">
-                <a href="{{ url_for('nota_fiscal.criar_nota_fiscal') }}" class="btn btn-primary w-100">Registrar recebimento</a>
-                <a href="#" class="btn btn-primary w-100">Mudar Status</a>
-                <a href="#" class="btn btn-primary w-100">Estorno</a>
-            </div>
-        </form>
+                    <a href="{{ url_for('nota_fiscal.criar_nota_fiscal') }}" class="btn btn-primary w-100">Registrar recebimento</a>
+                    <a href="#" class="btn btn-primary w-100">Mudar Status</a>
+                    <a href="#" class="btn btn-primary w-100">Estorno</a>
+            </form>
+        </div>
 
-        <div class="tabela_menu form-group mt-3">
-            <a href="{{ url_for('menu.menu', id_responsavel=id_responsavel) }}" class="btn btn-primary" style="width: 90%;">Recebimentos registrados por mim</a>
+        <div class="menu_item form-group">
+            <a href="{{ url_for('menu.menu', id_responsavel=id_responsavel) }}" class="btn btn-primary">Meus registros</a>
         </div>
     </div>
 </div>

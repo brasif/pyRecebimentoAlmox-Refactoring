@@ -133,9 +133,38 @@ td.descricao {
     gap: .5rem;
 }
 
+.form-group form {
+    gap: 1rem;
+    width: 80%;
+}
+
+.form-group .form_opcao {
+    width: 100%;
+    display: flex;
+    align-items: left;
+    flex-direction: column;
+}
+
+.menu_item a {
+    width: 80%;
+}
 
 @media screen and (max-width: 1210px) {
-    .tabela_menu {
+    .menu_item {
         display: none;
     }
+
+    .form-line {
+        width: 100%;
+    }
+
+    .form-line .form-group {
+        width: 80%;
+    }
+
+    .form-group form {
+        gap: 1rem;
+        width: 100%;
+    }
+
 }
