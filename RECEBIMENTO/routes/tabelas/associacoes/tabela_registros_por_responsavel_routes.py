@@ -28,4 +28,4 @@ def tabela_registros_por_responsavel(id_responsavel):
         .order_by(Registro.data_criacao.desc())\
         .paginate(page=page, per_page=per_page, error_out=False)
 
-    return render_template('/tabelas/associacoes/tabela_registros_por_responsavel.html', registros=registros, id_responsavel=responsavel.id_responsavel)
+    return render_template('/tabelas/associacoes/tabela_registros_por_responsavel.html', registros=registros, nome_responsavel=responsavel.nome_responsavel, id_responsavel=responsavel.id_responsavel)

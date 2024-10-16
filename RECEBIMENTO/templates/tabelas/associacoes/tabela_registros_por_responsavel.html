@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% set title = "registros por Responsável" %}
+{% set title = "Registros por Responsável" %}
 
 {% block content %}
 <div class="container">
@@ -18,8 +18,12 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
-    
-    <h1 class="text-center">registros por Responsável</h1>
+
+    {% if id_responsavel == current_user.id_responsavel %}
+        <h1 class="text-center">Meus registros</h1>
+    {% else %}
+        <h1 class="text-center">Registros<br>{{ nome_responsavel }}</h1>
+    {% endif %}
 
     <div class="table-responsive">
         <table class="table table-striped">
@@ -59,7 +63,7 @@
                     <td>{{ registro.responsavel.nome_responsavel }}</td>
                     <td>
                         <form method="GET" action="{{ url_for('associacoes.tabela_registros_por_nota_fiscal', id_nota_fiscal=registro.nota_fiscal.id_nota_fiscal) }}">
-                            <input type="submit" value="Histórico" class="btn btn-warning">
+                            <input type="submit" value="Histórico" class="btn btn-primary">
                         </form>
                     </td>
                     <td>

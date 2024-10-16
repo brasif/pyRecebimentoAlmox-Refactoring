@@ -29,6 +29,7 @@
                     <th>E-mail</th>
                     <th>Permissão</th>
                     <th>Status</th>
+                    <th>Registros</th>
                     <th>Editar</th>
                 </tr>
             </thead>
@@ -39,14 +40,23 @@
                     <td>{{ responsavel.email }}</td>
                     <td>{{ 'Administrador' if responsavel.permissao else 'Usuário' }}</td>
                     <td>{{ 'Ativo' if responsavel.status else 'Inativo' }}</td>
-                    {% if responsavel.id_responsavel != id_responsavel %}
                     <td>
-                        <form method="GET" action="{{ url_for('responsavel.editar_responsavel', id_responsavel=responsavel.id_responsavel) }}">
-                            <input type="submit" value="Editar" class="btn btn-warning">
+                        <form method="GET" action="{{ url_for('associacoes.tabela_registros_por_responsavel', id_responsavel=responsavel.id_responsavel) }}">
+                            <input type="submit" value="Registros" class="btn btn-info">
                         </form>
                     </td>
+                    {% if responsavel.id_responsavel != id_responsavel %}
+                        <td>
+                            <form method="GET" action="{{ url_for('responsavel.editar_responsavel', id_responsavel=responsavel.id_responsavel) }}">
+                                <input type="submit" value="Editar" class="btn btn-warning">
+                            </form>
+                        </td>
                     {% else %}
-                    <td>Alteração própria não é possível.</td>
+                        <td>
+                            <form method="GET" action="{{ url_for('responsavel.editar_responsavel', id_responsavel=responsavel.id_responsavel) }}">
+                                <input type="submit" value="Editar" class="btn btn-warning" disabled>
+                            </form>
+                        </td>
                     {% endif %}
                 </tr>
                 {% endfor %}

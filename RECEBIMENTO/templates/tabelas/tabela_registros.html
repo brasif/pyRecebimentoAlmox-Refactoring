@@ -59,7 +59,7 @@
                     <td>{{ registro.responsavel.nome_responsavel }}</td>
                     <td>
                         <form method="GET" action="{{ url_for('associacoes.tabela_registros_por_nota_fiscal', id_nota_fiscal=registro.nota_fiscal.id_nota_fiscal) }}">
-                            <input type="submit" value="Histórico" class="btn btn-warning">
+                            <input type="submit" value="Histórico" class="btn btn-info">
                         </form>
                     </td>
                     <td>
@@ -67,11 +67,19 @@
                             <input type="submit" value="Mudar Status" class="btn btn-warning">
                         </form>
                     </td>
-                    <td>
-                        <form method="GET" action="{{ url_for('estorno.registro_estorno', id_nota_fiscal=registro.nota_fiscal.id_nota_fiscal) }}">
-                            <input type="submit" value="Estornar" class="btn btn-warning">
-                        </form>
-                    </td>
+                    {% if registro.status_registro == "Estornado" %}
+                        <td>
+                            <form method="GET" action="{{ url_for('estorno.registro_estorno', id_nota_fiscal=registro.nota_fiscal.id_nota_fiscal) }}">
+                                <input type="submit" value="Estornar" class="btn btn-warning" disabled>
+                            </form>
+                        </td>
+                    {% else %}
+                        <td>
+                            <form method="GET" action="{{ url_for('estorno.registro_estorno', id_nota_fiscal=registro.nota_fiscal.id_nota_fiscal) }}">
+                                <input type="submit" value="Estornar" class="btn btn-warning">
+                            </form>
+                        </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
