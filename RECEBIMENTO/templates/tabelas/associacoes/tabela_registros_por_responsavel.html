@@ -50,7 +50,11 @@
                     <tr>
                         <td>{{ registro.mes|title }}</td>
                         <td>{{ registro.data_recebimento.strftime('%d/%m/%Y %H:%M h') }}</td>
-                        <td class="descricao">{{ registro.nota_fiscal.chave_acesso }}</td>
+                        <td class="descricao">
+                            <a href="{{ url_for('visualizacao.visualizar_nota_fiscal', id_nota_fiscal=registro.nota_fiscal.id_nota_fiscal) }}">
+                                {{ registro.nota_fiscal.chave_acesso }}
+                            </a>
+                        </td>
                         <td>{{ registro.nota_fiscal.numero_nf }}</td>
                         <td>{{ registro.nota_fiscal.filial.value|title  }}</td>
                         <td>{{ registro.nota_fiscal.nome_centro }}</td>
