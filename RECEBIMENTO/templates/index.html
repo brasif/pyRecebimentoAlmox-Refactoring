@@ -45,8 +45,11 @@
             </form>
         </div>
 
-        <div class="menu_item form-group">
-            <a href="{{ url_for('menu.menu', id_responsavel=id_responsavel) }}" class="btn btn-primary">Meus registros</a>
+        <div class="form-group">
+            <form method="GET" action="{{ url_for('associacoes.tabela_registros_por_responsavel', id_responsavel=id_responsavel) }}">
+                {{ form.hidden_tag() }}
+                <button type="submit" class="btn btn-primary w-100">Meus registros</button>
+            </form>
         </div>
     </div>
 </div>
