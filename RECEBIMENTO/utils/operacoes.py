@@ -54,7 +54,7 @@ def operacao_recebimento(chave_acesso):
                 if registro:
                     # Verifica se o último status registrado da nota é igual a "Estornado"
                     if registro.status_registro == "Estornado":
-                        return redirect(url_for("nota_fiscal.criar_nota_fiscal", chave_acesso=chave_acesso))
+                        return None
                     else:
                         flash("A chave de acesso já foi registrada anteriormente.", "warning")
                         return redirect_back()
@@ -62,7 +62,7 @@ def operacao_recebimento(chave_acesso):
                     flash(f"ERRO: Abra um chamado para a T.I., não foi possível encontrar um registro referente à nota fiscal. ID NF: {nota_fiscal.id_nota_fiscal}", "danger")
                     return redirect_back()
             else:
-                return redirect(url_for("nota_fiscal.criar_nota_fiscal", chave_acesso=chave_acesso))
+                return None
         else:
             flash("Por favor, insira uma chave de acesso válida para continuar.", "warning")
             return redirect_back()
@@ -99,7 +99,7 @@ def operacao_mudar_status(chave_acesso):
                         flash("A NF foi estornada. Por favor, registre o Recebimento novamente para continuar.", "warning")
                         return redirect_back()
                     else:
-                        return redirect(url_for("mudar_status.registro_mudar_status", id_nota_fiscal=nota_fiscal.id_nota_fiscal))
+                        return nota_fiscal
                 else:
                     flash(f"ERRO: Abra um chamado para a T.I., não foi possível encontrar um registro referente à nota fiscal. ID NF: {nota_fiscal.id_nota_fiscal}", "danger")
                     return redirect_back()
@@ -142,7 +142,7 @@ def operacao_estorno(chave_acesso):
                         flash("A NF já está estornada.", "warning")
                         return redirect_back()
                     else:
-                        return redirect(url_for("estorno.registro_estorno", id_nota_fiscal=nota_fiscal.id_nota_fiscal))
+                        return nota_fiscal.id_nota_fiscal
                 else:
                     flash(f"ERRO: Abra um chamado para a T.I., não foi possível encontrar um registro referente à nota fiscal. ID NF: {nota_fiscal.id_nota_fiscal}", "danger")
                     return redirect_back()
