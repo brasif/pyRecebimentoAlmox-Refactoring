@@ -108,7 +108,7 @@ td.descricao {
 .container {
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: 1rem;
 }
 
 .container-home {
@@ -119,7 +119,7 @@ td.descricao {
     justify-content: center;
     text-align: center;
     flex-direction: column;
-    gap: 4rem;
+    gap: 2rem;
 }
 
 .container-home form {

@@ -78,7 +78,7 @@ def registro_mudar_status(id_nota_fiscal):
                     db.session.commit()
 
                     flash("Registro atualizado com sucesso!", "success")
-                    return redirect(url_for("tabela.tabela_registros"))
+                    return redirect(request.referrer)
                 else:
                     flash("Insira um status diferente do atual para continuar.", "warning")
 

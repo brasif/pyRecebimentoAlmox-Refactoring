@@ -4,84 +4,85 @@
 
 {% block content %}
 <div class="container">
+    <div class="container-home">
 
-    <!-- Seção para exibir mensagens flash -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-        </button>
+        <h1 class="text-center mt-5">Todos os Registros</h1>
+
+        <!-- Seção para exibir mensagens flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Mês recebimento</th>
+                        <th>Data recebimento</th>
+                        <th class="descricao">Chave de acesso</th>
+                        <th>Nota Fiscal</th>
+                        <th>Filial</th>
+                        <th>Centro</th>
+                        <th>Status</th>
+                        <th>Data guarda</th>
+                        <th>Prioridade</th>
+                        <th>Resp. Atualização</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for registro in registros.items %}
+                    <tr>
+                        <td>{{ registro.mes|title }}</td>
+                        <td>{{ registro.data_recebimento.strftime('%d/%m/%Y %H:%M h') }}</td>
+                        <td class="descricao">{{ registro.nota_fiscal.chave_acesso }}</td>
+                        <td>{{ registro.nota_fiscal.numero_nf }}</td>
+                        <td>{{ registro.nota_fiscal.filial.value|title  }}</td>
+                        <td>{{ registro.nota_fiscal.nome_centro }}</td>
+                        <td>{{ registro.status_registro }}</td>
+                        <td>
+                            {% if registro.data_guarda %}
+                            {{ registro.data_guarda.strftime('%d/%m/%Y') }}
+                            {% endif %}
+                        </td>
+                        <td>{{ 'Sim' if registro.prioridade else 'Não' }}</td>
+                        <td>{{ registro.responsavel.nome_responsavel }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if registros.has_prev %}
+                <li class="page-item"><a class="page-link"
+                        href="{{ url_for('tabela.tabela_todos_registros', page=registros.prev_num) }}">Anterior</a></li>
+                {% endif %}
+                <li class="page-item disabled"><a class="page-link" href="">Página {{ registros.page }} de
+                        {{ registros.pages }}</a></li>
+                {% if registros.has_next %}
+                <li class="page-item"><a class="page-link"
+                        href="{{ url_for('tabela.tabela_todos_registros', page=registros.next_num) }}">Próxima</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <!-- Botão para baixar o Excel -->
+        <div class="text-right mb-3">
+            <form method="GET" action="{{ url_for('tabelas_excel.excel_registros_todos') }}">
+                <input type="submit" value="Exportar todos os registros (.xlsx)" class="btn btn-primary">
+            </form>
+        </div>
     </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-    
-    <h1 class="text-center">Todos os Registros</h1>
-
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Mês recebimento</th>
-                    <th>Data recebimento</th>
-                    <th class="descricao">Chave de acesso</th>
-                    <th>Nota Fiscal</th>
-                    <th>Filial</th>
-                    <th>Centro</th>
-                    <th>Status</th>
-                    <th>Data guarda</th>
-                    <th>Prioridade</th>
-                    <th>Resp. Atualização</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for registro in registros.items %}
-                <tr>
-                    <td>{{ registro.mes|title }}</td>
-                    <td>{{ registro.data_recebimento.strftime('%d/%m/%Y %H:%M h') }}</td>
-                    <td class="descricao">{{ registro.nota_fiscal.chave_acesso }}</td>
-                    <td>{{ registro.nota_fiscal.numero_nf }}</td>
-                    <td>{{ registro.nota_fiscal.filial.value|title  }}</td>
-                    <td>{{ registro.nota_fiscal.nome_centro }}</td>
-                    <td>{{ registro.status_registro }}</td>
-                    <td>
-                        {% if registro.data_guarda %}
-                            {{ registro.data_guarda.strftime('%d/%m/%Y') }}  
-                        {% endif %}
-                    </td>                    
-                    <td>{{ 'Sim' if registro.prioridade else 'Não' }}</td>
-                    <td>{{ registro.responsavel.nome_responsavel }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        
-    </div>
-
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            {% if registros.has_prev %}
-            <li class="page-item"><a class="page-link"
-                    href="{{ url_for('tabela.tabela_registros', page=registros.prev_num) }}">Anterior</a></li>
-            {% endif %}
-            <li class="page-item disabled"><a class="page-link" href="">Página {{ registros.page }} de
-                    {{ registros.pages }}</a></li>
-            {% if registros.has_next %}
-            <li class="page-item"><a class="page-link"
-                    href="{{ url_for('tabela.tabela_registros', page=registros.next_num) }}">Próxima</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-
-    <!-- Botão para baixar o Excel -->
-    <div class="text-right mb-3">
-        <form method="GET" action="{{ url_for('tabelas_excel.excel_registros_todos') }}">
-            <input type="submit" value="Exportar todos os registros (.xlsx)" class="btn btn-primary">
-        </form>
-    </div>
-
 </div>
 {% endblock %}

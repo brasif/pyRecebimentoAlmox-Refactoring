@@ -84,7 +84,7 @@ def criar_nota_fiscal(chave_acesso):
                 db.session.commit()
 
                 flash('Registro criado com sucesso!', 'success')
-                return redirect(url_for('tabela.tabela_notas_fiscais'))
+                return redirect(url_for('menu.menu'))
 
             except ValueError as ve:
                 db.session.rollback()
