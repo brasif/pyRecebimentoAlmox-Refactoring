@@ -101,5 +101,17 @@
             {% endif %}
         </ul>
     </nav>
+
+    <!-- Botões para baixar o Excel -->
+    <div class="form-line">
+        <form method="GET" action="{{ url_for('tabelas_excel.excel_registros_atuais') }}">
+            <input type="submit" value="Exportar apenas os registros atuais (.xlsx)" class="btn btn-primary">
+        </form>
+            
+        <form method="GET" action="{{ url_for('tabelas_excel.excel_registros_todos') }}">
+            <input type="submit" value="Exportar todos os registros (.xlsx)" class="btn btn-primary">
+        </form>
+    </div>
+    
 </div>
 {% endblock %}
