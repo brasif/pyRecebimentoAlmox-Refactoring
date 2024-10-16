@@ -1,4 +1,4 @@
-from flask import render_template, redirect, flash, request
+from flask import render_template, redirect, url_for, flash, request
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.forms import NotaFiscalForm
@@ -57,7 +57,7 @@ def editar_nota_fiscal(id_nota_fiscal):
             db.session.commit()
 
             flash('Nota fiscal atualizada com sucesso!', 'success')
-            return redirect(request.referrer)
+            return redirect(url_for('tabela.tabela_notas_fiscais'))
 
         except ValueError as ve:
             db.session.rollback()
