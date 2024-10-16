@@ -65,7 +65,11 @@
                             {% endif %}
                         </td>
                         <td>{{ 'Sim' if registro.prioridade else 'Não' }}</td>
-                        <td>{{ registro.responsavel.nome_responsavel }}</td>
+                        <td>
+                            <a href="{{ url_for('visualizacao.visualizar_responsavel', id_responsavel=registro.responsavel.id_responsavel) }}">
+                                {{ registro.responsavel.nome_responsavel }}
+                            </a>
+                        </td>
                         <td>
                             <form method="GET"
                                 action="{{ url_for('associacoes.tabela_registros_por_nota_fiscal', id_nota_fiscal=registro.nota_fiscal.id_nota_fiscal) }}">
