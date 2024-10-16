@@ -1,9 +1,7 @@
-from flask import send_file
-import io
-import pandas as pd
 from flask_login import login_required
 from RECEBIMENTO import db
 from RECEBIMENTO.models import NotaFiscal
+from RECEBIMENTO.utils import geracao_excel
 from . import tabelas_excel_bp
 
 
@@ -22,22 +20,9 @@ def excel_notas_fiscais():
         'Código CTE': nota_fiscal.codigo_cte,
         'CNPJ': nota_fiscal.cnpj,
         'Filial': nota_fiscal.filial.value,
-        'Centro': nota_fiscal.nome_centro
+        'Centro': nota_fiscal.nome_centro,
+        'Data criação': nota_fiscal.data_cricao.strftime('%d/%m/%Y %H:%M') if nota_fiscal.data_cricao else '',
+        'Data alteração': nota_fiscal.data_alteracao.strftime('%d/%m/%Y %H:%M') if nota_fiscal.data_alteracao else ''
     } for nota_fiscal in notas_fiscais]
 
-    # Criar um DataFrame usando pandas
-    df = pd.DataFrame(data)
-
-    # Criar um objeto de buffer de memória para o arquivo Excel
-    output = io.BytesIO()
-    
-    # Escrever o DataFrame no buffer como um arquivo Excel
-    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-        df.to_excel(writer, index=False, sheet_name='Notas Fiscais')
-    
-    # Configurar o ponteiro do buffer para o início do arquivo
-    output.seek(0)
-
-    # Enviar o arquivo para o usuário
-    return send_file(output, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                     as_attachment=True, download_name='notas_fiscais.xlsx')
+    return geracao_excel(data, "Notas_Fiscais")
