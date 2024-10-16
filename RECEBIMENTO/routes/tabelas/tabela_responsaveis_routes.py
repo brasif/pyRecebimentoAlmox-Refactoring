@@ -15,7 +15,7 @@ def tabela_responsaveis():
     
     # Consulta para trazer os responsaveis
     responsaveis = db.session.query(Responsavel)\
-        .order_by(desc(Responsavel.data_alteracao))\
+        .order_by(desc(Responsavel.nome_responsavel))\
         .paginate(page=page, per_page=per_page, error_out=False)
     
     return render_template('/tabelas/tabela_responsaveis.html', responsaveis=responsaveis, id_responsavel=current_user.id_responsavel)
