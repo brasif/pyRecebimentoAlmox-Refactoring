@@ -78,5 +78,12 @@
             {% endif %}
         </ul>
     </nav>
+
+    <!-- Botão para baixar o Excel -->
+    <div class="text-right mb-3">
+        <form method="GET" action="{{ url_for('tabelas_excel.excel_responsaveis') }}">
+            <input type="submit" value="Exportar responsáveis (.xlsx)" class="btn btn-primary">
+        </form>
+    </div>
 </div>
 {% endblock %}
