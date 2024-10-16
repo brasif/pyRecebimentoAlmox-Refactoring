@@ -21,7 +21,7 @@ def excel_notas_fiscais():
         'CNPJ': nota_fiscal.cnpj,
         'Filial': nota_fiscal.filial.value,
         'Centro': nota_fiscal.nome_centro,
-        'Data criação': nota_fiscal.data_cricao.strftime('%d/%m/%Y %H:%M') if nota_fiscal.data_cricao else '',
+        'Data criação': nota_fiscal.data_criacao.strftime('%d/%m/%Y %H:%M') if nota_fiscal.data_criacao else '',
         'Data alteração': nota_fiscal.data_alteracao.strftime('%d/%m/%Y %H:%M') if nota_fiscal.data_alteracao else ''
     } for nota_fiscal in notas_fiscais]
 
