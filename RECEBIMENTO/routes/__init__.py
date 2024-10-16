@@ -8,6 +8,7 @@ from .estorno import estorno_bp
 from .tabelas import tabela_bp
 from .tabelas.associacoes import associacoes_bp
 from .ajax_get import ajax_get_bp
+from .tabelas_excel import tabelas_excel_bp
 
 def register_blueprint(app):
     app.register_blueprint(menu_bp)
@@ -20,3 +21,4 @@ def register_blueprint(app):
     app.register_blueprint(tabela_bp)
     app.register_blueprint(associacoes_bp)
     app.register_blueprint(ajax_get_bp)
+    app.register_blueprint(tabelas_excel_bp)

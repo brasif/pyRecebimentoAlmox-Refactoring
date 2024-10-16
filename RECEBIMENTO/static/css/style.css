@@ -43,7 +43,7 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-    font-size: 1.1rem;
+    font-size: 1.02rem;
 }
 
 button[type=submit] {
@@ -52,7 +52,7 @@ button[type=submit] {
 }
 
 button[type=submit]:hover {
-    font-size: 1.1rem;
+    font-size: 1.02rem;
 }
 
 th, td {
