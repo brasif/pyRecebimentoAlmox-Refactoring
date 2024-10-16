@@ -6,9 +6,9 @@ from sqlalchemy import func
 from . import tabela_bp
 
 
-@tabela_bp.route('/registros')
+@tabela_bp.route('/registros/atuais')
 @login_required
-def tabela_registros():
+def tabela_registros_atuais():
     # Paginação
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 5, type=int)
@@ -26,4 +26,4 @@ def tabela_registros():
         .order_by(Registro.data_criacao.desc())\
         .paginate(page=page, per_page=per_page, error_out=False)
     
-    return render_template('/tabelas/tabela_registros.html', registros=registros)
+    return render_template('/tabelas/tabela_registros_atuais.html', registros=registros)
