@@ -6,6 +6,18 @@
 <div class="container-home">
     <h1 class="text-center">{{ filial.value }}</h1>
 
+    <div class="form-group">
+        <!-- Exibir os centros associados à filial em uma única linha -->
+        <p>
+            Centros Associados: 
+            {% if centros %}
+                {{ centros | join(', ') }}
+            {% else %}
+                Nenhum centro encontrado para esta filial.
+            {% endif %}
+        </p>
+    </div>    
+
     <!-- Seção para exibir mensagens flash -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
