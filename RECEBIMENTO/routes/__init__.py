@@ -10,6 +10,7 @@ from .tabelas.associacoes import associacoes_bp
 from .ajax_get import ajax_get_bp
 from .tabelas_excel import tabelas_excel_bp
 from .visualizacao import visualizacao_bp
+from .gerenciamento_filial import gerenciamento_filial_bp
 
 def register_blueprint(app):
     app.register_blueprint(menu_bp)
@@ -24,3 +25,4 @@ def register_blueprint(app):
     app.register_blueprint(ajax_get_bp)
     app.register_blueprint(tabelas_excel_bp)
     app.register_blueprint(visualizacao_bp)
+    app.register_blueprint(gerenciamento_filial_bp)

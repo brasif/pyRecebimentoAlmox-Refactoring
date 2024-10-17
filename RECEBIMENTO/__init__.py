@@ -1,8 +1,8 @@
 # ========== IMPORTAÇÕES ==========
-from flask import Flask # Flask
-from flask_sqlalchemy import SQLAlchemy # Gerenciamento do Banco de dados
-from flask_login import LoginManager # Gerenciamento do Login
-from flask_wtf.csrf import CSRFProtect # Proteção contra ataques CSRF
+from flask import Flask  # Flask
+from flask_sqlalchemy import SQLAlchemy  # Gerenciamento do Banco de dados
+from flask_login import LoginManager  # Gerenciamento do Login
+from flask_wtf.csrf import CSRFProtect  # Proteção contra ataques CSRF
 
 # Configurações de ambiente
 from app_config import Config
@@ -28,7 +28,7 @@ def criacao_app():
 
     # Importação dos models após a inicialização do app
     with app.app_context():
-        from RECEBIMENTO.models import Responsavel # Tabela com os usuários do sistema
+        from RECEBIMENTO.models import Responsavel, Filiais  # Tabela com os usuários do sistema e enum Filiais
 
     # Carrega as informações do usuário através do id
     @login_manager.user_loader
@@ -38,6 +38,11 @@ def criacao_app():
     # Registrar blueprints
     from RECEBIMENTO.routes import register_blueprint
     register_blueprint(app)
+
+    # Adiciona o Enum Filiais em todos os templates para dropdown em navbar (base.html)
+    @app.context_processor
+    def inject_filiais():
+        return dict(Filiais=Filiais)
 
     return app
 

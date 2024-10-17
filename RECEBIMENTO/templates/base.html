@@ -32,6 +32,15 @@
                             {% endif %}
                         </div>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">Gerenciamento de Filial</a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            {% for filial in Filiais %}
+                                <a class="dropdown-item" href="{{ url_for('gerenciamento_filial.menu_filial', filial=filial.name) }}">{{ filial.value }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>                    
                 </ul>
                 <ul class="navbar-nav">
                     {% if session.get('_user_permissao') == 1 %}
