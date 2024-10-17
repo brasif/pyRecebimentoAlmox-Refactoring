@@ -21,9 +21,19 @@
     {% endwith %}
 
     <div class="form-group">
-        <form method="GET" action="{{ url_for('associacoes.tabela_notas_fiscais_por_filial', filial=filial.name) }}">
-            <button type="submit" class="btn btn-primary w-100">Notas Fiscais</button>
-        </form>
+        <div class="form-line">
+            <div class="form-group">
+                <form method="GET" action="{{ url_for('associacoes.tabela_notas_fiscais_por_filial', filial=filial.name) }}">
+                    <button type="submit" class="btn btn-primary w-100">Notas Fiscais</button>
+                </form>
+            </div>
+
+            <div class="form-group">
+                <form method="GET" action="{{ url_for('associacoes.tabela_responsaveis_por_filial', filial=filial.name) }}">
+                    <button type="submit" class="btn btn-primary w-100">Responsáveis</button>
+                </form>
+            </div>
+        </div>
     </div>
 
 </div>
