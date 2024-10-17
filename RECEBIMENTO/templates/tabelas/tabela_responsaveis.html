@@ -37,7 +37,11 @@
                 <tbody>
                     {% for responsavel in responsaveis.items %}
                     <tr>
-                        <td>{{ responsavel.nome_responsavel }}</td>
+                        <td>
+                            <a href="{{ url_for('visualizacao.visualizar_responsavel', id_responsavel=responsavel.id_responsavel) }}">
+                                {{ responsavel.nome_responsavel }}
+                            </a>
+                        </td>
                         <td>{{ responsavel.email }}</td>
                         <td>{{ 'Administrador' if responsavel.permissao else 'Usuário' }}</td>
                         <td>{{ 'Ativo' if responsavel.status else 'Inativo' }}</td>

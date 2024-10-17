@@ -39,7 +39,11 @@
                     {% for responsavel_filial in responsaveis_filial.items %}
                     <tr>
                         <td>{{ responsavel_filial.filial.value }}</td>
-                        <td>{{ responsavel_filial.responsavel.nome_responsavel }}</td>
+                        <td>
+                            <a href="{{ url_for('visualizacao.visualizar_responsavel', id_responsavel=responsavel_filial.responsavel.id_responsavel) }}">
+                                {{ responsavel_filial.responsavel.nome_responsavel }}
+                            </a>
+                        </td>
                         <td>{{ responsavel_filial.responsavel.email }}</td>
                         <td>{{ 'Administrador' if responsavel_filial.responsavel.permissao else 'Usuário' }}</td>
                         <td>{{ 'Ativo' if responsavel_filial.responsavel.status else 'Inativo' }}</td>
