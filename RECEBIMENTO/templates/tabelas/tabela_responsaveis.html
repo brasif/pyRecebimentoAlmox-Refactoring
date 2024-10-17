@@ -30,6 +30,7 @@
                         <th>E-mail</th>
                         <th>Permissão</th>
                         <th>Status</th>
+                        <th>Filiais</th>
                         <th>Registros</th>
                         <th>Editar</th>
                     </tr>
@@ -45,6 +46,12 @@
                         <td>{{ responsavel.email }}</td>
                         <td>{{ 'Administrador' if responsavel.permissao else 'Usuário' }}</td>
                         <td>{{ 'Ativo' if responsavel.status else 'Inativo' }}</td>
+                        <td>
+                            <form method="GET"
+                                action="{{ url_for('associacoes.tabela_filiais_por_responsavel', id_responsavel=responsavel.id_responsavel) }}">
+                                <input type="submit" value="Filiais" class="btn btn-info">
+                            </form>
+                        </td>
                         <td>
                             <form method="GET"
                                 action="{{ url_for('associacoes.tabela_registros_por_responsavel', id_responsavel=responsavel.id_responsavel) }}">

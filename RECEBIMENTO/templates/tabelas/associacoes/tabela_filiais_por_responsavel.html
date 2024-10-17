@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% set title = "Filiais por responsável" %}
+
+{% block content %}
+<div class="container">
+    <div class="container-home">
+
+        <h1 class="text-center mt-5">Filiais por responsável</h1>
+
+        <!-- Seção para exibir mensagens flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Filial</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Permissão</th>
+                        <th>Status</th>
+                        <th>Editar</th>
+                        <th>Excluir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for responsavel_filial in filiais_responsavel.items %}
+                    <tr>
+                        <td>{{ responsavel_filial.filial.value }}</td>
+                        <td>
+                            <a href="{{ url_for('visualizacao.visualizar_responsavel', id_responsavel=responsavel_filial.responsavel.id_responsavel) }}">
+                                {{ responsavel_filial.responsavel.nome_responsavel }}
+                            </a>
+                        </td>
+                        <td>{{ responsavel_filial.responsavel.email }}</td>
+                        <td>{{ 'Administrador' if responsavel_filial.responsavel.permissao else 'Usuário' }}</td>
+                        <td>{{ 'Ativo' if responsavel_filial.responsavel.status else 'Inativo' }}</td>
+                        <td>
+                            <form method="GET"
+                                action="{{ url_for('responsavel_filial.editar_responsavel_filial', id_responsavel_filial=responsavel_filial.id_responsavel_filial) }}">
+                                <input type="submit" value="Editar" class="btn btn-warning">
+                            </form>
+                        </td>
+                        <td>
+                            <form method="POST"
+                                action="{{ url_for('responsavel_filial.excluir_responsavel_filial', id_responsavel_filial=responsavel_filial.id_responsavel_filial) }}"
+                                onsubmit="return confirm('Tem certeza que deseja excluir a relação de responsável por filial?');">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <input type="submit" value="Excluir" class="btn btn-danger">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if filiais_responsavel.has_prev %}
+                <li class="page-item"><a class="page-link"
+                        href="{{ url_for('associacoes.tabela_filiais_por_responsavel', page=filiais_responsavel.prev_num) }}">Anterior</a>
+                </li>
+                {% endif %}
+                <li class="page-item disabled"><a class="page-link" href="">Página {{ filiais_responsavel.page }} de
+                        {{ filiais_responsavel.pages }}</a></li>
+                {% if filiais_responsavel.has_next %}
+                <li class="page-item"><a class="page-link"
+                        href="{{ url_for('associacoes.tabela_filiais_por_responsavel', page=filiais_responsavel.next_num) }}">Próxima</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}
