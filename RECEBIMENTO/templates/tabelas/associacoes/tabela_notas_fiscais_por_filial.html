@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% set title = "Notas Fiscais" %}
+
+{% block content %}
+<div class="container">
+    <div class="container-home">
+
+        <h1 class="text-center mt-5">Notas Fiscais<br>{{ filial.value }}</h1>
+
+        <!-- Seção para exibir mensagens flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Chave de acesso</th>
+                        <th>Nota Fiscal</th>
+                        <th>Volumes</th>
+                        <th>Código CTE</th>
+                        <th>CNPJ</th>
+                        <th>Filial</th>
+                        <th>Centro</th>
+                        <th>Registros</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for nota_fiscal in notas_fiscais.items %}
+                    <tr>
+                        <td class="descricao">
+                            <a href="{{ url_for('visualizacao.visualizar_nota_fiscal', id_nota_fiscal=nota_fiscal.id_nota_fiscal) }}">
+                                {{ nota_fiscal.chave_acesso }}
+                            </a>
+                        </td>
+                        <td>{{ nota_fiscal.numero_nf }}</td>
+                        <td>{{ nota_fiscal.volumes }}</td>
+                        <td>{{ nota_fiscal.codigo_cte }}</td>
+                        <td>{{ nota_fiscal.cnpj }}</td>
+                        <td>{{ nota_fiscal.filial.value }}</td>
+                        <td>{{ nota_fiscal.nome_centro }}</td>
+                        <td>
+                            <form method="GET"
+                                action="{{ url_for('associacoes.tabela_registros_por_nota_fiscal', id_nota_fiscal=nota_fiscal.id_nota_fiscal) }}">
+                                <input type="submit" value="Registros" class="btn btn-info">
+                            </form>
+                        </td>
+                        <td>
+                            <form method="GET"
+                                action="{{ url_for('nota_fiscal.editar_nota_fiscal', id_nota_fiscal=nota_fiscal.id_nota_fiscal) }}">
+                                <input type="submit" value="Editar" class="btn btn-warning">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if notas_fiscais.has_prev %}
+                <li class="page-item"><a class="page-link"
+                        href="{{ url_for('tabela.tabela_notas_fiscais', page=notas_fiscais.prev_num) }}">Anterior</a>
+                </li>
+                {% endif %}
+                <li class="page-item disabled"><a class="page-link" href="">Página {{ notas_fiscais.page }} de
+                        {{ notas_fiscais.pages }}</a></li>
+                {% if notas_fiscais.has_next %}
+                <li class="page-item"><a class="page-link"
+                        href="{{ url_for('tabela.tabela_notas_fiscais', page=notas_fiscais.next_num) }}">Próxima</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <!-- Botão para baixar o Excel -->
+        <div class="text-right mb-3">
+            <form method="GET" action="{{ url_for('tabelas_excel.excel_notas_fiscais') }}">
+                <input type="submit" value="Exportar todas as notas fiscais (.xlsx)" class="btn btn-primary">
+            </form>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

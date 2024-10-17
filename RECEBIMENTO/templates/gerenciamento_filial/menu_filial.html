@@ -20,5 +20,11 @@
         {% endif %}
     {% endwith %}
 
+    <div class="form-group">
+        <form method="GET" action="{{ url_for('associacoes.tabela_notas_fiscais_por_filial', filial=filial.name) }}">
+            <button type="submit" class="btn btn-primary w-100">Notas Fiscais</button>
+        </form>
+    </div>
+
 </div>
 {% endblock %}
