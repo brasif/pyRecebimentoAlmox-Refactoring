@@ -74,14 +74,14 @@
             <ul class="pagination justify-content-center">
                 {% if notas_fiscais.has_prev %}
                 <li class="page-item"><a class="page-link"
-                        href="{{ url_for('tabela.tabela_notas_fiscais', page=notas_fiscais.prev_num) }}">Anterior</a>
+                        href="{{ url_for('associacoes.tabela_notas_fiscais_por_filial', page=notas_fiscais.prev_num) }}">Anterior</a>
                 </li>
                 {% endif %}
                 <li class="page-item disabled"><a class="page-link" href="">Página {{ notas_fiscais.page }} de
                         {{ notas_fiscais.pages }}</a></li>
                 {% if notas_fiscais.has_next %}
                 <li class="page-item"><a class="page-link"
-                        href="{{ url_for('tabela.tabela_notas_fiscais', page=notas_fiscais.next_num) }}">Próxima</a>
+                        href="{{ url_for('associacoes.tabela_notas_fiscais_por_filial', page=notas_fiscais.next_num) }}">Próxima</a>
                 </li>
                 {% endif %}
             </ul>
