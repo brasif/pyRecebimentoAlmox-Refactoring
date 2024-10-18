@@ -11,42 +11,45 @@
         <p>
             <b>Centros Associados:</b>
             {% if centros %}
-                {{ centros | join(', ') }}
+            {{ centros | join(', ') }}
             {% else %}
-                Nenhum centro encontrado para esta filial.
+            Nenhum centro encontrado para esta filial.
             {% endif %}
         </p>
-    </div>    
+    </div>
 
     <!-- Seção para exibir mensagens flash -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-            {% endfor %}
-        {% endif %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% endif %}
     {% endwith %}
 
-    <div class="form-group">
-        <div class="form-line">
-            <div class="form-group">
-                <form method="GET" action="{{ url_for('associacoes.tabela_notas_fiscais_por_filial', filial=filial.name) }}">
-                    <button type="submit" class="btn btn-primary w-100">Notas Fiscais</button>
-                </form>
-            </div>
-
-            <div class="form-group">
-                <form method="GET" action="{{ url_for('associacoes.tabela_responsaveis_por_filial', filial=filial.name) }}">
-                    <button type="submit" class="btn btn-primary w-100">Responsáveis</button>
-                </form>
-            </div>
-        </div>
+    <div class="menu_opcoes form-line">
+        <form method="GET" action="{{ url_for('associacoes.tabela_todos_registros_por_filial', filial=filial.name) }}">
+            <button type="submit" class="btn btn-primary">Todos os Registros</button>
+        </form>
+    
+        <form method="GET" action="{{ url_for('associacoes.tabela_registros_atuais_por_filial', filial=filial.name) }}">
+            <button type="submit" class="btn btn-primary">Registros atuais</button>
+        </form>
+    
+        <form method="GET" action="{{ url_for('associacoes.tabela_notas_fiscais_por_filial', filial=filial.name) }}">
+            <button type="submit" class="btn btn-primary">Notas Fiscais</button>
+        </form>
+    
+        <form method="GET" action="{{ url_for('associacoes.tabela_responsaveis_por_filial', filial=filial.name) }}">
+            <button type="submit" class="btn btn-primary">Responsáveis</button>
+        </form>
     </div>
-
+    
+    
 </div>
 {% endblock %}

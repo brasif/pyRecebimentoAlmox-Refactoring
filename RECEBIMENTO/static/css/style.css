@@ -149,6 +149,15 @@ td.descricao {
     width: 80%;
 }
 
+.menu_opcoes {
+    margin-top: 5rem;
+    gap: 1rem;
+}
+
+.menu_opcoes form button {
+    width: 90%;
+}
+
 @media screen and (max-width: 1210px) {
     .menu_item {
         display: none;
@@ -164,6 +173,14 @@ td.descricao {
 
     .form-group form {
         gap: 1rem;
+        width: 100%;
+    }
+
+    .menu_opcoes {
+        flex-direction: column;
+    }
+
+    .menu_opcoes form button {
         width: 100%;
     }
 
