@@ -23,48 +23,90 @@
         {% endwith %}
 
         <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Filial</th>
-                        <th>Nome</th>
-                        <th>E-mail</th>
-                        <th>Permissão</th>
-                        <th>Status</th>
-                        <th>Editar</th>
-                        <th>Excluir</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for responsavel_filial in responsaveis_filial.items %}
-                    <tr>
-                        <td>{{ responsavel_filial.filial.value }}</td>
-                        <td>
-                            <a href="{{ url_for('visualizacao.visualizar_responsavel', id_responsavel=responsavel_filial.responsavel.id_responsavel) }}">
-                                {{ responsavel_filial.responsavel.nome_responsavel }}
-                            </a>
-                        </td>
-                        <td>{{ responsavel_filial.responsavel.email }}</td>
-                        <td>{{ 'Administrador' if responsavel_filial.responsavel.permissao else 'Usuário' }}</td>
-                        <td>{{ 'Ativo' if responsavel_filial.responsavel.status else 'Inativo' }}</td>
-                        <td>
-                            <form method="GET"
-                                action="{{ url_for('responsavel_filial.editar_responsavel_filial', id_responsavel_filial=responsavel_filial.id_responsavel_filial) }}">
-                                <input type="submit" value="Editar" class="btn btn-warning">
-                            </form>
-                        </td>
-                        <td>
-                            <form method="POST"
-                                action="{{ url_for('responsavel_filial.excluir_responsavel_filial', id_responsavel_filial=responsavel_filial.id_responsavel_filial) }}"
-                                onsubmit="return confirm('Tem certeza que deseja excluir a relação de responsável por filial?');">
-                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                <input type="submit" value="Excluir" class="btn btn-danger">
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <form method="GET" action="{{ url_for('tabela.tabela_responsaveis_filial') }}" id="filter-form">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                <select class="form-control" id="filial" name="filial"
+                                    onchange="document.getElementById('filter-form').submit()">
+                                    <option value="">Filial</option>
+                                    {% for f in Filiais %}
+                                    <option value="{{ f.name }}"
+                                        {% if request.args.get('filial') == f.name %}selected{% endif %}>{{ f.value }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </th>
+                            <th>
+                                <input type="text" class="form-control" id="nome" name="nome"
+                                    value="{{ request.args.get('nome') or '' }}" placeholder="Nome"
+                                    onchange="document.getElementById('filter-form').submit()">
+                            </th>
+                            <th>
+                                <input type="text" class="form-control" id="email" name="email"
+                                    value="{{ request.args.get('email') or '' }}" placeholder="E-mail"
+                                    onchange="document.getElementById('filter-form').submit()">
+                            </th>
+                            <th>
+                                <select class="form-control" id="permissao" name="permissao"
+                                    onchange="document.getElementById('filter-form').submit()">
+                                    <option value="">Permissão</option>
+                                    <option value="true"
+                                        {% if request.args.get('permissao') == 'true' %}selected{% endif %}>
+                                        Administrador</option>
+                                    <option value="false"
+                                        {% if request.args.get('permissao') == 'false' %}selected{% endif %}>Usuário
+                                    </option>
+                                </select>
+                            </th>
+                            <th>
+                                <select class="form-control" id="status" name="status"
+                                    onchange="document.getElementById('filter-form').submit()">
+                                    <option value="">Status</option>
+                                    <option value="true"
+                                        {% if request.args.get('status') == 'true' %}selected{% endif %}>Ativo</option>
+                                    <option value="false"
+                                        {% if request.args.get('status') == 'false' %}selected{% endif %}>Inativo
+                                    </option>
+                                </select>
+                            </th>
+                            <th>Editar</th>
+                            <th>Excluir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for responsavel_filial in responsaveis_filial.items %}
+                        <tr>
+                            <td>{{ responsavel_filial.filial.value }}</td>
+                            <td>
+                                <a
+                                    href="{{ url_for('visualizacao.visualizar_responsavel', id_responsavel=responsavel_filial.responsavel.id_responsavel) }}">
+                                    {{ responsavel_filial.responsavel.nome_responsavel }}
+                                </a>
+                            </td>
+                            <td>{{ responsavel_filial.responsavel.email }}</td>
+                            <td>{{ 'Administrador' if responsavel_filial.responsavel.permissao else 'Usuário' }}</td>
+                            <td>{{ 'Ativo' if responsavel_filial.responsavel.status else 'Inativo' }}</td>
+                            <td>
+                                <form method="GET"
+                                    action="{{ url_for('responsavel_filial.editar_responsavel_filial', id_responsavel_filial=responsavel_filial.id_responsavel_filial) }}">
+                                    <input type="submit" value="Editar" class="btn btn-warning">
+                                </form>
+                            </td>
+                            <td>
+                                <form method="POST"
+                                    action="{{ url_for('responsavel_filial.excluir_responsavel_filial', id_responsavel_filial=responsavel_filial.id_responsavel_filial) }}"
+                                    onsubmit="return confirm('Tem certeza que deseja excluir a relação de responsável por filial?');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <input type="submit" value="Excluir" class="btn btn-danger">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
         </div>
 
         <nav aria-label="Page navigation example">
