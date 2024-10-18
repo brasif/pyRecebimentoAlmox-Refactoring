@@ -26,4 +26,4 @@ def tabela_responsaveis():
         .order_by(Responsavel.nome_responsavel.asc())\
         .paginate(page=page, per_page=per_page, error_out=False)
     
-    return render_template('/tabelas/tabela_responsaveis.html', responsaveis=responsaveis, id_responsavel=current_user.id_responsavel)
+    return render_template('/tabelas/tabela_responsaveis.html', responsaveis=responsaveis, id_responsavel_logado=current_user.id_responsavel)
