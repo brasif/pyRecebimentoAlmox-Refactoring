@@ -1,6 +1,6 @@
-from flask import render_template, abort, request
+from flask import render_template, request
 from RECEBIMENTO import db
-from flask_login import login_required, current_user
+from flask_login import login_required
 from RECEBIMENTO.models import ResponsavelFilial, Responsavel
 from . import associacoes_bp
 
@@ -8,7 +8,10 @@ from . import associacoes_bp
 @associacoes_bp.route('/filiais/responsavel/<int:id_responsavel>')
 @login_required
 def tabela_filiais_por_responsavel(id_responsavel):
-    responsavel = Responsavel.query.get_or_404(id_responsavel)
+    try:
+        responsavel = Responsavel.query.get_or_404(id_responsavel)
+    except Exception as e:
+        print(f"Erro ao buscar responsável com ID {id_responsavel}: {e}")
 
     # Paginação
     page = request.args.get('page', 1, type=int)
