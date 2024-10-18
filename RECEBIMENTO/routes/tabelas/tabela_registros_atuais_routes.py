@@ -1,7 +1,7 @@
 from flask import render_template, request
 from RECEBIMENTO import db
 from flask_login import login_required
-from RECEBIMENTO.models import Registro
+from RECEBIMENTO.models import Registro, NotaFiscal
 from sqlalchemy import func
 from . import tabela_bp
 
@@ -21,8 +21,8 @@ def tabela_registros_atuais():
 
     # Consulta principal para trazer os registros mais recentes por id_nota_fiscal
     registros = db.session.query(Registro)\
-        .join(subquery, (Registro.id_nota_fiscal == subquery.c.id_nota_fiscal) & 
-                         (Registro.data_criacao == subquery.c.max_data_criacao))\
+        .join(subquery, (Registro.id_nota_fiscal == subquery.c.id_nota_fiscal) & (Registro.data_criacao == subquery.c.max_data_criacao))\
+        .join(NotaFiscal, Registro.id_nota_fiscal == NotaFiscal.id_nota_fiscal)\
         .order_by(Registro.data_criacao.desc())\
         .paginate(page=page, per_page=per_page, error_out=False)
     
