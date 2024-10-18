@@ -72,7 +72,6 @@ def responsaveis_filial_filtro(model, join_model, filial, nome, email, permissao
 # Filtro de notas fiscais
 def notas_fiscais_filtro(model, chave_acesso, nota_fiscal, cnpj, filial, centro, prioridade):
 
-    # Consulta base para trazer os responsáveis
     query = consulta_base(model)
 
     # Aplica filtro da chave de acesso se presente
