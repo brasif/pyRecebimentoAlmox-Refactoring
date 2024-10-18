@@ -1,4 +1,4 @@
-from flask import redirect, url_for, flash
+from flask import redirect, url_for, flash, request
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.models import ResponsavelFilial
@@ -17,7 +17,7 @@ def excluir_responsavel_filial(id_responsavel_filial):
         db.session.delete(responsavel_filial)
         db.session.commit()
         flash("Vinculo responável por filial excluído com sucesso", "success")
-        return redirect(url_for('tabela.tabela_responsaveis_filial'))
+        return redirect(request.referrer)
 
     except ValueError as ve:
         db.session.rollback()
@@ -31,5 +31,4 @@ def excluir_responsavel_filial(id_responsavel_filial):
         db.session.rollback()
         flash(f"Erro inesperado: {str(e)}", "danger")
     
-    
-    return redirect(url_for('tabela.tabela_responsaveis_filial'))
+    return redirect(request.referrer)

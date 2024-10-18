@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, flash, request
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.forms import ResponsavelForm
@@ -22,7 +22,7 @@ def editar_responsavel(id_responsavel):
             db.session.commit()
 
             flash('Responsável atualizado com sucesso!', 'success')
-            return redirect(url_for('tabela.tabela_responsaveis'))
+            return redirect(request.referrer)
         
         except ValueError as ve:
             db.session.rollback()

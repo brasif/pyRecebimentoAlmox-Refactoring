@@ -57,7 +57,7 @@ def editar_nota_fiscal(id_nota_fiscal):
             db.session.commit()
 
             flash('Nota fiscal atualizada com sucesso!', 'success')
-            return redirect(url_for('tabela.tabela_notas_fiscais'))
+            return redirect(url_for("menu.menu"))
 
         except ValueError as ve:
             db.session.rollback()

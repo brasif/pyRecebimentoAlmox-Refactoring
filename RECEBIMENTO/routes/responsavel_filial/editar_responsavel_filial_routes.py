@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, flash, request
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.forms import ResponsavelFilialForm
@@ -47,7 +47,7 @@ def editar_responsavel_filial(id_responsavel_filial):
             ResponsavelFilial.atualizacao_responsavel_filial(responsavel_filial, form)
             db.session.commit()
             flash('Vinculo entre colaborador e filial atualizado com sucesso!', 'success')
-            return redirect(url_for('tabela.tabela_responsaveis_filial'))
+            return redirect(request.referrer)
 
         except ValueError as ve:
             db.session.rollback()

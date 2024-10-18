@@ -1,5 +1,4 @@
-import werkzeug
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.forms import NotaFiscalRecebimentoForm
@@ -13,12 +12,10 @@ from . import nota_fiscal_bp
 @login_required
 def criar_nota_fiscal(chave_acesso):
 
-    # Valida a chave de acesso para a operação de mudança de status
-    validacao = operacao_recebimento(chave_acesso)
-    
-    # Verifica se a função retorna um redirecionamento
-    if isinstance(validacao, werkzeug.wrappers.Response):
-        return validacao
+    # Verifica se a função retorna um valor falso
+    if operacao_recebimento(chave_acesso) == False:
+        # Redireciona para a ultima página acessada
+        return redirect(request.referrer)
     else:
         # A execução continua apenas se não houver redirecionamento na função operacao_recebimento
         form = NotaFiscalRecebimentoForm()
@@ -84,7 +81,7 @@ def criar_nota_fiscal(chave_acesso):
                 db.session.commit()
 
                 flash('Registro criado com sucesso!', 'success')
-                return redirect(url_for('menu.menu'))
+                return redirect(url_for("menu.menu"))
 
             except ValueError as ve:
                 db.session.rollback()

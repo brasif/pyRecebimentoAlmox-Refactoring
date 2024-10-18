@@ -1,12 +1,6 @@
-from flask import flash, redirect, url_for, request
+from flask import flash
 from RECEBIMENTO.models import NotaFiscal, Registro
 from sqlalchemy.exc import SQLAlchemyError
-
-# ========== Função auxiliar de redirecionamento ==========
-
-def redirect_back(default='menu.menu'):
-    # Tenta redirecionar para a página anterior
-    return redirect(request.referrer or url_for(default))
 
 
 # ========== Chave de acesso ==========
@@ -29,7 +23,7 @@ def obter_numero_nf(chave_acesso):
             return chave_acesso[27:34]
         else:
             flash("ERRO: Não foi possível obter o número da NF, chave de acesso inválida!", "danger")
-            return redirect_back()
+            return None
     except Exception as e:
         # Caso haja erro
         raise ValueError(f"Erro na extração do número da NF a partir da chave de acesso: {str(e)}")
@@ -54,30 +48,30 @@ def operacao_recebimento(chave_acesso):
                 if registro:
                     # Verifica se o último status registrado da nota é igual a "Estornado"
                     if registro.status_registro == "Estornado":
-                        return None
+                        return True
                     else:
                         flash("A chave de acesso já foi registrada anteriormente.", "warning")
-                        return redirect_back()
+                        return False
                 else:
                     flash(f"ERRO: Abra um chamado para a T.I., não foi possível encontrar um registro referente à nota fiscal. ID NF: {nota_fiscal.id_nota_fiscal}", "danger")
-                    return redirect_back()
+                    return False
             else:
-                return None
+                return True
         else:
             flash("Por favor, insira uma chave de acesso válida para continuar.", "warning")
-            return redirect_back()
+            return False
     
     except ValueError as ve:
         flash(str(ve), "warning")
-        return redirect_back()
+        return False
 
     except SQLAlchemyError as e:
         flash(f"Erro ao acessar o banco de dados: {str(e)}", "danger")
-        return redirect_back()
+        return False
 
     except Exception as e:
         flash(f"Erro inesperado: {str(e)}", "danger")
-        return redirect_back()
+        return False
 
 # HANDLER MUDAR STATUS
 def operacao_mudar_status(chave_acesso):
@@ -97,30 +91,30 @@ def operacao_mudar_status(chave_acesso):
                     # Verifica se o último status registrado da nota é igual a "Estornado"
                     if registro.status_registro == "Estornado":
                         flash("A NF foi estornada. Por favor, registre o Recebimento novamente para continuar.", "warning")
-                        return redirect_back()
+                        return False
                     else:
                         return nota_fiscal
                 else:
                     flash(f"ERRO: Abra um chamado para a T.I., não foi possível encontrar um registro referente à nota fiscal. ID NF: {nota_fiscal.id_nota_fiscal}", "danger")
-                    return redirect_back()
+                    return False
             else:
                 flash("A chave de acesso não foi cadastrada anteriormente. Por favor, registre o recebimento.", "warning")
-                return redirect_back()
+                return False
         else:
             flash("Por favor, insira uma chave de acesso válida para continuar.", "warning")
-            return redirect_back()
+            return False
     
     except ValueError as ve:
         flash(str(ve), "warning")
-        return redirect_back()
+        return False
 
     except SQLAlchemyError as e:
         flash(f"Erro ao acessar o banco de dados: {str(e)}", "danger")
-        return redirect_back()
+        return False
 
     except Exception as e:
         flash(f"Erro inesperado: {str(e)}", "danger")
-        return redirect_back()
+        return False
 
 # HANDLER ESTORNO
 def operacao_estorno(chave_acesso):
@@ -140,27 +134,27 @@ def operacao_estorno(chave_acesso):
                     # Verifica se o último status registrado da nota é igual a "Estornado"
                     if registro.status_registro == "Estornado":
                         flash("A NF já está estornada.", "warning")
-                        return redirect_back()
+                        return False
                     else:
-                        return nota_fiscal.id_nota_fiscal
+                        return True
                 else:
                     flash(f"ERRO: Abra um chamado para a T.I., não foi possível encontrar um registro referente à nota fiscal. ID NF: {nota_fiscal.id_nota_fiscal}", "danger")
-                    return redirect_back()
+                    return False
             else:
                 flash("A chave de acesso não foi cadastrada anteriormente. Por favor, registre o recebimento.", "warning")
-                return redirect_back()
+                return False
         else:
             flash("Por favor, insira uma chave de acesso válida para continuar.", "warning")
-            return redirect_back()
+            return False
     
     except ValueError as ve:
         flash(str(ve), "warning")
-        return redirect_back()
+        return False
 
     except SQLAlchemyError as e:
         flash(f"Erro ao acessar o banco de dados: {str(e)}", "danger")
-        return redirect_back()
+        return False
 
     except Exception as e:
         flash(f"Erro inesperado: {str(e)}", "danger")
-        return redirect_back()
+        return False

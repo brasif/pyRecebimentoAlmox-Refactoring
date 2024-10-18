@@ -1,7 +1,7 @@
-import werkzeug
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.forms import ChaveAcessoForm
+from RECEBIMENTO.models import NotaFiscal
 from RECEBIMENTO.utils import operacao_recebimento, operacao_mudar_status, operacao_estorno
 from flask_login import login_required, current_user
 
@@ -24,42 +24,37 @@ def menu():
             # Verifica se a operação escolhida
             # Recebimento
             if acao == "registrar":
-                # Valida a chave de acesso para a operação de mudança de status
-                validacao = operacao_recebimento(chave_acesso)
-
-                # Verifica se a função retorna um redirecionamento
-                if isinstance(validacao, werkzeug.wrappers.Response):
-                    # Retorna o redirecionamento
-                    return validacao
+                # Verifica se a função retorna um valor falso
+                if operacao_recebimento(chave_acesso) == False:
+                    # Redireciona para a ultima página acessada
+                    return redirect(request.referrer)
                 else:
                     # Opereção recebimento
                     return redirect(url_for("nota_fiscal.criar_nota_fiscal", chave_acesso=chave_acesso))
             
             # Mudar status
             elif acao == "mudar_status":
-                # Valida a chave de acesso para a operação de mudança de status
-                validacao = operacao_mudar_status(chave_acesso)
-                
-                # Verifica se a função retorna um redirecionamento
-                if isinstance(validacao, werkzeug.wrappers.Response):
-                    # Retorna o redirecionamento
-                    return validacao
+                # Verifica se a função retorna um valor falso
+                if operacao_mudar_status(chave_acesso) == False:
+                    # Redireciona para a ultima página acessada
+                    return redirect(request.referrer)
                 else:
+                    # Obtem o ID da nota fiscal a partir da chave de acesso
+                    nota_fiscal = NotaFiscal.query.filter_by(chave_acesso=chave_acesso).first_or_404()
                     # Opereção 'mudar status'
-                    return redirect(url_for("mudar_status.registro_mudar_status", id_nota_fiscal=validacao.id_nota_fiscal))
+                    return redirect(url_for("mudar_status.registro_mudar_status", id_nota_fiscal=nota_fiscal.id_nota_fiscal))
             
             # Estorno
             elif acao == "estorno":
-                # Valida a chave de acesso para a operação de estorno
-                validacao = operacao_estorno(chave_acesso)
-                
-                # Verifica se a função retorna um redirecionamento
-                if isinstance(validacao, werkzeug.wrappers.Response):
-                    # Retorna o redirecionamento
-                    return validacao
+                # Verifica se a função retorna um valor falso
+                if operacao_estorno(chave_acesso) == False:
+                    # Redireciona para a ultima página acessada
+                    return redirect(request.referrer)
                 else:
+                    # Obtem o ID da nota fiscal a partir da chave de acesso
+                    nota_fiscal = NotaFiscal.query.filter_by(chave_acesso=chave_acesso).first_or_404()
                     # Operação de estorno
-                    return redirect(url_for("estorno.registro_estorno", id_nota_fiscal=validacao.id_nota_fiscal))
+                    return redirect(url_for("estorno.registro_estorno", id_nota_fiscal=nota_fiscal.id_nota_fiscal))
         
         except ValueError as ve:
             flash(str(ve), "warning")

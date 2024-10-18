@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, flash, request
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.forms import ResponsavelFilialForm
@@ -46,7 +46,7 @@ def criar_responsavel_filial():
             db.session.commit()
 
             flash('Vinculo entre colaborador e filial criado com sucesso!', 'success')
-            return redirect(url_for('tabela.tabela_responsaveis_filial'))
+            return redirect(request.referrer)
 
         except ValueError as ve:
             db.session.rollback()

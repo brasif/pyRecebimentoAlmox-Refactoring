@@ -1,4 +1,3 @@
-import werkzeug
 from flask import render_template, redirect, url_for, flash, request
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
@@ -15,12 +14,10 @@ from . import mudar_status_bp
 def registro_mudar_status(id_nota_fiscal):
     nota_fiscal = NotaFiscal.query.get_or_404(id_nota_fiscal)
     
-    # Valida a chave de acesso para a operação de mudança de status
-    validacao = operacao_mudar_status(nota_fiscal.chave_acesso)
-    
-    # Verifica se a função retorna um redirecionamento
-    if isinstance(validacao, werkzeug.wrappers.Response):
-        return validacao
+    # Verifica se a função retorna um valor falso
+    if operacao_mudar_status(nota_fiscal.chave_acesso) == False:
+        # Redireciona para a ultima página acessada
+        return redirect(request.referrer)
     else:
         # A execução continua apenas se não houver redirecionamento na função operacao_mudar_status
         form = MudarStatusForm(obj=nota_fiscal)
@@ -78,7 +75,7 @@ def registro_mudar_status(id_nota_fiscal):
                     db.session.commit()
 
                     flash("Registro atualizado com sucesso!", "success")
-                    return redirect(url_for('tabela.tabela_registros_atuais'))
+                    return redirect(url_for("menu.menu"))
                 else:
                     flash("Insira um status diferente do atual para continuar.", "warning")
 
