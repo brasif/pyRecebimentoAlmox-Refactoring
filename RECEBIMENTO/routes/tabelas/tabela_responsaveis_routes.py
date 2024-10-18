@@ -12,7 +12,7 @@ def tabela_responsaveis():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 5, type=int)
 
-    # Chama a função de filtro de responsáveis por filial com os parâmetros da requisição
+    # Chama a função de filtro de responsáveis com os parâmetros da requisição
     query = responsaveis_filtro(
         Responsavel,
         request.args.get('nome', None),
