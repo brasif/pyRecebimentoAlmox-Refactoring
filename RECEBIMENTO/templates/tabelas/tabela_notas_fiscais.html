@@ -22,35 +22,74 @@
         {% endif %}
         {% endwith %}
 
+        <!-- Tabela de notas fiscais com filtros no cabeçalho -->
         <div class="table-responsive">
+
             <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Chave de acesso</th>
-                        <th>Nota Fiscal</th>
-                        <th>Volumes</th>
-                        <th>Código CTE</th>
-                        <th>CNPJ</th>
-                        <th>Filial</th>
-                        <th>Centro</th>
-                        <th>Registros</th>
-                        <th>Editar</th>
-                    </tr>
-                </thead>
+                <form method="GET" action="{{ url_for('tabela.tabela_notas_fiscais') }}" id="filter-form">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="text" class="form-control" id="chave_acesso" name="chave_acesso"
+                                    value="{{ request.args.get('chave_acesso') or '' }}" placeholder="Chave de acesso"
+                                    onchange="document.getElementById('filter-form').submit()">
+                            </th>
+                            <th>
+                                <input type="text" class="form-control" id="nota_fiscal" name="nota_fiscal"
+                                    value="{{ request.args.get('nota_fiscal') or '' }}" placeholder="Nota Fiscal"
+                                    onchange="document.getElementById('filter-form').submit()">
+                            </th>
+                            <th>
+                                <input type="text" class="form-control" id="cnpj" name="cnpj"
+                                    value="{{ request.args.get('cnpj') or '' }}" placeholder="CNPJ"
+                                    onchange="document.getElementById('filter-form').submit()">
+                            </th>
+                            <th>
+                                <select class="form-control" id="filial" name="filial"
+                                    onchange="document.getElementById('filter-form').submit()">
+                                    <option value="">Filial</option>
+                                    {% for f in Filiais %}
+                                    <option value="{{ f.name }}"
+                                        {% if request.args.get('filial') == f.name %}selected{% endif %}>{{ f.value }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </th>
+                            <th>
+                                <input type="text" class="form-control" id="centro" name="centro"
+                                    value="{{ request.args.get('centro') or '' }}" placeholder="Centro"
+                                    onchange="document.getElementById('filter-form').submit()">
+                            </th>
+                            <th>
+                                <select class="form-control" id="prioridade" name="prioridade"
+                                    onchange="document.getElementById('filter-form').submit()">
+                                    <option value="">Prioridade</option>
+                                    <option value="true"
+                                        {% if request.args.get('prioridade') == 'true' %}selected{% endif %}>
+                                        Sim</option>
+                                    <option value="false"
+                                        {% if request.args.get('prioridade') == 'false' %}selected{% endif %}>Não
+                                    </option>
+                                </select>
+                            </th>
+                            <th>Registros</th>
+                            <th>Editar</th>
+                        </tr>
+                    </thead>
+                </form>
                 <tbody>
                     {% for nota_fiscal in notas_fiscais.items %}
                     <tr>
                         <td class="descricao">
-                            <a href="{{ url_for('visualizacao.visualizar_nota_fiscal', id_nota_fiscal=nota_fiscal.id_nota_fiscal) }}">
-                                {{ nota_fiscal.chave_acesso }}
-                            </a>
+                            <a
+                                href="{{ url_for('visualizacao.visualizar_nota_fiscal', id_nota_fiscal=nota_fiscal.id_nota_fiscal) }}">{{ nota_fiscal.chave_acesso }}</a>
                         </td>
                         <td>{{ nota_fiscal.numero_nf }}</td>
-                        <td>{{ nota_fiscal.volumes }}</td>
-                        <td>{{ nota_fiscal.codigo_cte }}</td>
                         <td>{{ nota_fiscal.cnpj }}</td>
                         <td>{{ nota_fiscal.filial.value }}</td>
                         <td>{{ nota_fiscal.nome_centro }}</td>
+                        <td>{{ 'Sim' if nota_fiscal.prioridade else 'Não' }}</td>
+
                         <td>
                             <form method="GET"
                                 action="{{ url_for('associacoes.tabela_todos_registros_por_nota_fiscal', id_nota_fiscal=nota_fiscal.id_nota_fiscal) }}">
@@ -67,33 +106,27 @@
                     {% endfor %}
                 </tbody>
             </table>
-
         </div>
 
+        <!-- Paginação -->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 {% if notas_fiscais.has_prev %}
-                <li class="page-item"><a class="page-link"
-                        href="{{ url_for('tabela.tabela_notas_fiscais', page=notas_fiscais.prev_num) }}">Anterior</a>
+                <li class="page-item">
+                    <a class="page-link"
+                        href="{{ url_for('tabela.tabela_notas_fiscais', page=notas_fiscais.prev_num, filial=request.args.get('filial'), prioridade=request.args.get('prioridade')) }}">Anterior</a>
                 </li>
                 {% endif %}
-                <li class="page-item disabled"><a class="page-link" href="">Página {{ notas_fiscais.page }} de
+                <li class="page-item disabled"><a class="page-link">Página {{ notas_fiscais.page }} de
                         {{ notas_fiscais.pages }}</a></li>
                 {% if notas_fiscais.has_next %}
-                <li class="page-item"><a class="page-link"
-                        href="{{ url_for('tabela.tabela_notas_fiscais', page=notas_fiscais.next_num) }}">Próxima</a>
+                <li class="page-item">
+                    <a class="page-link"
+                        href="{{ url_for('tabela.tabela_notas_fiscais', page=notas_fiscais.next_num, filial=request.args.get('filial'), prioridade=request.args.get('prioridade')) }}">Próxima</a>
                 </li>
                 {% endif %}
             </ul>
         </nav>
-
-        <!-- Botão para baixar o Excel -->
-        <div class="text-right mb-3">
-            <form method="GET" action="{{ url_for('tabelas_excel.excel_notas_fiscais') }}">
-                <input type="submit" value="Exportar todas as notas fiscais (.xlsx)" class="btn btn-primary">
-            </form>
-        </div>
-
     </div>
 </div>
 {% endblock %}
