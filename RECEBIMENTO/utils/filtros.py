@@ -1,5 +1,6 @@
 from RECEBIMENTO import db
 from sqlalchemy.orm import aliased
+from sqlalchemy import func
 
 
 # Obtem a consulta base
@@ -40,6 +41,7 @@ def responsaveis_filtro(model, nome, email, permissao, status):
 
 # Filtro de responsáveis por filial
 def responsaveis_filial_filtro(model, join_model, filial, nome, email, permissao, status):
+    
     # Consulta base para trazer os responsáveis por filial e garantir o join com a tabela Responsavel
     ResponsavelAlias = aliased(join_model)  # Usando alias para evitar ambiguidades
     query = db.session.query(model).join(ResponsavelAlias, model.id_responsavel == ResponsavelAlias.id_responsavel)
@@ -63,5 +65,40 @@ def responsaveis_filial_filtro(model, join_model, filial, nome, email, permissao
     # Aplica filtro de status se presente (na tabela Responsavel)
     if status:
         query = query.filter(ResponsavelAlias.status == (status.lower() == 'true'))
+    
+    return query
+
+
+# Filtro de notas fiscais
+def notas_fiscais_filtro(model, chave_acesso, nota_fiscal, cnpj, filial, centro, prioridade):
+
+    # Consulta base para trazer os responsáveis
+    query = consulta_base(model)
+
+    # Aplica filtro da chave de acesso se presente
+    if chave_acesso:
+        query = query.filter(model.chave_acesso.ilike(f'%{chave_acesso}%'))
+    
+    # Filtro da nota fiscal se presente
+    if nota_fiscal:
+        # Aplica o filtro sobre a substring específica da chave de acesso que corresponde ao número da NF
+        query = query.filter(func.substr(model.chave_acesso, 27, 34).ilike(f'%{nota_fiscal}%'))
+    
+    # Aplica filtro do cnpj se presente
+    if cnpj:
+        # Aplica o filtro sobre a substring específica da chave de acesso que corresponde ao CNPJ
+        query = query.filter(func.substr(model.chave_acesso, 6, 20).ilike(f'%{cnpj}%'))
+    
+    # Aplica filtro de filial se presente
+    if filial:
+        query = query.filter(model.filial == filial)
+    
+    # Aplica filtro do centro se presente
+    if centro:
+        query = query.filter(model.nome_centro.ilike(f'%{centro}%'))    
+    
+    # Aplica filtro de prioridade se presente
+    if prioridade:
+        query = query.filter(model.prioridade == (prioridade.lower() == 'true'))
     
     return query
