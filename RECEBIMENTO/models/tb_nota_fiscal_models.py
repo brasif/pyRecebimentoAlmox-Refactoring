@@ -1,7 +1,6 @@
 from RECEBIMENTO import db
 from datetime import datetime
 from .enum_filiais import Filiais
-import re
 
 
 class NotaFiscal(db.Model):
