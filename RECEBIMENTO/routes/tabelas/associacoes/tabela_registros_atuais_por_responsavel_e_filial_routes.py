@@ -8,7 +8,7 @@ from . import associacoes_bp
 
 @associacoes_bp.route('/registros/responsavel/<int:id_responsavel>/filial/<string:filial>')
 @login_required
-def tabela_registros_por_responsavel_e_filial(id_responsavel, filial):
+def tabela_registros_atuais_por_responsavel_e_filial(id_responsavel, filial):
     responsavel = Responsavel.query.get_or_404(id_responsavel)
 
     try:
@@ -35,4 +35,4 @@ def tabela_registros_por_responsavel_e_filial(id_responsavel, filial):
         .order_by(Registro.data_criacao.desc())\
         .paginate(page=page, per_page=per_page, error_out=False)
 
-    return render_template('/tabelas/associacoes/tabela_registros_por_responsavel_e_filial.html', registros=registros, nome_responsavel=responsavel.nome_responsavel, id_responsavel=current_user.id_responsavel)
+    return render_template('/tabelas/associacoes/tabela_registros_atuais_por_responsavel_e_filial.html', registros=registros, nome_responsavel=responsavel.nome_responsavel, id_responsavel=current_user.id_responsavel)
