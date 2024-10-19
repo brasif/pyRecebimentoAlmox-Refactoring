@@ -1,82 +1,78 @@
 {% extends "base.html" %}
 
-{% set title = "Responsaveis por filial" %}
+{% set title = "Responsáveis por Filial" %}
 
 {% block content %}
-<div class="container">
-    <div class="container-home">
+<section>
 
-        <h1 class="text-center mt-5">Responsaveis por filial</h1>
+    <h1>Responsáveis por Filial</h1>
 
-        <!-- Seção para exibir mensagens flash -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
+    <!-- Seção para exibir mensagens flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 
-        <div class="table-responsive">
-
-            <table class="table table-striped">
-                <form method="GET" action="{{ url_for('tabela.tabela_responsaveis_filial') }}" id="filter-form">
-                    <thead>
-                        <tr>
-                            <th>
-                                <select class="form-control" id="filial" name="filial"
-                                    onchange="document.getElementById('filter-form').submit()">
-                                    <option value="">Filial</option>
-                                    {% for f in Filiais %}
-                                    <option value="{{ f.name }}"
-                                        {% if request.args.get('filial') == f.name %}selected{% endif %}>{{ f.value }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
-                            </th>
-                            <th>
-                                <input type="text" class="form-control" id="nome" name="nome"
-                                    value="{{ request.args.get('nome') or '' }}" placeholder="Nome"
-                                    onchange="document.getElementById('filter-form').submit()">
-                            </th>
-                            <th>
-                                <input type="text" class="form-control" id="email" name="email"
-                                    value="{{ request.args.get('email') or '' }}" placeholder="E-mail"
-                                    onchange="document.getElementById('filter-form').submit()">
-                            </th>
-                            <th>
-                                <select class="form-control" id="permissao" name="permissao"
-                                    onchange="document.getElementById('filter-form').submit()">
-                                    <option value="">Permissão</option>
-                                    <option value="true"
-                                        {% if request.args.get('permissao') == 'true' %}selected{% endif %}>
-                                        Administrador</option>
-                                    <option value="false"
-                                        {% if request.args.get('permissao') == 'false' %}selected{% endif %}>Usuário
-                                    </option>
-                                </select>
-                            </th>
-                            <th>
-                                <select class="form-control" id="status" name="status"
-                                    onchange="document.getElementById('filter-form').submit()">
-                                    <option value="">Status</option>
-                                    <option value="true"
-                                        {% if request.args.get('status') == 'true' %}selected{% endif %}>Ativo</option>
-                                    <option value="false"
-                                        {% if request.args.get('status') == 'false' %}selected{% endif %}>Inativo
-                                    </option>
-                                </select>
-                            </th>
-                            <th>Editar</th>
-                            <th>Excluir</th>
-                        </tr>
-                    </thead>
-                </form>
+    <div class="table-responsive">
+        <form method="GET" action="{{ url_for('tabela.tabela_responsaveis_filial') }}" id="filter-form">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <select class="form-control" id="filial" name="filial"
+                                onchange="document.getElementById('filter-form').submit()">
+                                <option value="">Filial</option>
+                                {% for f in Filiais %}
+                                <option value="{{ f.name }}"
+                                    {% if request.args.get('filial') == f.name %}selected{% endif %}>{{ f.value }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                        <th>
+                            <input type="text" class="form-control" id="nome" name="nome"
+                                value="{{ request.args.get('nome') or '' }}" placeholder="Nome"
+                                onchange="document.getElementById('filter-form').submit()">
+                        </th>
+                        <th>
+                            <input type="text" class="form-control" id="email" name="email"
+                                value="{{ request.args.get('email') or '' }}" placeholder="E-mail"
+                                onchange="document.getElementById('filter-form').submit()">
+                        </th>
+                        <th>
+                            <select class="form-control" id="permissao" name="permissao"
+                                onchange="document.getElementById('filter-form').submit()">
+                                <option value="">Permissão</option>
+                                <option value="true" {% if request.args.get('permissao') == 'true' %}selected{% endif %}>
+                                    Administrador</option>
+                                <option value="false" {% if request.args.get('permissao') == 'false' %}selected{% endif %}>
+                                    Usuário
+                                </option>
+                            </select>
+                        </th>
+                        <th>
+                            <select class="form-control" id="status" name="status"
+                                onchange="document.getElementById('filter-form').submit()">
+                                <option value="">Status</option>
+                                <option value="true" {% if request.args.get('status') == 'true' %}selected{% endif %}>
+                                    Ativo</option>
+                                <option value="false" {% if request.args.get('status') == 'false' %}selected{% endif %}>
+                                    Inativo
+                                </option>
+                            </select>
+                        </th>
+                        <th>Editar</th>
+                        <th>Excluir</th>
+                    </tr>
+                </thead>
                 <tbody>
                     {% for responsavel_filial in responsaveis_filial.items %}
                     <tr>
@@ -108,24 +104,42 @@
                     {% endfor %}
                 </tbody>
             </table>
-        </div>
-
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                {% if responsaveis_filial.has_prev %}
-                <li class="page-item"><a class="page-link"
-                        href="{{ url_for('tabela.tabela_responsaveis_filial', page=responsaveis_filial.prev_num) }}">Anterior</a>
-                </li>
-                {% endif %}
-                <li class="page-item disabled"><a class="page-link" href="">Página {{ responsaveis_filial.page }} de
-                        {{ responsaveis_filial.pages }}</a></li>
-                {% if responsaveis_filial.has_next %}
-                <li class="page-item"><a class="page-link"
-                        href="{{ url_for('tabela.tabela_responsaveis_filial', page=responsaveis_filial.next_num) }}">Próxima</a>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
+        </form>
     </div>
-</div>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if responsaveis_filial.has_prev %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="{{ url_for('tabela.tabela_responsaveis_filial', page=responsaveis_filial.prev_num, 
+                    filial=request.args.get('filial'), 
+                    nome=request.args.get('nome'), 
+                    email=request.args.get('email'), 
+                    permissao=request.args.get('permissao'), 
+                    status=request.args.get('status')) }}">
+                    Anterior
+                </a>
+            </li>
+            {% endif %}
+            <li class="page-item disabled">
+                <a class="page-link" href="">Página {{ responsaveis_filial.page }} de {{ responsaveis_filial.pages }}</a>
+            </li>
+            {% if responsaveis_filial.has_next %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="{{ url_for('tabela.tabela_responsaveis_filial', page=responsaveis_filial.next_num, 
+                    filial=request.args.get('filial'), 
+                    nome=request.args.get('nome'), 
+                    email=request.args.get('email'), 
+                    permissao=request.args.get('permissao'), 
+                    status=request.args.get('status')) }}">
+                    Próxima
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>    
+
+</section>
 {% endblock %}

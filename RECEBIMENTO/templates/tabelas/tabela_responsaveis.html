@@ -1,137 +1,129 @@
 {% extends "base.html" %}
 
-{% set title = "Responsaveis" %}
+{% set title = "Responsáveis" %}
 
 {% block content %}
-<div class="container">
-    <div class="container-home">
+<section>
 
-        <h1 class="text-center mt-5">Responsaveis</h1>
+    <h1>Responsáveis</h1>
 
-        <!-- Seção para exibir mensagens flash -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
-
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <form method="GET" action="{{ url_for('tabela.tabela_responsaveis') }}" id="filter-form">
-                    <thead>
-                        <tr>
-                            <th>
-                                <input type="text" class="form-control" id="nome" name="nome"
-                                    value="{{ request.args.get('nome') or '' }}" placeholder="Nome"
-                                    onchange="document.getElementById('filter-form').submit()">
-                            </th>
-                            <th>
-                                <input type="text" class="form-control" id="email" name="email"
-                                    value="{{ request.args.get('email') or '' }}" placeholder="E-mail"
-                                    onchange="document.getElementById('filter-form').submit()">
-                            </th>
-                            <th>
-                                <select class="form-control" id="permissao" name="permissao"
-                                    onchange="document.getElementById('filter-form').submit()">
-                                    <option value="">Permissão</option>
-                                    <option value="true"
-                                        {% if request.args.get('permissao') == 'true' %}selected{% endif %}>
-                                        Administrador</option>
-                                    <option value="false"
-                                        {% if request.args.get('permissao') == 'false' %}selected{% endif %}>Usuário
-                                    </option>
-                                </select>
-                            </th>
-                            <th>
-                                <select class="form-control" id="status" name="status"
-                                    onchange="document.getElementById('filter-form').submit()">
-                                    <option value="">Status</option>
-                                    <option value="true"
-                                        {% if request.args.get('status') == 'true' %}selected{% endif %}>Ativo</option>
-                                    <option value="false"
-                                        {% if request.args.get('status') == 'false' %}selected{% endif %}>Inativo
-                                    </option>
-                                </select>
-                            </th>
-                            <th>Filiais</th>
-                            <th>Registros</th>
-                            <th>Editar</th>
-                        </tr>
-                    </thead>
-                </form>
-                <tbody>
-                    {% for responsavel in responsaveis.items %}
-                    <tr>
-                        <td>
-                            <a
-                                href="{{ url_for('visualizacao.visualizar_responsavel', id_responsavel=responsavel.id_responsavel) }}">
-                                {{ responsavel.nome_responsavel }}
-                            </a>
-                        </td>
-                        <td>{{ responsavel.email }}</td>
-                        <td>{{ 'Administrador' if responsavel.permissao else 'Usuário' }}</td>
-                        <td>{{ 'Ativo' if responsavel.status else 'Inativo' }}</td>
-                        <td>
-                            <form method="GET"
-                                action="{{ url_for('associacoes.tabela_filiais_por_responsavel', id_responsavel=responsavel.id_responsavel) }}">
-                                <input type="submit" value="Filiais" class="btn btn-info">
-                            </form>
-                        </td>
-                        <td>
-                            <form method="GET"
-                                action="{{ url_for('associacoes.tabela_registros_atuais_por_responsavel', id_responsavel=responsavel.id_responsavel) }}">
-                                <input type="submit" value="Registros" class="btn btn-info">
-                            </form>
-                        </td>
-                        {% if responsavel.id_responsavel != id_responsavel_logado %}
-                        <td>
-                            <form method="GET"
-                                action="{{ url_for('responsavel.editar_responsavel', id_responsavel=responsavel.id_responsavel) }}">
-                                <input type="submit" value="Editar" class="btn btn-warning">
-                            </form>
-                        </td>
-                        {% else %}
-                        <td>
-                            <form method="GET"
-                                action="{{ url_for('responsavel.editar_responsavel', id_responsavel=responsavel.id_responsavel) }}">
-                                <input type="submit" value="Editar" class="btn btn-warning" disabled>
-                            </form>
-                        </td>
-                        {% endif %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                {% if responsaveis.has_prev %}
-                <li class="page-item"><a class="page-link"
-                        href="{{ url_for('tabela.tabela_responsaveis', page=responsaveis.prev_num) }}">Anterior</a></li>
-                {% endif %}
-                <li class="page-item disabled"><a class="page-link" href="">Página {{ responsaveis.page }} de
-                        {{ responsaveis.pages }}</a></li>
-                {% if responsaveis.has_next %}
-                <li class="page-item"><a class="page-link"
-                        href="{{ url_for('tabela.tabela_responsaveis', page=responsaveis.next_num) }}">Próxima</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-
-        <!-- Botão para baixar o Excel -->
-        <div class="text-right mb-3">
-            <form method="GET" action="{{ url_for('tabelas_excel.excel_responsaveis') }}">
-                <input type="submit" value="Exportar todos os responsáveis (.xlsx)" class="btn btn-primary">
-            </form>
-        </div>
+    <!-- Seção para exibir mensagens flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
     </div>
-</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="table-responsive">
+        <table>
+            <form method="GET" action="{{ url_for('tabela.tabela_responsaveis') }}" id="filter-form">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="text" class="form-control" id="nome" name="nome"
+                                value="{{ request.args.get('nome') or '' }}" placeholder="Nome"
+                                onchange="document.getElementById('filter-form').submit()">
+                        </th>
+                        <th>
+                            <input type="text" class="form-control" id="email" name="email"
+                                value="{{ request.args.get('email') or '' }}" placeholder="E-mail"
+                                onchange="document.getElementById('filter-form').submit()">
+                        </th>
+                        <th>
+                            <select class="form-control" id="permissao" name="permissao"
+                                onchange="document.getElementById('filter-form').submit()">
+                                <option value="">Permissão</option>
+                                <option value="true" {% if request.args.get('permissao') == 'true' %}selected{% endif %}>
+                                    Administrador</option>
+                                <option value="false" {% if request.args.get('permissao') == 'false' %}selected{% endif %}>
+                                    Usuário
+                                </option>
+                            </select>
+                        </th>
+                        <th>
+                            <select class="form-control" id="status" name="status"
+                                onchange="document.getElementById('filter-form').submit()">
+                                <option value="">Status</option>
+                                <option value="true" {% if request.args.get('status') == 'true' %}selected{% endif %}>Ativo
+                                </option>
+                                <option value="false" {% if request.args.get('status') == 'false' %}selected{% endif %}>
+                                    Inativo
+                                </option>
+                            </select>
+                        </th>
+                        <th>Filiais</th>
+                        <th>Registros</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+            </form>
+            <tbody>
+                {% for responsavel in responsaveis.items %}
+                <tr>
+                    <td>
+                        <a
+                            href="{{ url_for('visualizacao.visualizar_responsavel', id_responsavel=responsavel.id_responsavel) }}">
+                            {{ responsavel.nome_responsavel }}
+                        </a>
+                    </td>
+                    <td>{{ responsavel.email }}</td>
+                    <td>{{ 'Administrador' if responsavel.permissao else 'Usuário' }}</td>
+                    <td>{{ 'Ativo' if responsavel.status else 'Inativo' }}</td>
+                    <td>
+                        <form method="GET"
+                            action="{{ url_for('associacoes.tabela_filiais_por_responsavel', id_responsavel=responsavel.id_responsavel) }}">
+                            <input type="submit" value="Filiais" class="btn btn-info">
+                        </form>
+                    </td>
+                    <td>
+                        <form method="GET"
+                            action="{{ url_for('associacoes.tabela_registros_atuais_por_responsavel', id_responsavel=responsavel.id_responsavel) }}">
+                            <input type="submit" value="Registros" class="btn btn-info">
+                        </form>
+                    </td>
+                    {% if responsavel.id_responsavel != id_responsavel_logado %}
+                    <td>
+                        <form method="GET"
+                            action="{{ url_for('responsavel.editar_responsavel', id_responsavel=responsavel.id_responsavel) }}">
+                            <input type="submit" value="Editar" class="btn btn-warning">
+                        </form>
+                    </td>
+                    {% else %}
+                    <td>
+                        <form method="GET"
+                            action="{{ url_for('responsavel.editar_responsavel', id_responsavel=responsavel.id_responsavel) }}">
+                            <input type="submit" value="Editar" class="btn btn-warning" disabled>
+                        </form>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if responsaveis.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('tabela.tabela_responsaveis', page=responsaveis.prev_num, nome=request.args.get('nome'), email=request.args.get('email'), permissao=request.args.get('permissao'), status=request.args.get('status')) }}">Anterior</a>
+            </li>
+            {% endif %}
+            <li class="page-item disabled"><a class="page-link" href="">Página {{ responsaveis.page }} de {{ responsaveis.pages }}</a></li>
+            {% if responsaveis.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('tabela.tabela_responsaveis', page=responsaveis.next_num, nome=request.args.get('nome'), email=request.args.get('email'), permissao=request.args.get('permissao'), status=request.args.get('status')) }}">Próxima</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>    
+
+</section>
 {% endblock %}
