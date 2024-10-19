@@ -3,45 +3,43 @@
 {% set title = "Visualizar Nota Fiscal" %}
 
 {% block content %}
-<div class="container">
-    <div class="container-home">
+<section>
 
-        <h1 class="text-center mt-5">Detalhes da Nota Fiscal</h1>
+    <h1>Detalhes da Nota Fiscal</h1>
 
-        <!-- Seção para exibir mensagens flash -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
-
-        <div class="mt-4" style="text-align: left;">
-            <h5><strong>Chave de Acesso:</strong> {{ nota_fiscal.chave_acesso }}</h5>
-            <h5><strong>Número da Nota Fiscal:</strong> {{ nota_fiscal.numero_nf }}</h5>
-            <h5><strong>Volumes:</strong> {{ nota_fiscal.volumes }}</h5>
-            <h5><strong>Código CTE:</strong> {{ nota_fiscal.codigo_cte }}</h5>
-            <h5><strong>CNPJ:</strong> {{ nota_fiscal.cnpj }}</h5>
-            <h5><strong>Filial:</strong> {{ nota_fiscal.filial.value }}</h5>
-            <h5><strong>Centro:</strong> {{ nota_fiscal.nome_centro }}</h5>
-            <h5><strong>Prioridade:</strong> {{ 'Sim' if nota_fiscal.prioridade else 'Não' }}</h5>
-            <h5><strong>Avaria:</strong> {{ 'Sim' if nota_fiscal.avaria else 'Não' }}</h5>
-            <h5><strong>Recusa:</strong> {{ 'Sim' if nota_fiscal.recusa else 'Não' }}</h5>
-            <h5><strong>Data de Criação:</strong> {{ nota_fiscal.data_criacao.strftime('%d/%m/%Y %H:%Mh') }}</h5>
-            <h5><strong>Data de Alteração:</strong> {{ nota_fiscal.data_alteracao.strftime('%d/%m/%Y %H:%Mh') }}</h5>
-        </div>
-
-        <div class="text-right mt-4">
-            <button onclick="goBack()" class="btn btn-secondary">Voltar</button>
-        </div>
+    <!-- Seção para exibir mensagens flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
     </div>
-</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="mt-5" style="text-align: left;">
+        <h5><strong>Chave de Acesso:</strong> {{ nota_fiscal.chave_acesso }}</h5>
+        <h5><strong>Número da Nota Fiscal:</strong> {{ nota_fiscal.numero_nf }}</h5>
+        <h5><strong>Volumes:</strong> {{ nota_fiscal.volumes }}</h5>
+        <h5><strong>Código CTE:</strong> {{ nota_fiscal.codigo_cte }}</h5>
+        <h5><strong>CNPJ:</strong> {{ nota_fiscal.cnpj }}</h5>
+        <h5><strong>Filial:</strong> {{ nota_fiscal.filial.value }}</h5>
+        <h5><strong>Centro:</strong> {{ nota_fiscal.nome_centro }}</h5>
+        <h5><strong>Prioridade:</strong> {{ 'Sim' if nota_fiscal.prioridade else 'Não' }}</h5>
+        <h5><strong>Avaria:</strong> {{ 'Sim' if nota_fiscal.avaria else 'Não' }}</h5>
+        <h5><strong>Recusa:</strong> {{ 'Sim' if nota_fiscal.recusa else 'Não' }}</h5>
+        <h5><strong>Data de Criação:</strong> {{ nota_fiscal.data_criacao.strftime('%d/%m/%Y %H:%Mh') }}</h5>
+        <h5><strong>Data de Alteração:</strong> {{ nota_fiscal.data_alteracao.strftime('%d/%m/%Y %H:%Mh') }}</h5>
+    </div>
+
+
+    <button onclick="goBack()" class="btn btn-secondary mt-5 w-100">Voltar</button>
+
+</section>
 
 <!-- Inclusão do arquivo JavaScript -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
