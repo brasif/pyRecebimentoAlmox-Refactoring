@@ -59,6 +59,20 @@ CREATE TABLE tb_registro (
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Criação da tabela de auditoria
+CREATE TABLE tb_auditoria (
+    id_auditoria SERIAL PRIMARY KEY,
+    tabela_referenciada VARCHAR(50) NOT NULL,
+    id_referencia INT,
+    acao VARCHAR(50) NOT NULL,
+    coluna_alterada VARCHAR(100),
+    valor_antigo TEXT,
+    valor_novo TEXT,
+    id_responsavel INT REFERENCES tb_responsavel(id_responsavel),
+    data_evento TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- Associações e consultas solicitadas
 -- Ver registros por nota fiscal
 CREATE INDEX idx_registro_nota_fiscal ON tb_registro(id_nota_fiscal);
