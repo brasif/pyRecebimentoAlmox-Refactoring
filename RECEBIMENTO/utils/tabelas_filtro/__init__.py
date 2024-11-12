@@ -1,2 +1,2 @@
-from tabelas import *
-from associacoes import *
+from .tabelas import *
+from .associacoes import *
