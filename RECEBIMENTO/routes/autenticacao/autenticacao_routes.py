@@ -1,9 +1,11 @@
-from flask import render_template, redirect, url_for, request, session
+from flask import render_template, redirect, url_for, flash, request, session
 from RECEBIMENTO import login_manager, db
 from RECEBIMENTO.models import Responsavel
 from flask_login import login_required, logout_user, login_user
 from RECEBIMENTO.utils import autenticacao_URL, autenticacao_token
 from . import autenticacao_bp
+from app_config import Config
+import requests
 
 
 @autenticacao_bp.route("/login", methods=["GET", "POST"])
@@ -28,25 +30,51 @@ def get_token():
         user_info = result.get("id_token_claims")
         user_email = user_info.get("preferred_username")  # Email do usuário
         user_name = user_info.get("name")  # Nome do usuário
+        access_token = result.get("access_token")
 
-        # Verifica se o usuário já existe no banco de dados
-        user = Responsavel.query.filter_by(email=user_email).first()
-        
-        if not user:
-            user = Responsavel(
-                nome_responsavel=user_name,
-                email=user_email,
-                id_azure_ad=user_info.get("oid"),
-                permissao=True,
-                status=True
-            )
-            db.session.add(user)
-            db.session.commit()  # Salva o novo usuário no banco
+        # Define a URL do grupo de e-mail no Microsoft Graph
+        group_url = f"https://graph.microsoft.com/v1.0/groups/{Config.GROUP_ID}/members?$select=mail"
 
-        # Faz login do usuário
-        login_user(user)
-        session['_user_permissao'] = user.permissao
-        return redirect(url_for("menu.menu"))
+        # Cabeçalhos da requisição
+        headers = {
+            "Authorization": f"Bearer {access_token}"
+        }
+
+        # Faz a requisição para obter a lista de membros do grupo
+        response = requests.get(group_url, headers=headers)
+
+        # Verifica o sucesso da requisição
+        if response.status_code == 200:
+            members = response.json().get("value", [])
+            # Verifica se o e-mail do usuário está na lista de membros
+            if any(member.get("mail") == user_email for member in members):
+                # O usuário faz parte do grupo; continue com o login
+
+                # Verifica se o usuário já existe no banco de dados
+                user = Responsavel.query.filter_by(email=user_email).first()
+                
+                if not user:
+                    user = Responsavel(
+                        nome_responsavel=user_name,
+                        email=user_email,
+                        id_azure_ad=user_info.get("oid"),
+                        permissao=True,
+                        status=True
+                    )
+                    db.session.add(user)
+                    db.session.commit()  # Salva o novo usuário no banco
+
+                # Faz login do usuário
+                login_user(user)
+                session['_user_permissao'] = user.permissao
+                return redirect(url_for("menu.menu"))
+            else:
+                # O usuário não faz parte do grupo
+                flash(f"Você não tem permissão para acessar a aplicação!", "warning")
+                return redirect(url_for("autenticacao.login"))
+        else:
+            # Erro ao acessar a API do Microsoft Graph
+            return f"Failed to retrieve group members: {response.status_code} - {response.text}", 500
     else:
         error = result.get("error")
         error_description = result.get("error_description")

@@ -18,6 +18,7 @@ class Config:
     AUTHORITY = f"https://login.microsoftonline.com/{os.getenv('TENANT_ID')}"
     REDIRECT_PATH = "/getAToken"
     SCOPE = ["User.Read"]
+    GROUP_ID = os.getenv('GROUP_ID')
     
     # Método para verificação das variáveis críticas
     @staticmethod
