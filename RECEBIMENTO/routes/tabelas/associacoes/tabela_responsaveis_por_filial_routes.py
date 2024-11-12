@@ -24,13 +24,14 @@ def tabela_responsaveis_por_filial(filial):
     permissao = request.args.get('permissao')
     status = request.args.get('status')
     
-    # Consulta para trazer os responsáveis por filial com filtros opcionais
-    query = db.session.query(ResponsavelFilial).join(Responsavel).filter(ResponsavelFilial.filial == filial_enum)
+    # Consulta para trazer os responsáveis por filial
+    responsaveis_query = db.session.query(ResponsavelFilial).join(Responsavel).filter(ResponsavelFilial.filial == filial_enum)
     
     
     # Chama a função de filtro de responsáveis com os parâmetros da requisição
-    query = responsaveis_por_filial_filtro(
+    responsaveis_query = responsaveis_por_filial_filtro(
         Responsavel,
+        responsaveis_query,
         nome,
         email,
         permissao,
@@ -38,7 +39,7 @@ def tabela_responsaveis_por_filial(filial):
     )
 
     # Ordenação por nome (A-Z)
-    responsaveis = query\
+    responsaveis = responsaveis_query\
         .order_by(Responsavel.nome_responsavel.asc())\
         .paginate(page=page, per_page=per_page, error_out=False)
     
