@@ -1,6 +1,6 @@
 from RECEBIMENTO import db
 from sqlalchemy.orm import aliased
-from sqlalchemy import func
+from sqlalchemy import func, extract
 
 
 # Obtem a consulta base
@@ -104,7 +104,8 @@ def notas_fiscais_filtro(model, chave_acesso, nota_fiscal, cnpj, filial, centro,
 
 
 # Filtro de todos os registros
-def todos_registros_filtro(model_nf, model_reg, model_resp, query, chave_acesso, nota_fiscal, filial, centro, status, prioridade, responsavel, data_recebimento=None, data_guarda=None):
+def todos_registros_filtro(model_nf, model_reg, model_resp, query, chave_acesso, nota_fiscal, filial, centro, status, prioridade, responsavel, data_recebimento, data_guarda, mes):
+    
     # Filtro da chave de acesso
     if chave_acesso:
         query = query.filter(model_nf.chave_acesso.ilike(f'%{chave_acesso}%'))
@@ -140,5 +141,9 @@ def todos_registros_filtro(model_nf, model_reg, model_resp, query, chave_acesso,
     # Filtro da data de guarda
     if data_guarda:
         query = query.filter(func.date(model_reg.data_guarda) == data_guarda)
+
+    # Filtro do mês
+    if mes:
+        query = query.filter(extract('month', model_reg.data_recebimento) == int(mes))
 
     return query

@@ -23,6 +23,7 @@ def tabela_todos_registros():
     responsavel = request.args.get('responsavel')
     data_recebimento = request.args.get('data_recebimento')
     data_guarda = request.args.get('data_guarda')
+    mes = request.args.get('mes')
 
     # Consulta para trazer todos os registros
     registros_query = db.session.query(Registro)\
@@ -43,7 +44,8 @@ def tabela_todos_registros():
         prioridade,
         responsavel,
         data_recebimento,
-        data_guarda
+        data_guarda,
+        mes
     )
 
     # Pagina os resultados
