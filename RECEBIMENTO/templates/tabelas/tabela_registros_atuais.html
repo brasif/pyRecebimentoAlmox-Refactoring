@@ -106,7 +106,7 @@
             <tbody>
                 {% for registro in registros.items %}
                 <tr>
-                    <td>{{ registro.mes|title }}</td>
+                    <td style="min-width: 8rem;">{{ registro.mes|title }}</td>
                     <td>{{ registro.data_recebimento.strftime('%d/%m/%Y %H:%M h') }}</td>
                     <td class="descricao">
                         <a
