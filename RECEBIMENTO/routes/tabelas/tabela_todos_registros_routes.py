@@ -10,7 +10,6 @@ from . import tabela_bp
 @tabela_bp.route('/registros')
 @login_required
 def tabela_todos_registros():
-    # Paginação
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 5, type=int)
 
@@ -22,6 +21,8 @@ def tabela_todos_registros():
     status = request.args.get('status')
     prioridade = request.args.get('prioridade')
     responsavel = request.args.get('responsavel')
+    data_recebimento = request.args.get('data_recebimento')
+    data_guarda = request.args.get('data_guarda')
 
     # Consulta para trazer todos os registros
     registros_query = db.session.query(Registro)\
@@ -40,7 +41,9 @@ def tabela_todos_registros():
         centro,
         status,
         prioridade,
-        responsavel
+        responsavel,
+        data_recebimento,
+        data_guarda
     )
 
     # Pagina os resultados

@@ -27,7 +27,11 @@
                 <thead>
                     <tr>
                         <th>Mês</th>
-                        <th>Data recebimento</th>
+                        <th>
+                            <input type="date" class="form-control" name="data_recebimento" 
+                                   value="{{ request.args.get('data_recebimento') or '' }}" placeholder="Data Recebimento"
+                                   onchange="document.getElementById('filter-form').submit()">
+                        </th>
                         <th>
                             <input type="text" class="form-control" name="chave_acesso" 
                                    value="{{ request.args.get('chave_acesso') or '' }}" placeholder="Chave de Acesso"
@@ -59,7 +63,11 @@
                                    value="{{ request.args.get('status') or '' }}" placeholder="Status"
                                    onchange="document.getElementById('filter-form').submit()">
                         </th>
-                        <th>Data guarda</th>
+                        <th>
+                            <input type="date" class="form-control" name="data_guarda" 
+                                   value="{{ request.args.get('data_guarda') or '' }}" placeholder="Data Guarda"
+                                   onchange="document.getElementById('filter-form').submit()">
+                        </th>
                         <th>
                             <select class="form-control" name="prioridade" 
                                     onchange="document.getElementById('filter-form').submit()">
@@ -87,7 +95,7 @@
                         </a>
                     </td>
                     <td style="min-width: 8rem;">{{ registro.nota_fiscal.numero_nf }}</td>
-                    <td>{{ registro.nota_fiscal.filial.value|title }}</td>
+                    <td style="min-width: 7rem;">{{ registro.nota_fiscal.filial.value|title }}</td>
                     <td style="min-width: 6rem;">{{ registro.nota_fiscal.nome_centro }}</td>
                     <td>{{ registro.status_registro }}</td>
                     <td>
@@ -111,23 +119,27 @@
         <ul class="pagination justify-content-center">
             {% if registros.has_prev %}
             <li class="page-item"><a class="page-link" href="{{ url_for('tabela.tabela_todos_registros', page=registros.prev_num, 
-                chave_acesso=request.args.get('chave_acesso'), 
+                chave_acesso=request.args.get('chave_acesso'),
+                data_recebimento=request.args.get('data_recebimento'),
                 nota_fiscal=request.args.get('nota_fiscal'), 
                 filial=request.args.get('filial'), 
                 centro=request.args.get('centro'), 
-                status=request.args.get('status'), 
+                status=request.args.get('status'),
+                data_guarda=request.args.get('data_guarda'),
                 prioridade=request.args.get('prioridade'), 
                 responsavel=request.args.get('responsavel')) }}">Anterior</a></li>
             {% endif %}
             <li class="page-item disabled"><a class="page-link" href="">Página {{ registros.page }} de {{ registros.pages }}</a></li>
             {% if registros.has_next %}
             <li class="page-item"><a class="page-link" href="{{ url_for('tabela.tabela_todos_registros', page=registros.next_num, 
-                chave_acesso=request.args.get('chave_acesso'), 
-                nota_fiscal=request.args.get('nota_fiscal'), 
-                filial=request.args.get('filial'), 
-                centro=request.args.get('centro'), 
-                status=request.args.get('status'), 
-                prioridade=request.args.get('prioridade'), 
+                chave_acesso=request.args.get('chave_acesso'),
+                data_recebimento=request.args.get('data_recebimento'),
+                nota_fiscal=request.args.get('nota_fiscal'),
+                filial=request.args.get('filial'),
+                centro=request.args.get('centro'),
+                status=request.args.get('status'),
+                data_guarda=request.args.get('data_guarda'),
+                prioridade=request.args.get('prioridade'),
                 responsavel=request.args.get('responsavel')) }}">Próxima</a></li>
             {% endif %}
         </ul>

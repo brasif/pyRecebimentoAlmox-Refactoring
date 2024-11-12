@@ -104,34 +104,41 @@ def notas_fiscais_filtro(model, chave_acesso, nota_fiscal, cnpj, filial, centro,
 
 
 # Filtro de todos os registros
-def todos_registros_filtro(model_nf, model_reg, model_resp, query, chave_acesso, nota_fiscal, filial, centro, status, prioridade, responsavel):
-    # Aplica filtro da chave de acesso se presente
+def todos_registros_filtro(model_nf, model_reg, model_resp, query, chave_acesso, nota_fiscal, filial, centro, status, prioridade, responsavel, data_recebimento=None, data_guarda=None):
+    # Filtro da chave de acesso
     if chave_acesso:
         query = query.filter(model_nf.chave_acesso.ilike(f'%{chave_acesso}%'))
 
-    # Filtro da nota fiscal se presente
+    # Filtro da nota fiscal
     if nota_fiscal:
-        # Aplica filtro utilizando a propriedade numero_nf
         query = query.filter(func.substr(model_nf.chave_acesso, 27, 34).ilike(f'%{nota_fiscal}%'))
 
-    # Aplica filtro de filial se presente
+    # Filtro da filial
     if filial:
         query = query.filter(model_nf.filial == filial)
 
-    # Aplica filtro do centro se presente
+    # Filtro do centro
     if centro:
         query = query.filter(model_nf.nome_centro.ilike(f'%{centro}%'))
 
-    # Aplica filtro de prioridade se presente
+    # Filtro da prioridade
     if prioridade:
         query = query.filter(model_nf.prioridade == (prioridade == 'true'))
 
-    # Aplica filtro do status_registro se presente
+    # Filtro do status do registro
     if status:
         query = query.filter(model_reg.status_registro.ilike(f'%{status}%'))
 
-    # Aplica filtro do responsável pela atualização se presente
+    # Filtro do responsável
     if responsavel:
         query = query.filter(model_resp.nome_responsavel.ilike(f'%{responsavel}%'))
+
+    # Filtro da data de recebimento
+    if data_recebimento:
+        query = query.filter(func.date(model_reg.data_recebimento) == data_recebimento)
+
+    # Filtro da data de guarda
+    if data_guarda:
+        query = query.filter(func.date(model_reg.data_guarda) == data_guarda)
 
     return query
