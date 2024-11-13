@@ -1,8 +1,10 @@
 from RECEBIMENTO.models.tb_auditoria_models import Auditoria
 from sqlalchemy.orm import sessionmaker
+from flask_login import current_user
 
 
 def insert(model, connection, target):
+
     session = sessionmaker(bind=connection)()
 
     try:
@@ -20,7 +22,7 @@ def insert(model, connection, target):
             coluna_alterada="Todos os campos",
             valor_antigo="Nenhum",
             valor_novo=valor_novo,
-            id_responsavel=target.id_responsavel
+            id_responsavel=current_user.id_responsavel
         )
 
         session.add(auditoria)
@@ -59,7 +61,7 @@ def update(model, connection, target, state):
                 coluna_alterada=coluna,
                 valor_antigo=str(valor_antigo),
                 valor_novo=str(valor_novo),
-                id_responsavel=target.id_responsavel
+                id_responsavel=current_user.id_responsavel
             )
             session.add(auditoria)
         
@@ -73,20 +75,16 @@ def update(model, connection, target, state):
 
 def delete(model, connection, target):
 
-    # Cria uma nova sessão para a auditoria
     Session = sessionmaker(bind=connection)
     session = Session()
 
     try:
 
-        # Obtém o valor da chave primária (supondo que há apenas uma chave primária)
         primary_key_column = list(model.__table__.primary_key.columns)[0].name
         id_referencia = getattr(target, primary_key_column)
 
-        # Constrói a string 'valor_novo' com base nos atributos do objeto
         valor_antigo = ', '.join(f"{coluna}: {getattr(target, coluna)}" for coluna in target.__table__.columns.keys())
 
-        # Registra as informações antigas na auditoria
         auditoria = Auditoria(
             tabela_referenciada=model.__tablename__,
             id_referencia=id_referencia,
@@ -94,7 +92,7 @@ def delete(model, connection, target):
             coluna_alterada="Todos os campos",
             valor_antigo=valor_antigo,
             valor_novo="Registro excluído",
-            id_responsavel=target.id_responsavel
+            id_responsavel=current_user.id_responsavel
         )
 
         session.add(auditoria)
