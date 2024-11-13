@@ -1,8 +1,10 @@
 from RECEBIMENTO import db
 from datetime import datetime
 from .enum_filiais import Filiais
+from sqlalchemy import event
 
 
+# Model
 class NotaFiscal(db.Model):
     __tablename__ = 'tb_nota_fiscal'
     
@@ -72,3 +74,19 @@ class NotaFiscal(db.Model):
         self.recusa = form.recusa.data
         
         return self
+
+
+# === Auditoria ===
+
+# Listener - INSERT
+@event.listens_for(NotaFiscal, 'after_insert')
+def after_insert_listener(mapper, connection, target):
+    from RECEBIMENTO.utils import insert
+    insert(NotaFiscal, connection, target)
+
+# Listener - UPDATE
+@event.listens_for(NotaFiscal, 'after_update')
+def after_update_listener(mapper, connection, target):
+    from RECEBIMENTO.utils import update
+    state = db.inspect(target)
+    update(NotaFiscal, connection, target, state)
