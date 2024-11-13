@@ -1,3 +1,4 @@
+from RECEBIMENTO import db
 from RECEBIMENTO.models.tb_auditoria_models import Auditoria
 from sqlalchemy.orm import sessionmaker
 
@@ -24,6 +25,46 @@ def insert(model, connection, target):
         )
 
         session.add(auditoria)
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        print(f"Erro ao salvar auditoria: {e}")
+    finally:
+        session.close()
+
+
+def update(model, connection, target):
+    session = sessionmaker(bind=connection)()
+    changes = []
+
+    # Verifica as alterações para os atributos que precisam ser auditados
+    state = db.inspect(target)
+    for attr in state.attrs:
+        history = attr.load_history()
+        if history.has_changes():
+            coluna = attr.key
+            valor_antigo = history.deleted[0] if history.deleted else None
+            valor_novo = history.added[0] if history.added else None
+            changes.append((coluna, valor_antigo, valor_novo))
+
+    try:
+
+        # Obtém o valor da chave primária (supondo que há apenas uma chave primária)
+        primary_key_column = list(model.__table__.primary_key.columns)[0].name
+        id_referencia = getattr(target, primary_key_column)
+
+        for coluna, valor_antigo, valor_novo in changes:
+            auditoria = Auditoria(
+                tabela_referenciada=model.__tablename__,
+                id_referencia=id_referencia,
+                acao="UPDATE",
+                coluna_alterada=coluna,
+                valor_antigo=str(valor_antigo),
+                valor_novo=str(valor_novo),
+                id_responsavel=target.id_responsavel
+            )
+            session.add(auditoria)
+        
         session.commit()
     except Exception as e:
         session.rollback()
