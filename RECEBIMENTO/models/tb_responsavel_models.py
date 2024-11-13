@@ -1,7 +1,6 @@
 from RECEBIMENTO import db
 from datetime import datetime
 from sqlalchemy import event
-from RECEBIMENTO.utils import insert, update
 
 
 # Model
@@ -57,10 +56,12 @@ class Responsavel(db.Model):
 # Listener - INSERT
 @event.listens_for(Responsavel, 'after_insert')
 def after_insert_listener(mapper, connection, target):
+    from RECEBIMENTO.utils import insert
     insert(Responsavel, connection, target)
 
 # Listener - UPDATE
 @event.listens_for(Responsavel, 'after_update')
 def after_update_listener(mapper, connection, target):
+    from RECEBIMENTO.utils import update
     state = db.inspect(target)
     update(Responsavel, connection, target, state)
