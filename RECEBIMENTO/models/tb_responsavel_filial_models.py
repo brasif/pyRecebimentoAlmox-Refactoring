@@ -1,9 +1,8 @@
 from RECEBIMENTO import db
 from datetime import datetime
 from .enum_filiais import Filiais
-from RECEBIMENTO.utils import insert, update, delete
-# Importações para os enventos listeners
 from sqlalchemy import event
+from RECEBIMENTO.utils import insert, update, delete
 
 
 # Model

@@ -1,13 +1,10 @@
 from RECEBIMENTO import db
 from datetime import datetime
+from sqlalchemy import event
 from RECEBIMENTO.utils import insert, update
 
-# Importações para os eventos listeners
-from sqlalchemy import event
-from RECEBIMENTO.models.tb_auditoria_models import Auditoria
-from sqlalchemy.orm import sessionmaker
 
-
+# Model
 class Responsavel(db.Model):
     __tablename__ = 'tb_responsavel'
     
