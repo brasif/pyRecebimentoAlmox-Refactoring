@@ -1,5 +1,11 @@
 from RECEBIMENTO import db
 from datetime import datetime
+from RECEBIMENTO.utils import insert, update
+
+# Importações para os eventos listeners
+from sqlalchemy import event
+from RECEBIMENTO.models.tb_auditoria_models import Auditoria
+from sqlalchemy.orm import sessionmaker
 
 
 class Responsavel(db.Model):
@@ -46,5 +52,18 @@ class Responsavel(db.Model):
         # Atualiza os atributos da instância com os dados do formulário
         self.permissao = form.permissao.data
         self.status = form.status.data
-
         return self
+
+
+# === Auditoria ===
+
+# Listener - INSERT
+@event.listens_for(Responsavel, 'after_insert')
+def after_insert_listener(mapper, connection, target):
+    insert(Responsavel, connection, target)
+
+# Listener - UPDATE
+@event.listens_for(Responsavel, 'after_update')
+def after_update_listener(mapper, connection, target):
+    state = db.inspect(target)
+    update(Responsavel, connection, target, state)
