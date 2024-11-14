@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% set title = "Auditoria" %}
+
+{% block content %}
+<section>
+
+    <h1>Auditoria</h1>
+
+    <!-- Seção para exibir mensagens flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="table-responsive">
+        <table>
+            <form method="GET" action="{{ url_for('tabela.tabela_auditoria') }}" id="filter-form">
+                <thead>
+                    <tr>
+                        <th>
+                            <select class="form-control" name="acao" onchange="document.getElementById('filter-form').submit()">
+                                <option value="">Ação</option>
+                                <option value="INSERT" {% if request.args.get('acao') == 'INSERT' %}selected{% endif %}>Criação</option>
+                                <option value="UPDATE" {% if request.args.get('acao') == 'UPDATE' %}selected{% endif %}>Edição</option>
+                                <option value="DELETE" {% if request.args.get('acao') == 'DELETE' %}selected{% endif %}>Exclusão</option>
+                            </select>
+                        </th>
+                        <th>
+                            <input type="text" class="form-control" id="tabela" name="tabela_referenciada"
+                                value="{{ request.args.get('tabela_referenciada') or '' }}" placeholder="Tabela Referenciada"
+                                onchange="document.getElementById('filter-form').submit()">
+                        </th>
+                        <th>
+                            <input type="text" class="form-control" id="coluna_alterada" name="coluna_alterada"
+                                value="{{ request.args.get('coluna_alterada') or '' }}" placeholder="Coluna Alterada"
+                                onchange="document.getElementById('filter-form').submit()">
+                        </th>
+                        <th>
+                            <input type="text" class="form-control" id="id_responsavel" name="id_responsavel"
+                                value="{{ request.args.get('id_responsavel') or '' }}" placeholder="ID Responsável"
+                                onchange="document.getElementById('filter-form').submit()">
+                        </th>
+                        <th>
+                            <input type="date" class="form-control" id="data_evento" name="data_evento"
+                                value="{{ request.args.get('data_evento') or '' }}" placeholder="Data do Evento"
+                                onchange="document.getElementById('filter-form').submit()">
+                        </th>
+                    </tr>
+                </thead>
+            </form>
+            <tbody>
+                {% for audit in auditoria.items %}
+                <tr>
+                    <td>
+                        {% if audit.acao == 'INSERT' %}
+                            Criação
+                        {% elif audit.acao == 'UPDATE' %}
+                            Edição
+                        {% elif audit.acao == 'DELETE' %}
+                            Exclusão
+                        {% else %}
+                            {{ audit.acao }}
+                        {% endif %}
+                    </td>                    
+                    <td>{{ audit.tabela_referenciada }}</td>
+                    <td>{{ audit.coluna_alterada }}</td>
+                    <td>{{ audit.responsavel.nome_responsavel }}</td>
+                    <td>{{ audit.data_evento.strftime('%d/%m/%Y %H:%M') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginação -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if auditoria.has_prev %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="{{ url_for('tabela.tabela_auditoria', page=auditoria.prev_num, 
+                    acao=request.args.get('acao'), 
+                    tabela_referenciada=request.args.get('tabela_referenciada'), 
+                    coluna_alterada=request.args.get('coluna_alterada'), 
+                    id_responsavel=request.args.get('id_responsavel'), 
+                    data_evento=request.args.get('data_evento')) }}">Anterior</a>
+            </li>
+            {% endif %}
+            <li class="page-item disabled"><a class="page-link">Página {{ auditoria.page }} de
+                    {{ auditoria.pages }}</a></li>
+            {% if auditoria.has_next %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="{{ url_for('tabela.tabela_auditoria', page=auditoria.next_num, 
+                    acao=request.args.get('acao'), 
+                    tabela_referenciada=request.args.get('tabela_referenciada'), 
+                    coluna_alterada=request.args.get('coluna_alterada'), 
+                    id_responsavel=request.args.get('id_responsavel'), 
+                    data_evento=request.args.get('data_evento')) }}">Próxima</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+</section>
+{% endblock %}
