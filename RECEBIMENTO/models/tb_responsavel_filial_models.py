@@ -18,11 +18,14 @@ class ResponsavelFilial(db.Model):
     responsavel = db.relationship('Responsavel', back_populates='responsavel_filial')
 
     def __repr__(self):
-        return (f"<ResponsavelFilial(id_responsavel_filial={self.id_responsavel_filial}, "
-                f"responsavel_id={self.id_responsavel}, "
-                f"filial='{self.filial}', "
-                f"data_vinculacao={self.data_vinculacao}, "
-                f"data_alteracao={self.data_alteracao})>")
+        return (
+            f"<ResponsavelFilial(id_responsavel_filial={self.id_responsavel_filial}, "
+            f"id_responsavel={self.id_responsavel}, "
+            f"filial='{self.filial.name}', "
+            f"data_vinculacao='{self.data_vinculacao}', "
+            f"data_alteracao='{self.data_alteracao}')>"
+        )
+
 
     @classmethod
     def criar_responsavel_filial(cls, form):

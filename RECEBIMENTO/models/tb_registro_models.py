@@ -3,6 +3,7 @@ from datetime import datetime
 from babel.dates import format_date
 
 
+# Model
 class Registro(db.Model):
     __tablename__ = 'tb_registro'
     
@@ -19,8 +20,16 @@ class Registro(db.Model):
     responsavel = db.relationship('Responsavel', back_populates='registros')
 
     def __repr__(self):
-        return f"<Registro {self.id_registro} - Nota Fiscal: {self.id_nota_fiscal} - Responsavel: {self.id_responsavel}>"
-    
+        return (
+            f"<Registro(id_registro={self.id_registro}, "
+            f"id_nota_fiscal={self.id_nota_fiscal}, "
+            f"data_recebimento='{format_date(self.data_recebimento, format='short')}', "
+            f"status_registro='{self.status_registro}', "
+            f"data_guarda='{format_date(self.data_guarda, format='short') if self.data_guarda else 'Não Guardado'}', "
+            f"id_responsavel={self.id_responsavel}, "
+            f"data_criacao='{format_date(self.data_criacao, format='short')}')>"
+        )
+
 
     @property
     # Propriedade para extrair o nome do mês em portugês

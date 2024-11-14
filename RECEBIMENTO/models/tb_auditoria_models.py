@@ -1,6 +1,8 @@
 from RECEBIMENTO import db
 from datetime import datetime
 
+
+# Model
 class Auditoria(db.Model):
     __tablename__ = 'tb_auditoria'
 
@@ -20,9 +22,10 @@ class Auditoria(db.Model):
     def __repr__(self):
         return (f"<Auditoria(id_auditoria={self.id_auditoria}, "
                 f"tabela_referenciada='{self.tabela_referenciada}', "
+                f"id_referencia={self.id_referencia}, "
                 f"acao='{self.acao}', "
                 f"coluna_alterada='{self.coluna_alterada}', "
                 f"valor_antigo='{self.valor_antigo}', "
                 f"valor_novo='{self.valor_novo}', "
-                f"data_evento={self.data_evento}, "
-                f"responsavel_id={self.id_responsavel})>")
+                f"id_responsavel={self.id_responsavel}, "
+                f"data_evento='{self.data_evento}')>")

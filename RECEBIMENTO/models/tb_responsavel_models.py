@@ -19,11 +19,20 @@ class Responsavel(db.Model):
     # Relacionamentos
     registros = db.relationship('Registro', back_populates='responsavel')
     responsavel_filial = db.relationship('ResponsavelFilial', back_populates='responsavel')
-    
-    
+
     def __repr__(self):
-        return f"<Responsavel {self.nome_responsavel} - Email: {self.email}>"
-    
+        return (
+            f"<Responsavel(id_responsavel={self.id_responsavel}, "
+            f"nome_responsavel='{self.nome_responsavel}', "
+            f"email='{self.email}', "
+            f"id_azure_ad='{self.id_azure_ad}', "
+            f"permissao={'Admin' if self.permissao else 'Usuário'}, "
+            f"status={'Ativo' if self.status else 'Inativo'}, "
+            f"data_criacao='{self.data_criacao}', "
+            f"data_alteracao='{self.data_alteracao}')>"
+        )
+
+
     # Propriedades exigidas pelo Flask-Login
     @property
     def is_active(self):

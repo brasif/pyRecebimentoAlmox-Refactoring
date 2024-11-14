@@ -22,11 +22,23 @@ class NotaFiscal(db.Model):
 
     # Relacionamentos
     registros = db.relationship('Registro', back_populates='nota_fiscal')
-    
+
     def __repr__(self):
-        return f"<NotaFiscal {self.chave_acesso} - Filial: {self.filial} - Centro: {self.id_centro}>"
-    
-    
+        return (
+            f"<NotaFiscal(id_nota_fiscal={self.id_nota_fiscal}, "
+            f"chave_acesso='{self.chave_acesso}', "
+            f"codigo_cte='{self.codigo_cte}', "
+            f"volumes={self.volumes}, "
+            f"filial='{self.filial.name}', "
+            f"nome_centro='{self.nome_centro}', "
+            f"prioridade={'Sim' if self.prioridade else 'Não'}, "
+            f"avaria={'Sim' if self.avaria else 'Não'}, "
+            f"recusa={'Sim' if self.recusa else 'Não'}, "
+            f"data_criacao='{self.data_criacao}', "
+            f"data_alteracao='{self.data_alteracao}')>"
+        )
+
+
     @property
     # Propriedade para extrair CNPJ a partir da chave de acesso
     def cnpj(self):
