@@ -3,10 +3,10 @@ from sqlalchemy import func
 
 
 # Filtro da auditoria
-def auditoria_filtro(model, acao, tabela_referenciada, coluna_alterada, data_evento):
+def auditoria_filtro(model, model_resp, acao, tabela_referenciada, coluna_alterada, responsavel, data_evento):
 
-    # Consulta base para trazer os registros
-    query = db.session.query(model)
+    # Consulta base para trazer os registros com um join em Responsavel
+    query = db.session.query(model).join(model_resp, model.id_responsavel == model_resp.id_responsavel)
 
     # Aplica filtro da ação se presente
     if acao:
@@ -19,6 +19,10 @@ def auditoria_filtro(model, acao, tabela_referenciada, coluna_alterada, data_eve
     # Aplica filtro da coluna alterada se presente
     if coluna_alterada:
         query = query.filter(model.coluna_alterada.ilike(f'%{coluna_alterada}%'))
+    
+    # Aplica filtro pelo nome do responsável se presente
+    if responsavel:
+        query = query.filter(model_resp.nome_responsavel.ilike(f'%{responsavel}%'))
     
     # Aplica filtro da data do evento se presente
     if data_evento:

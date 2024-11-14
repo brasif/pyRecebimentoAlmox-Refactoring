@@ -30,9 +30,11 @@ def tabela_auditoria():
     # Chama a função de filtro de auditorias com os parâmetros da requisição
     auditoria_query = auditoria_filtro(
         Auditoria,
+        Responsavel,
         request.args.get('acao', None),
         request.args.get('tabela', None),
         request.args.get('coluna_alterada', None),
+        request.args.get('responsavel', None),
         request.args.get('data_evento', None)
     )
 

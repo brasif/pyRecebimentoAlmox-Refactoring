@@ -52,8 +52,8 @@
                                 onchange="document.getElementById('filter-form').submit()">
                         </th>
                         <th>
-                            <input type="text" class="form-control" id="id_responsavel" name="id_responsavel"
-                                value="{{ request.args.get('id_responsavel') or '' }}" placeholder="ID Responsável"
+                            <input type="text" class="form-control" id="responsavel" name="responsavel"
+                                value="{{ request.args.get('responsavel') or '' }}" placeholder="Responsável"
                                 onchange="document.getElementById('filter-form').submit()">
                         </th>
                         <th>
@@ -87,6 +87,7 @@
                     acao=request.args.get('acao'), 
                     tabela_referenciada=request.args.get('tabela_referenciada'), 
                     coluna_alterada=request.args.get('coluna_alterada'),
+                    responsavel=request.args.get('responsavel'),
                     data_evento=request.args.get('data_evento')) }}">Anterior</a>
             </li>
             {% endif %}
@@ -98,6 +99,7 @@
                     acao=request.args.get('acao'), 
                     tabela_referenciada=request.args.get('tabela_referenciada'), 
                     coluna_alterada=request.args.get('coluna_alterada'),
+                    responsavel=request.args.get('responsavel'),
                     data_evento=request.args.get('data_evento')) }}">Próxima</a>
             </li>
             {% endif %}
