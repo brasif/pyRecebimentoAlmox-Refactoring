@@ -29,16 +29,23 @@
                         <th>
                             <select class="form-control" name="acao" onchange="document.getElementById('filter-form').submit()">
                                 <option value="">Ação</option>
-                                <option value="INSERT" {% if request.args.get('acao') == 'INSERT' %}selected{% endif %}>Criação</option>
-                                <option value="UPDATE" {% if request.args.get('acao') == 'UPDATE' %}selected{% endif %}>Edição</option>
-                                <option value="DELETE" {% if request.args.get('acao') == 'DELETE' %}selected{% endif %}>Exclusão</option>
+                                {% for key, label in acoes.items() %}
+                                    <option value="{{ key }}" {% if request.args.get('acao') == key %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
                             </select>
-                        </th>
+                        </th>                        
                         <th>
-                            <input type="text" class="form-control" id="tabela" name="tabela_referenciada"
-                                value="{{ request.args.get('tabela_referenciada') or '' }}" placeholder="Tabela Referenciada"
-                                onchange="document.getElementById('filter-form').submit()">
-                        </th>
+                            <select class="form-control" name="tabela" onchange="document.getElementById('filter-form').submit()">
+                                <option value="">Tabela</option>
+                                {% for key, label in tabelas.items() %}
+                                    <option value="{{ key }}" {% if request.args.get('tabela') == key %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </th>                        
                         <th>
                             <input type="text" class="form-control" id="coluna_alterada" name="coluna_alterada"
                                 value="{{ request.args.get('coluna_alterada') or '' }}" placeholder="Coluna Alterada"
@@ -60,18 +67,8 @@
             <tbody>
                 {% for audit in auditoria.items %}
                 <tr>
-                    <td>
-                        {% if audit.acao == 'INSERT' %}
-                            Criação
-                        {% elif audit.acao == 'UPDATE' %}
-                            Edição
-                        {% elif audit.acao == 'DELETE' %}
-                            Exclusão
-                        {% else %}
-                            {{ audit.acao }}
-                        {% endif %}
-                    </td>                    
-                    <td>{{ audit.tabela_referenciada }}</td>
+                    <td>{{ acoes.get(audit.acao, audit.acao) }}</td>
+                    <td>{{ tabelas.get(audit.tabela_referenciada, audit.tabela_referenciada) }}</td>
                     <td>{{ audit.coluna_alterada }}</td>
                     <td>{{ audit.responsavel.nome_responsavel }}</td>
                     <td>{{ audit.data_evento.strftime('%d/%m/%Y %H:%M') }}</td>
@@ -86,12 +83,10 @@
         <ul class="pagination justify-content-center">
             {% if auditoria.has_prev %}
             <li class="page-item">
-                <a class="page-link"
-                    href="{{ url_for('tabela.tabela_auditoria', page=auditoria.prev_num, 
+                <a class="page-link" href="{{ url_for('tabela.tabela_auditoria', page=auditoria.prev_num, 
                     acao=request.args.get('acao'), 
                     tabela_referenciada=request.args.get('tabela_referenciada'), 
-                    coluna_alterada=request.args.get('coluna_alterada'), 
-                    id_responsavel=request.args.get('id_responsavel'), 
+                    coluna_alterada=request.args.get('coluna_alterada'),
                     data_evento=request.args.get('data_evento')) }}">Anterior</a>
             </li>
             {% endif %}
@@ -99,12 +94,10 @@
                     {{ auditoria.pages }}</a></li>
             {% if auditoria.has_next %}
             <li class="page-item">
-                <a class="page-link"
-                    href="{{ url_for('tabela.tabela_auditoria', page=auditoria.next_num, 
+                <a class="page-link" href="{{ url_for('tabela.tabela_auditoria', page=auditoria.next_num, 
                     acao=request.args.get('acao'), 
                     tabela_referenciada=request.args.get('tabela_referenciada'), 
-                    coluna_alterada=request.args.get('coluna_alterada'), 
-                    id_responsavel=request.args.get('id_responsavel'), 
+                    coluna_alterada=request.args.get('coluna_alterada'),
                     data_evento=request.args.get('data_evento')) }}">Próxima</a>
             </li>
             {% endif %}
