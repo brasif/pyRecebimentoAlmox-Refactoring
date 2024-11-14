@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% set title = "Registros por Responsável" %}
+{% set title = "Registros por Responsável - filial" %}
 
 {% block content %}
 <div class="container">
     <div class="container-home">
 
         {% if id_responsavel == current_user.id_responsavel %}
-        <h1 class="text-center mt-5">Meus registros</h1>
+        <h1 class="text-center mt-5">Meus registros - {{ filial.value }}</h1>
         {% else %}
-        <h1 class="text-center mt-5">Registros<br>{{ nome_responsavel }}</h1>
+        <h1 class="text-center mt-5">Registros<br>{{ nome_responsavel }} - {{ filial.value }}</h1>
         {% endif %}
 
         <!-- Seção para exibir mensagens flash -->
@@ -174,7 +174,13 @@
                 {% endif %}
             </ul>
         </nav>
+        
+        <button onclick="goBack()" class="btn btn-secondary text-uppercase mt-5 w-100">Voltar</button>
 
     </div>
 </div>
+
+<!-- Inclusão do arquivo JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+
 {% endblock %}

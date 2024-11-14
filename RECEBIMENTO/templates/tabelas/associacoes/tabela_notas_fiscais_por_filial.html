@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% set title = "Notas Fiscais" %}
+{% set title = "Notas Fiscais - filial" %}
 
 {% block content %}
 <div class="container">
     <div class="container-home">
 
-        <h1 class="text-center mt-5">Notas Fiscais<br>{{ filial.value }}</h1>
+        <h1 class="text-center mt-5">Notas Fiscais - {{ filial.value }}</h1>
 
         <!-- Seção para exibir mensagens flash -->
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -128,6 +128,12 @@
             </form>
         </div>
 
+        <button onclick="goBack()" class="btn btn-secondary text-uppercase mt-5 w-100">Voltar</button>
+
     </div>
 </div>
+
+<!-- Inclusão do arquivo JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+
 {% endblock %}

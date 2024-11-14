@@ -5,7 +5,7 @@
 {% block content %}
 <section>
 
-    <h1>Todos os Registros<br>{{ filial.value }}</h1>
+    <h1>Todos os Registros - {{ filial.value }}</h1>
 
     <!-- Seção para exibir mensagens flash -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -155,6 +155,12 @@
             {% endif %}
         </ul>
     </nav>
+    
+    <button onclick="goBack()" class="btn btn-secondary text-uppercase mt-5 w-100">Voltar</button>
 
 </section>
+
+<!-- Inclusão do arquivo JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+
 {% endblock %}
