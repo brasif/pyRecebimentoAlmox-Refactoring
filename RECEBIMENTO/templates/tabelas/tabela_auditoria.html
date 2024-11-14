@@ -35,7 +35,7 @@
                                     </option>
                                 {% endfor %}
                             </select>
-                        </th>                        
+                        </th>
                         <th>
                             <select class="form-control" name="tabela" onchange="document.getElementById('filter-form').submit()">
                                 <option value="">Tabela</option>
@@ -61,6 +61,7 @@
                                 value="{{ request.args.get('data_evento') or '' }}" placeholder="Data do Evento"
                                 onchange="document.getElementById('filter-form').submit()">
                         </th>
+                        <th>Visualizar</th>
                     </tr>
                 </thead>
             </form>
@@ -72,6 +73,12 @@
                     <td>{{ audit.coluna_alterada }}</td>
                     <td>{{ audit.responsavel.nome_responsavel }}</td>
                     <td>{{ audit.data_evento.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>
+                        <form method="GET"
+                            action="{{ url_for('visualizacao.visualizar_auditoria', id_auditoria=audit.id_auditoria) }}">
+                            <input type="submit" value="Visualizar" class="btn btn-info">
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

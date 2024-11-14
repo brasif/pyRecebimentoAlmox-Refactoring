@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% set title = "Visualizar Auditoria" %}
+
+{% block content %}
+<section>
+
+        <h1>Detalhes da auditoria</h1>
+
+        <!-- Seção para exibir mensagens flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="mt-5" style="text-align: left;">
+            <h5><strong>Ação:</strong> {{ acoes.get(auditoria.acao, auditoria.acao) }}</h5>
+            <h5><strong>Tabela Referenciada:</strong> {{ tabelas.get(auditoria.tabela_referenciada, auditoria.tabela_referenciada) }}</h5>
+            <h5><strong>Responsável:</strong> <a href="{{ url_for('visualizacao.visualizar_responsavel', id_responsavel=auditoria.responsavel.id_responsavel) }}">{{ auditoria.responsavel.nome_responsavel }}</a></h5>
+            <h5><strong>Data do Evento:</strong> {{ auditoria.data_evento.strftime('%d/%m/%Y %H:%Mh') }}</h5>
+            <hr>
+            <h5><strong>Coluna Alterada:</strong> {{ auditoria.coluna_alterada }}</h5>
+            <div style="margin: 1rem 0 0 2.5rem;">
+                <ul>
+                    <li><h5><strong>Valor Antigo:</strong> {{ auditoria.valor_antigo }}</h5></li>
+                    <li><h5><strong>Valor Novo:</strong> {{ auditoria.valor_novo }}</h5></li>
+                </ul>
+            </div>
+        </div>
+
+        <button onclick="goBack()" class="btn btn-secondary mt-5 w-100">Voltar</button>
+
+</section>
+
+<!-- Inclusão do arquivo JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+{% endblock %}
