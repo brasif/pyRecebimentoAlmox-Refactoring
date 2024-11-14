@@ -3,4 +3,4 @@ from .status_registro import *
 from .operacoes import *
 from .geracao_excel import *
 from .tabelas_filtro import *
-from .Auditoria import *
+from .auditoria_listener import *
