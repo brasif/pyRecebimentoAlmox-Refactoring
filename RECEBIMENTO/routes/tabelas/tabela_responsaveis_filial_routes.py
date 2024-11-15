@@ -26,7 +26,7 @@ def tabela_responsaveis_filial():
 
     # Ordenação por nome da filial e dentro dela, por nome do responsável
     responsaveis_filial = query\
-        .order_by(ResponsavelFilial.filial.asc(), Responsavel.nome.asc())\
+        .order_by(ResponsavelFilial.filial.asc(), Responsavel.nome_responsavel.asc())\
         .paginate(page=page, per_page=per_page, error_out=False)
 
     return render_template('/tabelas/tabela_responsaveis_filial.html', responsaveis_filial=responsaveis_filial)
