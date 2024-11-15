@@ -39,5 +39,5 @@ def tabela_todos_registros():
         return render_template('/tabelas/tabela_todos_registros.html', registros=registros)
 
     except:
-        flash("Ocorreu um erro ao carregar os registros. Tente novamente mais tarde.", "danger")
+        flash("Ocorreu um erro ao carregar todos os registros. Tente novamente mais tarde.", "danger")
         return render_template('/tabelas/tabela_todos_registros.html', registros=[])

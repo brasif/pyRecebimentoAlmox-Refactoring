@@ -53,5 +53,5 @@ def tabela_registros_atuais():
         return render_template('/tabelas/tabela_registros_atuais.html', registros=registros)
 
     except:
-        flash("Ocorreu um erro ao carregar os registros. Tente novamente mais tarde.", "danger")
+        flash("Ocorreu um erro ao carregar os registros atuais. Tente novamente mais tarde.", "danger")
         return render_template('/tabelas/tabela_registros_atuais.html', registros=[])
