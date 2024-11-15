@@ -43,8 +43,8 @@ def tabela_responsaveis_filial():
         return render_template('/tabelas/tabela_responsaveis_filial.html', responsaveis_filial=responsaveis_filial)
 
     except ValueError as e:
-        current_app.logger.error(f"Erro de validação: {str(e)}")
-        flash(str(e), "danger")
+        current_app.logger.warning(f"Erro de validação: {str(e)}")
+        flash(str(e), "warning")
         return render_template('/tabelas/tabela_responsaveis_filial.html', responsaveis_filial=[])
     
     except Exception as e:

@@ -43,8 +43,8 @@ def tabela_notas_fiscais():
         return render_template('/tabelas/tabela_notas_fiscais.html', notas_fiscais=notas_fiscais)
 
     except ValueError as e:
-        current_app.logger.error(f"Erro de validação: {str(e)}")
-        flash(str(e), "danger")
+        current_app.logger.warning(f"Erro de validação: {str(e)}")
+        flash(str(e), "warning")
         return render_template('/tabelas/tabela_notas_fiscais.html', notas_fiscais=[])
     
     except Exception as e:

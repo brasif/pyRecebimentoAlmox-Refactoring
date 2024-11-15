@@ -62,8 +62,8 @@ def tabela_registros_atuais():
         return render_template('/tabelas/tabela_registros_atuais.html', registros=registros)
 
     except ValueError as e:
-        current_app.logger.error(f"Erro de validação: {str(e)}")
-        flash(str(e), "danger")
+        current_app.logger.warning(f"Erro de validação: {str(e)}")
+        flash(str(e), "warning")
         return render_template('/tabelas/tabela_registros_atuais.html', registros=[])
     
     except Exception as e:

@@ -57,7 +57,7 @@ def tabela_auditoria():
 
     except ValueError as ve:
         current_app.logger.warning(f"Erro de validação: {ve}")
-        flash(str(ve), "danger")
+        flash(str(ve), "warning")
         return render_template('/tabelas/tabela_auditoria.html', acoes=[], tabelas=[], auditoria=[])
 
     except Exception as e:
