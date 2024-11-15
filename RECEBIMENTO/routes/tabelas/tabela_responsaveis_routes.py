@@ -8,6 +8,7 @@ from . import tabela_bp
 @tabela_bp.route('/responsaveis')
 @login_required
 def tabela_responsaveis():
+
     # Paginação
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 5, type=int)
@@ -21,7 +22,7 @@ def tabela_responsaveis():
         request.args.get('status', None)
     )
 
-    # Ordenação por nome (A-Z)
+    # Ordenação por nome
     responsaveis = query\
         .order_by(Responsavel.nome_responsavel.asc())\
         .paginate(page=page, per_page=per_page, error_out=False)

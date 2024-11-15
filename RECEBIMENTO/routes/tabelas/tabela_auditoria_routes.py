@@ -11,12 +11,14 @@ from . import tabela_bp
 @login_required
 def tabela_auditoria():
 
+    # Dicionário para renomeação das informações da coluna acao
     acoes = {
         "INSERT": "Criação",
         "UPDATE": "Edição",
         "DELETE": "Exclusão"
     }
 
+    # Dicionário para renomeação das informações da coluna tabela_referenciada
     tabelas = {
         "tb_responsavel": "Responsável",
         "tb_responsavel_filial": "Responsável x filial",
@@ -27,7 +29,7 @@ def tabela_auditoria():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 5, type=int)
 
-    # Chama a função de filtro de auditorias com os parâmetros da requisição
+    # Chama a função de filtro de auditoria com os parâmetros da requisição
     auditoria_query = auditoria_filtro(
         Auditoria,
         Responsavel,
@@ -38,9 +40,9 @@ def tabela_auditoria():
         request.args.get('data_evento', None)
     )
 
-
+    # Ordenação por id da auditoria
     auditoria = auditoria_query\
-        .order_by(desc(Auditoria.id_auditoria), Auditoria.id_auditoria.asc())\
+        .order_by(Auditoria.id_auditoria.desc())\
         .paginate(page=page, per_page=per_page, error_out=False)
 
     return render_template('/tabelas/tabela_auditoria.html', acoes=acoes, tabelas=tabelas, auditoria=auditoria)
