@@ -33,5 +33,5 @@ def tabela_notas_fiscais():
         return render_template('/tabelas/tabela_notas_fiscais.html', notas_fiscais=notas_fiscais)
 
     except:
-        flash("Ocorreu um erro ao carregar as notas fiscais. Tente novamente mais tarde.", "error")
+        flash("Ocorreu um erro ao carregar as notas fiscais. Tente novamente mais tarde.", "danger")
         return render_template('/tabelas/tabela_notas_fiscais.html', notas_fiscais=[])

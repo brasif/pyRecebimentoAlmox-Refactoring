@@ -34,5 +34,5 @@ def tabela_responsaveis_filial():
         return render_template('/tabelas/tabela_responsaveis_filial.html', responsaveis_filial=responsaveis_filial)
 
     except:
-        flash("Ocorreu um erro ao carregar os responsáveis por filial. Tente novamente mais tarde.", "error")
+        flash("Ocorreu um erro ao carregar os responsáveis por filial. Tente novamente mais tarde.", "danger")
         return render_template('/tabelas/tabela_responsaveis_filial.html', responsaveis_filial=[])

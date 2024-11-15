@@ -33,5 +33,5 @@ def tabela_responsaveis():
         return render_template('/tabelas/tabela_responsaveis.html', responsaveis=responsaveis, id_responsavel_logado=current_user.id_responsavel)
 
     except:
-        flash("Ocorreu um erro ao carregar os responsáveis. Tente novamente mais tarde.", "error")
+        flash("Ocorreu um erro ao carregar os responsáveis. Tente novamente mais tarde.", "danger")
         return render_template('/tabelas/tabela_responsaveis.html', responsaveis=[])

@@ -47,5 +47,5 @@ def tabela_auditoria():
         return render_template('/tabelas/tabela_auditoria.html', acoes=acoes, tabelas=tabelas, auditoria=auditoria)
 
     except:
-        flash("Ocorreu um erro ao carregar os registros de auditoria. Tente novamente mais tarde.", "error")
+        flash("Ocorreu um erro ao carregar os registros de auditoria. Tente novamente mais tarde.", "danger")
         return render_template('/tabelas/tabela_auditoria.html', acoes=acoes, tabelas=tabelas, auditoria=[])
