@@ -12,7 +12,7 @@ from . import tabela_bp
 def tabela_registros_atuais():
 
     try:
-        current_app.logger.info("Acessando a rota '/registros/atuais'.")
+        current_app.logger.info("Acessando a rota '/registros/atuais' - tabela_bp.")
 
         # Paginação com valores padrão e validação
         page = request.args.get('page', 1, type=int)

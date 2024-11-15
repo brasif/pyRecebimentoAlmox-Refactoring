@@ -11,7 +11,7 @@ from . import tabela_bp
 def tabela_auditoria():
 
     try:
-        current_app.logger.info("Acessando a rota '/auditoria'.")
+        current_app.logger.info("Acessando a rota '/auditoria' - tabela_bp.")
         
         # Dicionários para renomeação
         acoes = {

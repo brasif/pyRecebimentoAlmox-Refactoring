@@ -10,7 +10,7 @@ from . import tabela_bp
 def tabela_responsaveis_filial():
 
     try:
-        current_app.logger.info("Acessando a rota '/responsaveis_filial'.")
+        current_app.logger.info("Acessando a rota '/responsaveis_filial' - tabela_bp.")
 
         # Paginação com valores padrão e validação
         page = request.args.get('page', 1, type=int)
