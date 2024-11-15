@@ -33,16 +33,16 @@ def tabela_registros_atuais():
             Registro,
             Responsavel,
             query_base,
-            request.args.get('mes'),
-            request.args.get('chave_acesso'),
-            request.args.get('nota_fiscal'),
-            request.args.get('filial'),
-            request.args.get('centro'),
-            request.args.get('status'),
-            request.args.get('prioridade'),
-            request.args.get('responsavel'),
-            request.args.get('data_recebimento'),
-            request.args.get('data_guarda')
+            request.args.get('mes', None),
+            request.args.get('chave_acesso', None),
+            request.args.get('nota_fiscal', None),
+            request.args.get('filial', None),
+            request.args.get('centro', None),
+            request.args.get('status', None),
+            request.args.get('prioridade', None),
+            request.args.get('responsavel', None),
+            request.args.get('data_recebimento', None),
+            request.args.get('data_guarda', None)
         )
 
         # Ordenação por id do registro

@@ -16,16 +16,16 @@ def tabela_todos_registros():
 
         # Filtros com valores da requisição
         filtros = {
-            'mes': request.args.get('mes'),
-            'chave_acesso': request.args.get('chave_acesso'),
-            'nota_fiscal': request.args.get('nota_fiscal'),
-            'filial': request.args.get('filial'),
-            'centro': request.args.get('centro'),
-            'status': request.args.get('status'),
-            'prioridade': request.args.get('prioridade'),
-            'responsavel': request.args.get('responsavel'),
-            'data_recebimento': request.args.get('data_recebimento'),
-            'data_guarda': request.args.get('data_guarda')
+            'mes': request.args.get('mes', None),
+            'chave_acesso': request.args.get('chave_acesso', None),
+            'nota_fiscal': request.args.get('nota_fiscal', None),
+            'filial': request.args.get('filial', None),
+            'centro': request.args.get('centro', None),
+            'status': request.args.get('status', None),
+            'prioridade': request.args.get('prioridade', None),
+            'responsavel': request.args.get('responsavel', None),
+            'data_recebimento': request.args.get('data_recebimento', None),
+            'data_guarda': request.args.get('data_guarda', None)
         }
 
         # Chama a função de filtro com os parâmetros da requisição

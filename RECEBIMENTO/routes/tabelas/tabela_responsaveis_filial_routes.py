@@ -16,11 +16,11 @@ def tabela_responsaveis_filial():
 
         # Filtros com valores da requisição
         filtros = {
-            'filial': request.args.get('filial'),
-            'nome': request.args.get('nome'),
-            'email': request.args.get('email'),
-            'permissao': request.args.get('permissao'),
-            'status': request.args.get('status')
+            'filial': request.args.get('filial', None),
+            'nome': request.args.get('nome', None),
+            'email': request.args.get('email', None),
+            'permissao': request.args.get('permissao', None),
+            'status': request.args.get('status', None)
         }
 
         # Chama a função de filtro com os parâmetros da requisição

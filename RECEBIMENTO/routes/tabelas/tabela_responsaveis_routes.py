@@ -16,10 +16,10 @@ def tabela_responsaveis():
 
         # Filtros com valores da requisição
         filtros = {
-            'nome': request.args.get('nome'),
-            'email': request.args.get('email'),
-            'permissao': request.args.get('permissao'),
-            'status': request.args.get('status')
+            'nome': request.args.get('nome', None),
+            'email': request.args.get('email', None),
+            'permissao': request.args.get('permissao', None),
+            'status': request.args.get('status', None)
         }
 
         # Chama a função de filtro com os parâmetros da requisição
