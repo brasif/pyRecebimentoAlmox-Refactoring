@@ -2,42 +2,46 @@ from sqlalchemy import func, extract
 
 
 # Filtro dos registros atuais por responsável
-def registros_atuais_por_responsavel_filtro(model_nf, model_reg, query, mes, chave_acesso, nota_fiscal, filial, centro, status, prioridade, data_recebimento, data_guarda):
-    
-    # Filtro do mês
-    if mes:
-        query = query.filter(extract('month', model_reg.data_recebimento) == int(mes))
+def registros_atuais_por_responsavel_filtro(model_nf, model_reg, query, mes, chave_acesso, nota_fiscal, filial, centro, prioridade, status, data_recebimento, data_guarda):
 
-    # Filtro da chave de acesso
-    if chave_acesso:
-        query = query.filter(model_nf.chave_acesso.ilike(f'%{chave_acesso}%'))
+    try:
+        # Filtro do mês
+        if mes:
+            query = query.filter(extract('month', model_reg.data_recebimento) == int(mes))
 
-    # Filtro da nota fiscal
-    if nota_fiscal:
-        query = query.filter(func.substr(model_nf.chave_acesso, 27, 34).ilike(f'%{nota_fiscal}%'))
+        # Filtro da chave de acesso
+        if chave_acesso:
+            query = query.filter(model_nf.chave_acesso.ilike(f'%{chave_acesso}%'))
 
-    # Filtro da filial
-    if filial:
-        query = query.filter(model_nf.filial == filial)
+        # Filtro da nota fiscal
+        if nota_fiscal:
+            query = query.filter(func.substr(model_nf.chave_acesso, 27, 34).ilike(f'%{nota_fiscal}%'))
 
-    # Filtro do centro
-    if centro:
-        query = query.filter(model_nf.nome_centro.ilike(f'%{centro}%'))
+        # Filtro da filial
+        if filial:
+            query = query.filter(model_nf.filial == filial)
 
-    # Filtro da prioridade
-    if prioridade:
-        query = query.filter(model_nf.prioridade == (prioridade == 'true'))
+        # Filtro do centro
+        if centro:
+            query = query.filter(model_nf.nome_centro.ilike(f'%{centro}%'))
 
-    # Filtro do status do registro
-    if status:
-        query = query.filter(model_reg.status_registro.ilike(f'%{status}%'))
+        # Filtro da prioridade
+        if prioridade:
+            query = query.filter(model_nf.prioridade == (prioridade.lower() == 'true'))
 
-    # Filtro da data de recebimento
-    if data_recebimento:
-        query = query.filter(func.date(model_reg.data_recebimento) == data_recebimento)
+        # Filtro do status do registro
+        if status:
+            query = query.filter(model_reg.status_registro.ilike(f'%{status}%'))
 
-    # Filtro da data de guarda
-    if data_guarda:
-        query = query.filter(func.date(model_reg.data_guarda) == data_guarda)
+        # Filtro da data de recebimento
+        if data_recebimento:
+            query = query.filter(func.date(model_reg.data_recebimento) == data_recebimento)
 
-    return query
+        # Filtro da data de guarda
+        if data_guarda:
+            query = query.filter(func.date(model_reg.data_guarda) == data_guarda)
+
+        return query
+
+    except:
+        raise ValueError("Erro ao aplicar filtros nos registros por filial.")
