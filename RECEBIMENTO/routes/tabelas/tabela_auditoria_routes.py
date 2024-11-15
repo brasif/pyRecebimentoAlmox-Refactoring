@@ -28,19 +28,20 @@ def tabela_auditoria():
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 5, type=int)
 
-        # Chama a função de filtro de auditoria com os parâmetros da requisição
-        auditoria_query = auditoria_filtro(
-            Auditoria,
-            Responsavel,
-            request.args.get('acao', None),
-            request.args.get('tabela', None),
-            request.args.get('coluna_alterada', None),
-            request.args.get('responsavel', None),
-            request.args.get('data_evento', None)
-        )
+        # Filtros com valores da requisição
+        filtros = {
+            'acao': request.args.get('acao', None),
+            'tabela': request.args.get('tabela', None),
+            'coluna_alterada': request.args.get('coluna_alterada', None),
+            'responsavel': request.args.get('responsavel', None),
+            'data_evento': request.args.get('data_evento', None)
+        }
+
+        # Chama a função de filtro com os parâmetros da requisição
+        query = auditoria_filtro(Auditoria, Responsavel, **filtros)
 
         # Ordenação por id da auditoria e paginação
-        auditoria = auditoria_query\
+        auditoria = query\
             .order_by(Auditoria.id_auditoria.desc())\
             .paginate(page=page, per_page=per_page, error_out=False)
 

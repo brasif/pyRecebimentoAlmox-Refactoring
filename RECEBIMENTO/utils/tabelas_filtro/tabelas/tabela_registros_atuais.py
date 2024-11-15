@@ -1,49 +1,63 @@
+from flask import flash
 from sqlalchemy import func, extract
 
 
 # Filtro dos registros atuais
-def registros_atuais_filtro(model_nf, model_reg, model_resp, query, mes, chave_acesso, nota_fiscal, filial, centro, status, prioridade, responsavel, data_recebimento, data_guarda):
+def registros_atuais_filtro(model_nf, model_reg, model_resp, query, **filtros):
     
     try:
         # Filtro do mês
-        if mes:
-            query = query.filter(extract('month', model_reg.data_recebimento) == int(mes))
+        if filtros.get('mes'):
+            try:
+                mes = int(filtros['mes'])
+                query = query.filter(extract('month', model_reg.data_recebimento) == mes)
+            except ValueError:
+                flash("Não foi possível filtrar o mês")
+                pass
 
         # Filtro da chave de acesso
-        if chave_acesso:
-            query = query.filter(model_nf.chave_acesso.ilike(f'%{chave_acesso}%'))
+        if filtros.get('chave_acesso'):
+            query = query.filter(model_nf.chave_acesso.ilike(f"%{filtros['chave_acesso']}%"))
 
         # Filtro da nota fiscal
-        if nota_fiscal:
-            query = query.filter(func.substr(model_nf.chave_acesso, 27, 34).ilike(f'%{nota_fiscal}%'))
+        if filtros.get('nota_fiscal'):
+            query = query.filter(func.substr(model_nf.chave_acesso, 27, 34).ilike(f"%{filtros['nota_fiscal']}%"))
 
         # Filtro da filial
-        if filial:
-            query = query.filter(model_nf.filial == filial)
+        if filtros.get('filial'):
+            query = query.filter(model_nf.filial == filtros['filial'])
 
         # Filtro do centro
-        if centro:
-            query = query.filter(model_nf.nome_centro.ilike(f'%{centro}%'))
+        if filtros.get('centro'):
+            query = query.filter(model_nf.nome_centro.ilike(f"%{filtros['centro']}%"))
 
         # Filtro da prioridade
-        if prioridade:
-            query = query.filter(model_nf.prioridade == (prioridade == 'true'))
+        if filtros.get('prioridade') is not None:
+            query = query.filter(model_nf.prioridade == (filtros['prioridade'].lower() == 'true'))
 
         # Filtro do status do registro
-        if status:
-            query = query.filter(model_reg.status_registro.ilike(f'%{status}%'))
+        if filtros.get('status'):
+            query = query.filter(model_reg.status_registro.ilike(f"%{filtros['status']}%"))
 
         # Filtro do responsável
-        if responsavel:
-            query = query.filter(model_resp.nome_responsavel.ilike(f'%{responsavel}%'))
+        if filtros.get('responsavel'):
+            query = query.join(model_resp).filter(model_resp.nome_responsavel.ilike(f"%{filtros['responsavel']}%"))
 
-        # Filtro da data de recebimento
-        if data_recebimento:
-            query = query.filter(func.date(model_reg.data_recebimento) == data_recebimento)
+        # Filtro da dat de recebimento
+        if filtros.get('data_recebimento'):
+            try:
+                query = query.filter(func.date(model_reg.data_recebimento) == filtros['data_recebimento'])
+            except ValueError:
+                flash("Data inválida")
+                pass  # Ignora se a data não for válida
 
-        # Filtro da data de guarda
-        if data_guarda:
-            query = query.filter(func.date(model_reg.data_guarda) == data_guarda)
+        # Filtro da data guarda
+        if filtros.get('data_guarda'):
+            try:
+                query = query.filter(func.date(model_reg.data_guarda) == filtros['data_guarda'])
+            except ValueError:
+                flash("Data inválida")
+                pass  # Ignora se a data não for válida
 
         return query
 

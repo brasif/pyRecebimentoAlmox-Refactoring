@@ -3,31 +3,31 @@ from sqlalchemy import func
 
 
 # Filtro da auditoria
-def auditoria_filtro(model, model_resp, acao, tabela_referenciada, coluna_alterada, responsavel, data_evento):
+def auditoria_filtro(model, model_resp, **filtros):
     
     try:
         # Consulta base para trazer os registros com um join em Responsavel
         query = db.session.query(model).join(model_resp, model.id_responsavel == model_resp.id_responsavel)
 
-        # Aplica filtro da ação se presente
-        if acao:
-            query = query.filter(model.acao.ilike(f'%{acao}%'))
+        # Filtro da ação
+        if filtros.get('acao'):
+            query = query.filter(model.acao.ilike(f"%{filtros['acao']}%"))
         
         # Aplica filtro da tabela referenciada se presente
-        if tabela_referenciada:
-            query = query.filter(model.tabela_referenciada.ilike(f'%{tabela_referenciada}%'))
+        if filtros.get('tabela_referenciada'):
+            query = query.filter(model.tabela_referenciada.ilike(f"%{filtros['tabela_referenciada']}%"))
         
         # Aplica filtro da coluna alterada se presente
-        if coluna_alterada:
-            query = query.filter(model.coluna_alterada.ilike(f'%{coluna_alterada}%'))
+        if filtros.get('coluna_alterada'):
+            query = query.filter(model.coluna_alterada.ilike(f"%{filtros['coluna_alterada']}%"))
         
         # Aplica filtro pelo nome do responsável se presente
-        if responsavel:
-            query = query.filter(model_resp.nome_responsavel.ilike(f'%{responsavel}%'))
+        if filtros.get('responsavel'):
+            query = query.filter(model_resp.nome_responsavel.ilike(f"%{filtros['responsavel']}%"))
         
         # Aplica filtro da data do evento se presente
-        if data_evento:
-            query = query.filter(func.date(model.data_evento) == data_evento)
+        if filtros.get('data_evento'):
+            query = query.filter(func.date(model.data_evento) == f"%{filtros['data_evento']}%")
         
         return query
 

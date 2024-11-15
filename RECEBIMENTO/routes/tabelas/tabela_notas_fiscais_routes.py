@@ -15,15 +15,17 @@ def tabela_notas_fiscais():
         per_page = request.args.get('per_page', 5, type=int)
 
         # Chama a função de filtro de notas fiscais com os parâmetros da requisição
-        query = notas_fiscais_filtro(
-            NotaFiscal,
-            request.args.get('chave_acesso', None),
-            request.args.get('nota_fiscal', None),
-            request.args.get('cnpj', None),
-            request.args.get('filial', None),
-            request.args.get('centro', None),
-            request.args.get('prioridade', None)
-        )
+        filtros = {
+            'chave_acesso': request.args.get('chave_acesso', None),
+            'nota_fiscal': request.args.get('nota_fiscal', None),
+            'cnpj': request.args.get('cnpj', None),
+            'filial': request.args.get('filial', None),
+            'centro': request.args.get('centro', None),
+            'prioridade': request.args.get('prioridade', None)
+        }
+
+        # Chama a função de filtro com os parâmetros da requisição
+        query = notas_fiscais_filtro(NotaFiscal, **filtros)
 
         # Ordenação por id da nota fiscal
         notas_fiscais = query\

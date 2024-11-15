@@ -27,26 +27,25 @@ def tabela_registros_atuais():
             .join(subquery, (Registro.id_nota_fiscal == subquery.c.id_nota_fiscal) & (Registro.data_criacao == subquery.c.max_data_criacao))\
             .join(NotaFiscal, Registro.id_nota_fiscal == NotaFiscal.id_nota_fiscal)
 
+        # Filtros com valores da requisição
+        filtros = {
+            'mes': request.args.get('mes', None),
+            'chave_acesso': request.args.get('chave_acesso', None),
+            'nota_fiscal': request.args.get('nota_fiscal', None),
+            'filial': request.args.get('filial', None),
+            'centro': request.args.get('centro', None),
+            'status': request.args.get('status', None),
+            'prioridade': request.args.get('prioridade', None),
+            'responsavel': request.args.get('responsavel', None),
+            'data_recebimento': request.args.get('data_recebimento', None),
+            'data_guarda': request.args.get('data_guarda', None)
+        }
+
         # Chama a função de filtro com os parâmetros da requisição
-        registros_query = registros_atuais_filtro(
-            NotaFiscal,
-            Registro,
-            Responsavel,
-            query_base,
-            request.args.get('mes', None),
-            request.args.get('chave_acesso', None),
-            request.args.get('nota_fiscal', None),
-            request.args.get('filial', None),
-            request.args.get('centro', None),
-            request.args.get('status', None),
-            request.args.get('prioridade', None),
-            request.args.get('responsavel', None),
-            request.args.get('data_recebimento', None),
-            request.args.get('data_guarda', None)
-        )
+        query = registros_atuais_filtro(Registro, NotaFiscal, Responsavel, query_base, **filtros)
 
         # Ordenação por id do registro
-        registros = registros_query\
+        registros = query\
             .order_by(Registro.id_registro.desc())\
             .paginate(page=page, per_page=per_page, error_out=False)
 
