@@ -10,28 +10,19 @@ from . import associacoes_bp
 @associacoes_bp.route('/registros/responsavel/<int:id_responsavel>/filial/<string:filial>')
 @login_required
 def tabela_registros_atuais_por_responsavel_e_filial(id_responsavel, filial):
+
+    # Verifica se o id do responsavel passado como parametro, existe no banco de dados
     responsavel = Responsavel.query.get_or_404(id_responsavel)
 
+    # Tenta obter a filial do Enum
     try:
-        filial_enum = Filiais[filial]  # Tenta obter a filial do Enum
+        filial_enum = Filiais[filial]
     except KeyError:
-        abort(404)  # Se não encontrar, retorna erro 404
+        abort(404) # Se não encontrar, retorna erro 404
 
     # Paginação
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 5, type=int)
-
-
-    # Obtém os filtros do formulário
-    mes = request.args.get('mes')
-    data_recebimento = request.args.get('data_recebimento')
-    chave_acesso = request.args.get('chave_acesso')
-    nota_fiscal = request.args.get('nota_fiscal')
-    centro = request.args.get('centro')
-    status = request.args.get('status')
-    data_guarda = request.args.get('data_guarda')
-    prioridade = request.args.get('prioridade')
-
 
     # Subconsulta para encontrar o último registro por id_nota_fiscal
     subquery = db.session.query(
@@ -40,30 +31,31 @@ def tabela_registros_atuais_por_responsavel_e_filial(id_responsavel, filial):
     ).group_by(Registro.id_nota_fiscal).subquery()
 
     # Consulta principal para trazer os registros mais recentes por id_nota_fiscal e filtrar por responsável e filial
-    registros_query = db.session.query(Registro)\
+    query_base = db.session.query(Registro)\
         .join(subquery, (Registro.id_nota_fiscal == subquery.c.id_nota_fiscal) & (Registro.data_criacao == subquery.c.max_data_criacao))\
         .join(NotaFiscal, Registro.id_nota_fiscal == NotaFiscal.id_nota_fiscal)\
         .filter(Registro.id_responsavel == id_responsavel)\
         .filter(NotaFiscal.filial == filial_enum)\
         .order_by(Registro.data_criacao.desc())
 
-
-    # Aplica filtros
+    # Chama a função de filtro de registros por responsavel e filial com os parâmetros da requisição
     registros_query = registros_atuais_por_responsavel_e_filial_filtro(
         NotaFiscal,
         Registro,
-        registros_query,
-        mes,
-        chave_acesso,
-        nota_fiscal,
-        centro,
-        status,
-        prioridade,
-        data_recebimento,
-        data_guarda
+        query_base,
+        request.args.get('mes'),
+        request.args.get('data_recebimento'),
+        request.args.get('chave_acesso'),
+        request.args.get('nota_fiscal'),
+        request.args.get('centro'),
+        request.args.get('status'),
+        request.args.get('data_guarda'),
+        request.args.get('prioridade')
     )
     
-    # Pagina os resultados
-    registros = registros_query.paginate(page=page, per_page=per_page, error_out=False)
+    # Ordenação por id do registro
+    registros = registros_query\
+        .order_by(Registro.id_registro.asc())\
+        .paginate(page=page, per_page=per_page, error_out=False)
 
     return render_template('/tabelas/associacoes/tabela_registros_atuais_por_responsavel_e_filial.html', registros=registros, nome_responsavel=responsavel.nome_responsavel, id_responsavel=current_user.id_responsavel, filial=filial_enum)

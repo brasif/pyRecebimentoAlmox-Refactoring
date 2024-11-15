@@ -9,52 +9,42 @@ from . import associacoes_bp
 @associacoes_bp.route('/registros/filial/<string:filial>')
 @login_required
 def tabela_todos_registros_por_filial(filial):
+
+    # Tenta obter a filial do Enum
     try:
-        filial_enum = Filiais[filial]  # Tenta obter a filial do Enum
+        filial_enum = Filiais[filial]
     except KeyError:
-        abort(404)  # Se não encontrar, retorna erro 404
+        abort(404) # Se não encontrar, retorna erro 404
 
     # Paginação
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 5, type=int)
 
-    # Obtém os filtros do formulário
-    mes = request.args.get('mes')
-    chave_acesso = request.args.get('chave_acesso')
-    nota_fiscal = request.args.get('nota_fiscal')
-    centro = request.args.get('centro')
-    status = request.args.get('status')
-    prioridade = request.args.get('prioridade')
-    responsavel = request.args.get('responsavel')
-    data_recebimento = request.args.get('data_recebimento')
-    data_guarda = request.args.get('data_guarda')
-
-
-    # Consulta para trazer todos os registros por filial
-    registros_query = db.session.query(Registro)\
+    # Consulta para trazer todos os registros pela filial do parametro
+    query_base = db.session.query(Registro)\
         .join(NotaFiscal, Registro.id_nota_fiscal == NotaFiscal.id_nota_fiscal)\
-        .filter(NotaFiscal.filial == filial_enum)\
-        .order_by(Registro.id_registro.desc())
+        .filter(NotaFiscal.filial == filial_enum)
 
-
-    # Aplica filtros
+    # Chama a função de filtro de responsáveis por filial com os parâmetros da requisição
     registros_query = todos_registros_por_filial_filtro(
         NotaFiscal,
         Registro,
         Responsavel,
-        registros_query,
-        mes,
-        chave_acesso,
-        nota_fiscal,
-        centro,
-        status,
-        prioridade,
-        responsavel,
-        data_recebimento,
-        data_guarda
+        query_base,
+        request.args.get('mes'),
+        request.args.get('chave_acesso'),
+        request.args.get('nota_fiscal'),
+        request.args.get('centro'),
+        request.args.get('status'),
+        request.args.get('prioridade'),
+        request.args.get('responsavel'),
+        request.args.get('data_recebimento'),
+        request.args.get('data_guarda')
     )
 
-    # Pagina os resultados
-    registros = registros_query.paginate(page=page, per_page=per_page, error_out=False)
+    # Ordenação por id do registro
+    registros = registros_query\
+        .order_by(Registro.id_registro.asc())\
+        .paginate(page=page, per_page=per_page, error_out=False)
 
     return render_template('/tabelas/associacoes/tabela_todos_registros_por_filial.html', registros=registros, filial=filial_enum)

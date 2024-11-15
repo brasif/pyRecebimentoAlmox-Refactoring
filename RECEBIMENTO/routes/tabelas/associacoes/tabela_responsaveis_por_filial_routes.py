@@ -9,38 +9,35 @@ from . import associacoes_bp
 @associacoes_bp.route('/responsaveis/filial/<string:filial>')
 @login_required
 def tabela_responsaveis_por_filial(filial):
+
+    # Tenta obter a filial do Enum
     try:
-        filial_enum = Filiais[filial]  # Tenta obter a filial do Enum
+        filial_enum = Filiais[filial]
     except KeyError:
-        abort(404)  # Se não encontrar, retorna erro 404
+        abort(404) # Se não encontrar, retorna erro 404
 
     # Paginação
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 5, type=int)
     
-    # Parâmetros de filtro
-    nome = request.args.get('nome')
-    email = request.args.get('email')
-    permissao = request.args.get('permissao')
-    status = request.args.get('status')
-    
     # Consulta para trazer os responsáveis por filial
-    responsaveis_query = db.session.query(ResponsavelFilial).join(Responsavel).filter(ResponsavelFilial.filial == filial_enum)
+    query_base = db.session.query(ResponsavelFilial)\
+        .join(Responsavel)\
+        .filter(ResponsavelFilial.filial == filial_enum)
     
-    
-    # Chama a função de filtro de responsáveis com os parâmetros da requisição
+    # Chama a função de filtro de responsáveis por filial com os parâmetros da requisição
     responsaveis_query = responsaveis_por_filial_filtro(
         Responsavel,
-        responsaveis_query,
-        nome,
-        email,
-        permissao,
-        status
+        query_base,
+        request.args.get('nome'),
+        request.args.get('email'),
+        request.args.get('permissao'),
+        request.args.get('status')
     )
 
     # Ordenação por nome (A-Z)
     responsaveis = responsaveis_query\
         .order_by(Responsavel.nome_responsavel.asc())\
         .paginate(page=page, per_page=per_page, error_out=False)
-    
+
     return render_template("/tabelas/associacoes/tabela_responsaveis_por_filial.html", responsaveis=responsaveis, filial=filial_enum, id_responsavel=current_user.id_responsavel)
