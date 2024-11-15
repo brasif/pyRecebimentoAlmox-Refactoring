@@ -1,9 +1,13 @@
+from RECEBIMENTO import db
 from sqlalchemy import func, extract
 
 
 # Filtro de todos os registros
-def todos_registros_filtro(model_nf, model_reg, model_resp, query, mes, chave_acesso, nota_fiscal, filial, centro, status, prioridade, responsavel, data_recebimento, data_guarda):
+def todos_registros_filtro(model_reg, model_nf, model_resp, mes, chave_acesso, nota_fiscal, filial, centro, status, prioridade, responsavel, data_recebimento, data_guarda):
     
+    # Consulta para trazer todos os registros com o join nas notas fiscais
+    query = db.session.query(model_reg).join(model_nf)
+
     # Filtro do mês
     if mes:
         query = query.filter(extract('month', model_reg.data_recebimento) == int(mes))
