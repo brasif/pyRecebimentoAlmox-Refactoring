@@ -1,4 +1,6 @@
 # ========== IMPORTAÇÕES ==========
+import logging  # Adicionado para o log
+from logging.handlers import RotatingFileHandler  # Log com rotação de arquivos
 from flask import Flask  # Flask
 from flask_sqlalchemy import SQLAlchemy  # Gerenciamento do Banco de dados
 from flask_login import LoginManager  # Gerenciamento do Login
@@ -26,6 +28,9 @@ def criacao_app():
     login_manager.init_app(app)
     csrf.init_app(app)
 
+    # Configuração de log
+    configurar_log(app)
+
     # Importação dos models após a inicialização do app
     with app.app_context():
         from RECEBIMENTO.models import Responsavel, Filiais  # Tabela com os usuários do sistema e enum Filiais
@@ -46,6 +51,20 @@ def criacao_app():
 
     return app
 
+
+def configurar_log(app):
+    """Configura o log para o aplicativo Flask."""
+    handler = RotatingFileHandler(
+        "app.log", maxBytes=100000, backupCount=10
+    )  # Rotação do log
+    handler.setLevel(logging.INFO)  # Nível do log
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )  # Formato do log
+    handler.setFormatter(formatter)
+    app.logger.addHandler(handler)
+    app.logger.setLevel(logging.INFO)  # Configura o nível geral do log
+    app.logger.info("Aplicação iniciada com sucesso.")  # Mensagem inicial
 
 # Criação do objeto app
 app = criacao_app()
