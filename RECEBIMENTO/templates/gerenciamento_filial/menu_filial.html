@@ -3,10 +3,11 @@
 {% set title = "Gerenciamento Filial" %}
 
 {% block content %}
-<div class="container-home">
-    <h1 class="text-center">{{ filial.value }}</h1>
+<div class="menu_home_filial">
 
     <div class="form-group">
+        <h1 class="text-center">{{ filial.value }}</h1>
+
         <!-- Exibir os centros associados à filial em uma única linha -->
         <p>
             <b>Centros Associados:</b>
@@ -34,19 +35,19 @@
 
     <div class="menu_opcoes form-line">
         <form method="GET" action="{{ url_for('associacoes.tabela_todos_registros_por_filial', filial=filial.name) }}">
-            <button type="submit" class="btn btn-primary">Todos os Registros</button>
+            <button type="submit" class="btn btn-primary w-100">Todos os Registros</button>
         </form>
     
         <form method="GET" action="{{ url_for('associacoes.tabela_registros_atuais_por_filial', filial=filial.name) }}">
-            <button type="submit" class="btn btn-primary">Registros atuais</button>
+            <button type="submit" class="btn btn-primary w-100">Registros atuais</button>
         </form>
     
         <form method="GET" action="{{ url_for('associacoes.tabela_notas_fiscais_por_filial', filial=filial.name) }}">
-            <button type="submit" class="btn btn-primary">Notas Fiscais</button>
+            <button type="submit" class="btn btn-primary w-100">Notas Fiscais</button>
         </form>
     
         <form method="GET" action="{{ url_for('associacoes.tabela_responsaveis_por_filial', filial=filial.name) }}">
-            <button type="submit" class="btn btn-primary">Responsáveis</button>
+            <button type="submit" class="btn btn-primary w-100">Responsáveis</button>
         </form>
     </div>
     

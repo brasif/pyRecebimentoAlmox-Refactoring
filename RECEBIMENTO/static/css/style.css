@@ -48,6 +48,119 @@ section {
     width: 100%;
 }
 
+/* Estilo do menu principal */
+.menu_home {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6rem;
+}
+
+.menu_home .form-line {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.menu_home .form-line .form-group {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.menu_home .form-line .menu_item {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Tornando as opções do menu em coluna em telas menores */
+@media (max-width: 768px) {
+    .menu_home .form-line {
+        flex-direction: column;
+    }
+
+    .menu_home .form-line .menu_item {
+        display: none;
+    }
+}
+
+.menu_home .form-line .form-group form {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.menu_home .form-line .form-group .form_opcao {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: left;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* Estilo de menu de filiais */
+.menu_home_filial {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6rem;
+}
+
+.menu_home_filial .form-group {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.menu_home_filial .form-line {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 2rem;
+}
+
+.menu_home_filial .form-line form {
+    width: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Tornando as opções do menu de filiais em coluna em telas menores */
+@media (max-width: 768px) {
+    .menu_home_filial .form-line {
+        width: 75%;
+        flex-direction: column;
+    }
+}
+
 /* Adicionando rolagem lateral para a tabela em telas pequenas */
 .table-responsive {
     width: 100%;

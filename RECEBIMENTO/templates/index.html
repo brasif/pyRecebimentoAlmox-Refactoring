@@ -3,7 +3,7 @@
 {% set title = "Recebimento - Almox." %}
 
 {% block content %}
-<div class="container-home">
+<div class="menu_home">
     <h1 class="text-center">Recebimento Almox.</h1>
 
     <!-- Seção para exibir mensagens flash -->
@@ -45,11 +45,13 @@
             </form>
         </div>
 
-        <div class="menu_item form-group">
-            <form method="GET" action="{{ url_for('associacoes.tabela_registros_atuais_por_responsavel', id_responsavel=id_responsavel) }}">
-                {{ form.hidden_tag() }}
-                <button type="submit" class="btn btn-primary w-100">Meus registros</button>
-            </form>
+        <div class="menu_item">
+            <div class="form-group">
+                <form method="GET" action="{{ url_for('associacoes.tabela_registros_atuais_por_responsavel', id_responsavel=id_responsavel) }}">
+                    {{ form.hidden_tag() }}
+                    <button type="submit" class="btn btn-primary w-100">Meus registros</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
