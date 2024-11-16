@@ -3,7 +3,6 @@ from RECEBIMENTO import db
 from flask_login import login_required
 from RECEBIMENTO.models import NotaFiscal, Filiais
 from RECEBIMENTO.utils import notas_fiscais_por_filial_filtro
-from sqlalchemy import desc
 from . import associacoes_bp
 
 
@@ -44,7 +43,7 @@ def tabela_notas_fiscais_por_filial(filial):
         )
 
         # Ordena a consulta
-        notas_fiscais = notas_fiscais_query.order_by(desc(NotaFiscal.data_emissao))\
+        notas_fiscais = notas_fiscais_query.order_by(NotaFiscal.data_emissao.desc())\
             .paginate(page=page, per_page=per_page, error_out=False)
 
         current_app.logger.info("Consulta de notas fiscais por filial realizada com sucesso.")
