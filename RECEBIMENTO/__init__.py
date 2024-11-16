@@ -1,6 +1,7 @@
 # ========== IMPORTAÇÕES ==========
 import logging  # Adicionado para o log
 from logging.handlers import RotatingFileHandler  # Log com rotação de arquivos
+import os  # Importado para manipular o caminho do log
 from flask import Flask  # Flask
 from flask_sqlalchemy import SQLAlchemy  # Gerenciamento do Banco de dados
 from flask_login import LoginManager  # Gerenciamento do Login
@@ -52,19 +53,29 @@ def criacao_app():
     return app
 
 
+# ========== LOG ==========
 def configurar_log(app):
-    """Configura o log para o aplicativo Flask."""
+    # Define o diretório de logs
+    log_dir = os.path.join(os.getcwd(), "logs")
+    if not os.path.exists(log_dir):  # Cria a pasta se não existir
+        os.makedirs(log_dir)
+    
+    # Define o arquivo de log dentro do diretório
+    log_file = os.path.join(log_dir, "app.log")
+
+    # Configura o manipulador de log com rotação
     handler = RotatingFileHandler(
-        "app.log", maxBytes=100000, backupCount=10
+        log_file, maxBytes=100000, backupCount=10
     )  # Rotação do log
-    handler.setLevel(logging.INFO)  # Nível do log
+    handler.setLevel(logging.INFO)
     formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )  # Formato do log
     handler.setFormatter(formatter)
     app.logger.addHandler(handler)
-    app.logger.setLevel(logging.INFO)  # Configura o nível geral do log
+    app.logger.setLevel(logging.INFO)
     app.logger.info("Aplicação iniciada com sucesso.")  # Mensagem inicial
+
 
 # Criação do objeto app
 app = criacao_app()
