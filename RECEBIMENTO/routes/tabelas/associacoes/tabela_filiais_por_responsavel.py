@@ -1,6 +1,6 @@
-from flask import render_template, flash, request
+from flask import render_template, flash, request, current_app
 from RECEBIMENTO import db
-from flask_login import login_required, current_app
+from flask_login import login_required
 from RECEBIMENTO.models import ResponsavelFilial, Responsavel
 from . import associacoes_bp
 
