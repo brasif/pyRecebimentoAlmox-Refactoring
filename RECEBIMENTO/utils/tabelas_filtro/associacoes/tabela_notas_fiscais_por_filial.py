@@ -32,7 +32,7 @@ def notas_fiscais_por_filial_filtro(model, query, chave_acesso, nota_fiscal, cnp
             query = query.filter(model.prioridade == (prioridade.lower() == 'true'))
         
         return query
-    
+
     except Exception as e:
         logging.error("Erro ao aplicar filtros de notas fiscais por filial: %s", str(e))
-        return query  # Retorna a query sem o filtro aplicado
+        raise

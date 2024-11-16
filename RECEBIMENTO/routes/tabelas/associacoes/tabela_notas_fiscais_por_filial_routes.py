@@ -9,7 +9,7 @@ from . import associacoes_bp
 @associacoes_bp.route('/notas_fiscais/filial/<string:filial>')
 @login_required
 def tabela_notas_fiscais_por_filial(filial):
-
+    
     try:
         current_app.logger.info(f"Acessando a rota '/notas_fiscais/filial/{filial}' - associacoes_bp.")
 
@@ -30,31 +30,39 @@ def tabela_notas_fiscais_por_filial(filial):
 
         # Query para buscar as notas fiscais filtradas pela filial
         notas_fiscais_query = db.session.query(NotaFiscal).filter(NotaFiscal.filial == filial_enum)
+        current_app.logger.info("Consulta base de notas fiscais criada com sucesso.")
 
         # Aplica filtros adicionais à consulta
-        notas_fiscais_query = notas_fiscais_por_filial_filtro(
-            notas_fiscais_query,
-            request.args.get('mes', None),
-            request.args.get('data_emissao', None),
-            request.args.get('nota_fiscal', None),
-            request.args.get('centro', None),
-            request.args.get('status', None),
-            request.args.get('responsavel', None)
-        )
+        try:
+            notas_fiscais_query = notas_fiscais_por_filial_filtro(
+                NotaFiscal,
+                notas_fiscais_query,
+                request.args.get('chave_acesso', None),
+                request.args.get('nota_fiscal', None),
+                request.args.get('cnpj', None),
+                request.args.get('centro', None),
+                request.args.get('prioridade', None)
+            )
 
-        # Ordena a consulta
-        notas_fiscais = notas_fiscais_query.order_by(NotaFiscal.data_emissao.desc())\
+            current_app.logger.info("Filtros aplicados com sucesso à consulta de notas fiscais.")
+        except Exception as filter_error:
+            current_app.logger.error(f"Erro ao aplicar filtros: {filter_error}")
+            raise
+
+        # Ordena e pagina a consulta
+        notas_fiscais = notas_fiscais_query \
+            .order_by(NotaFiscal.data_criacao.desc()) \
             .paginate(page=page, per_page=per_page, error_out=False)
 
-        current_app.logger.info("Consulta de notas fiscais por filial realizada com sucesso.")
+        current_app.logger.info("Consulta de notas fiscais paginada com sucesso.")
         return render_template('/tabelas/associacoes/tabela_notas_fiscais_por_filial.html', notas_fiscais=notas_fiscais, filial=filial_enum)
 
     except ValueError as ve:
         current_app.logger.warning(f"Erro de validação: {ve}")
         flash(str(ve), "warning")
-        return redirect(url_for('menu.menu'))
+        return redirect(url_for('gerenciamento_filial.menu_filial'))
 
     except Exception as e:
         current_app.logger.exception("Erro ao carregar as notas fiscais por filial.")
         flash("Ocorreu um erro ao carregar as notas fiscais. Tente novamente mais tarde.", "danger")
-        return redirect(url_for('menu.menu'))
+        return redirect(url_for('gerenciamento_filial.menu_filial'))
