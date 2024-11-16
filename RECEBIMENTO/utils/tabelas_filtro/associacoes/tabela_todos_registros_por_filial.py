@@ -1,9 +1,13 @@
 from sqlalchemy import func, extract
+import logging
+
+# Configuração do logger
+logging.basicConfig(level=logging.ERROR)
 
 
 # Filtro de todos os registros por filial
 def todos_registros_por_filial_filtro(model_nf, model_reg, model_resp, query, **filtros):
-    
+
     try:
         # Filtro do mês
         if filtros.get('mes'):
@@ -11,7 +15,7 @@ def todos_registros_por_filial_filtro(model_nf, model_reg, model_resp, query, **
                 mes = int(filtros['mes'])  # Garantir que o mês seja um inteiro
                 query = query.filter(extract('month', model_reg.data_recebimento) == mes)
             except ValueError:
-                pass  # Se 'mes' não for um número válido, ignoramos o filtro
+                logging.logger.warning("Valor inválido para o mês: %s", filtros['mes'])
 
         # Filtro da chave de acesso
         if filtros.get('chave_acesso'):
@@ -48,7 +52,7 @@ def todos_registros_por_filial_filtro(model_nf, model_reg, model_resp, query, **
                 data_recebimento = func.date(filtros['data_recebimento'])  # Converter para tipo date
                 query = query.filter(func.date(model_reg.data_recebimento) == data_recebimento)
             except Exception:
-                pass  # Ignorar se a data não puder ser convertida corretamente
+                logging.logger.warning("Data de recebimento inválida: %s", filtros['data_recebimento'])
 
         # Filtro da data de guarda
         if filtros.get('data_guarda'):
@@ -56,9 +60,10 @@ def todos_registros_por_filial_filtro(model_nf, model_reg, model_resp, query, **
                 data_guarda = func.date(filtros['data_guarda'])  # Converter para tipo date
                 query = query.filter(func.date(model_reg.data_guarda) == data_guarda)
             except Exception:
-                pass  # Ignorar se a data não puder ser convertida corretamente
+                logging.logger.warning("Data de guarda inválida: %s", filtros['data_guarda'])
 
         return query
 
-    except:
+    except Exception as e:
+        logging.logger.error("Erro ao aplicar filtros nos registros por filial: %s", str(e))
         raise ValueError("Erro ao aplicar filtros nos registros por filial.")

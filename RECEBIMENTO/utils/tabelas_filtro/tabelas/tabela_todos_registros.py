@@ -1,21 +1,23 @@
 from RECEBIMENTO import db
 from sqlalchemy import func, extract
+import logging
+
+# Configuração do logger
+logging.basicConfig(level=logging.ERROR)
 
 
-# Filtro de todos os registros
 def todos_registros_filtro(model_reg, model_nf, model_resp, **filtros):
     
     try:
-        # Consulta inicial com join nas notas fiscais
         query = db.session.query(model_reg).join(model_nf)
 
-        # Aplicação de filtros
         if filtros.get('mes'):
             try:
                 mes = int(filtros['mes'])
                 query = query.filter(extract('month', model_reg.data_recebimento) == mes)
             except ValueError:
-                pass  # Ignora o filtro caso 'mes' não seja um número válido
+                logging.error("Filtro 'mes' inválido: não é um número.")
+                pass
 
         if filtros.get('chave_acesso'):
             query = query.filter(model_nf.chave_acesso.ilike(f"%{filtros['chave_acesso']}%"))
@@ -42,17 +44,19 @@ def todos_registros_filtro(model_reg, model_nf, model_resp, **filtros):
             try:
                 query = query.filter(func.date(model_reg.data_recebimento) == filtros['data_recebimento'])
             except ValueError:
-                pass  # Ignora se a data não for válida
+                logging.error("Filtro 'data_recebimento' inválido.")
+                pass
 
         if filtros.get('data_guarda'):
             try:
                 query = query.filter(func.date(model_reg.data_guarda) == filtros['data_guarda'])
             except ValueError:
-                pass  # Ignora se a data não for válida
+                logging.error("Filtro 'data_guarda' inválido.")
+                pass
 
         return query
 
     except Exception as e:
         db.session.rollback()
-        # Retorna consulta básica em caso de erro
+        logging.error(f"Erro na aplicação dos filtros: {e}")
         return db.session.query(model_reg)

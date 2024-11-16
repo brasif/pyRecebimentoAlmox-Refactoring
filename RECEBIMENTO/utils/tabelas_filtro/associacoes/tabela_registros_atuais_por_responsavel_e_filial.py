@@ -1,4 +1,8 @@
 from sqlalchemy import func, extract
+import logging
+
+# Configuração do logger
+logging.basicConfig(level=logging.ERROR)
 
 
 # Filtro dos registros atuais por responsável e filial
@@ -39,5 +43,6 @@ def registros_atuais_por_responsavel_e_filial_filtro(model_nf, model_reg, query,
 
         return query
 
-    except:
+    except Exception as e:
+        logging.logger.error("Erro ao aplicar filtros nos registros atuais por responsável e filial: %s", str(e))
         return query  # Retorna a query sem o filtro aplicado

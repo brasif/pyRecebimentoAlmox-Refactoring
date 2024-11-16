@@ -1,9 +1,13 @@
 from sqlalchemy import func, extract
+import logging
+
+# Configuração do logger
+logging.basicConfig(level=logging.ERROR)
 
 
 # Filtro dos registros atuais por filial
 def registros_atuais_por_filial_filtro(model_nf, model_reg, model_resp, query, mes, chave_acesso, nota_fiscal, centro, status, prioridade, responsavel, data_recebimento, data_guarda):
-    
+
     try:
         # Filtro do mês
         if mes:
@@ -16,7 +20,7 @@ def registros_atuais_por_filial_filtro(model_nf, model_reg, model_resp, query, m
         # Filtro da nota fiscal
         if nota_fiscal:
             query = query.filter(func.substr(model_nf.chave_acesso, 27, 34).ilike(f'%{nota_fiscal}%'))
-        
+
         # Filtro do centro
         if centro:
             query = query.filter(model_nf.nome_centro.ilike(f'%{centro}%'))
@@ -43,5 +47,6 @@ def registros_atuais_por_filial_filtro(model_nf, model_reg, model_resp, query, m
 
         return query
 
-    except:
-        return query  # Retorna a query sem o filtro aplicado
+    except Exception as e:
+        logging.logger.error("Erro ao aplicar filtros nos registros atuais por filial: %s", str(e))
+        raise ValueError("Erro ao aplicar filtros nos registros atuais por filial.")

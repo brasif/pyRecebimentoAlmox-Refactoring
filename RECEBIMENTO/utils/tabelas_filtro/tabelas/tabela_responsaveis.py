@@ -1,32 +1,30 @@
 from RECEBIMENTO import db
+import logging
+
+# Configuração do logger
+logging.basicConfig(level=logging.ERROR)
 
 
-# Filtro de responsáveis
 def responsaveis_filtro(model, nome, email, permissao, status):
     
     try:
-        # Consulta base para trazer os registros
         query = db.session.query(model)
 
-        # Aplica filtro do nome se presente
         if nome:
             query = query.filter(model.nome_responsavel.ilike(f'%{nome}%'))
-        
-        # Aplica filtro do email se presente
+
         if email:
             query = query.filter(model.email.ilike(f'%{email}%'))
 
-        # Aplica filtro de permissão se presente
         if permissao:
             query = query.filter(model.permissao == (permissao.lower() == 'true'))
-        
-        # Aplica filtro de status se presente
+
         if status:
             query = query.filter(model.status == (status.lower() == 'true'))
-        
+
         return query
 
     except Exception as e:
         db.session.rollback()
-        # Retorna consulta básica em caso de erro
+        logging.error(f"Erro na aplicação dos filtros de responsáveis: {e}")
         return db.session.query(model)
