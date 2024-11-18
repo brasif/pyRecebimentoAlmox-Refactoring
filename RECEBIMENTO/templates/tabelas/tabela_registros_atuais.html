@@ -196,5 +196,12 @@
         </ul>
     </nav>
 
+    <!-- Botão para baixar o xlsx -->
+    <div>
+        <form method="GET" action="{{ url_for('tabelas_excel.excel_registros_atuais') }}">
+            <input type="submit" value="Exportar (.xlsx)" class="btn btn-outline-info">
+        </form>
+    </div>
+
 </section>
 {% endblock %}
