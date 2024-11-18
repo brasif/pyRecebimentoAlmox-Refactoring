@@ -123,7 +123,14 @@
             </li>
             {% endif %}
         </ul>
-    </nav>    
+    </nav>
+
+    <!-- Botão para baixar o xlsx -->
+    <div>
+        <form method="GET" action="{{ url_for('tabelas_excel.excel_responsaveis') }}">
+            <input type="submit" value="Exportar (.xlsx)" class="btn btn-outline-info">
+        </form>
+    </div>
 
 </section>
 {% endblock %}
