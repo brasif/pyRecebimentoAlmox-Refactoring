@@ -6,14 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Recebimento</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
 <body>
-    <section>
+    <section class="main">
 
         <div class="card_principal">
 
-            <div class="left">
+            <div class="card_left">
                 <h1>Login</h1>
 
                 <!-- Seção para exibir mensagens flash -->
@@ -35,7 +37,7 @@
                 </a>
             </div>
 
-            <div class="right">
+            <div class="card_right">
                 <span>&rarr;</span>
                 <h2>Recebimento</h2>
                 <h3>Sistema para o setor de almoxarifado, destinado ao controle de status das Notas Fiscais.</h3>
@@ -44,6 +46,10 @@
         </div>
 
     </section>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 </body>
 
 </html>
