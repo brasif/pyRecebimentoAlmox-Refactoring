@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, current_app
 from RECEBIMENTO import db
 from sqlalchemy.exc import SQLAlchemyError
 from RECEBIMENTO.forms import EstornoForm
@@ -8,14 +8,17 @@ from flask_login import login_required
 from . import estorno_bp
 
 
-# Rota para criar novo registro com o status "Estorno"
 @estorno_bp.route("/<int:id_nota_fiscal>", methods=["GET", "POST"])
 @login_required
 def registro_estorno(id_nota_fiscal):
     nota_fiscal = NotaFiscal.query.get_or_404(id_nota_fiscal)
 
+    # Log de acesso à rota
+    current_app.logger.info(f"Iniciando operação de estorno para a nota fiscal ID {id_nota_fiscal}")
+
     # Verifica se a função retorna um valor falso
     if operacao_estorno(nota_fiscal.chave_acesso) == False:
+        current_app.logger.warning(f"Falha na operação de estorno para a nota fiscal {id_nota_fiscal}")
         # Redireciona para a ultima página acessada
         return redirect(request.referrer)
     else:
@@ -26,11 +29,12 @@ def registro_estorno(id_nota_fiscal):
         
         if not ultimo_registro:
             flash("Não foi possível obter o registro da nota fiscal", "danger")
+            current_app.logger.error(f"Registro não encontrado para a nota fiscal {id_nota_fiscal}")
             return redirect(url_for("menu.menu"))
         
         try:
             # Busca os responsáveis vinculados à filial da NF
-            responsaveis_vinculados =(Responsavel.query
+            responsaveis_vinculados = (Responsavel.query
                 .join(ResponsavelFilial)
                 .filter(ResponsavelFilial.filial == nota_fiscal.filial, Responsavel.status == True)
                 .all()
@@ -39,6 +43,7 @@ def registro_estorno(id_nota_fiscal):
             if not responsaveis_vinculados:
                 flash("Nenhum responsável encontrado nas filiais vinculadas.", "warning")
                 form.id_responsavel.choices = []
+                current_app.logger.warning(f"Nenhum responsável encontrado para a filial {nota_fiscal.filial}")
             else:
                 # Preencher choices com os responsáveis vinculados
                 form.id_responsavel.choices = [(0, "Selecione um responsável")] + [(resp.id_responsavel, resp.nome_responsavel) for resp in responsaveis_vinculados]
@@ -47,10 +52,12 @@ def registro_estorno(id_nota_fiscal):
         
         except SQLAlchemyError as e:
             flash(f"Erro ao acessar o banco de dados ao carregar as empresas: {str(e)}", "danger")
+            current_app.logger.error(f"Erro SQLAlchemy ao carregar responsáveis: {str(e)}")
             form.id_responsavel.choices = []
 
         except Exception as e:
             flash(f"Erro inesperado ao carregar as opções: {str(e)}", "danger")
+            current_app.logger.error(f"Erro inesperado ao carregar responsáveis: {str(e)}")
             form.id_responsavel.choices = []
 
 
@@ -64,6 +71,7 @@ def registro_estorno(id_nota_fiscal):
                     db.session.commit()
 
                     flash("Registro estornado com sucesso!", "success")
+                    current_app.logger.info(f"Estorno realizado com sucesso para a nota fiscal {id_nota_fiscal}")
                     return redirect(url_for("menu.menu"))
                 else:
                     flash("Insira um status diferente do atual para continuar.", "warning")
@@ -71,13 +79,16 @@ def registro_estorno(id_nota_fiscal):
             except ValueError as ve:
                 db.session.rollback()
                 flash(str(ve), "warning")
+                current_app.logger.error(f"Erro de valor ao tentar estornar a nota fiscal {id_nota_fiscal}: {str(ve)}")
 
             except SQLAlchemyError as e:
                 db.session.rollback()
                 flash(f"Erro ao acessar o banco de dados: {str(e)}", "danger")
+                current_app.logger.error(f"Erro SQLAlchemy ao estornar a nota fiscal {id_nota_fiscal}: {str(e)}")
 
             except Exception as e:
                 db.session.rollback()
                 flash(f"Erro inesperado: {str(e)}", "danger")
+                current_app.logger.error(f"Erro inesperado ao estornar a nota fiscal {id_nota_fiscal}: {str(e)}")
 
         return render_template("/estorno/registro_estorno.html", form=form, nota_fiscal=nota_fiscal, status_atual=ultimo_registro.status_registro)

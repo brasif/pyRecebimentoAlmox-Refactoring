@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request, session
+from flask import render_template, redirect, url_for, flash, request, session, current_app
 from RECEBIMENTO import login_manager, db
 from RECEBIMENTO.models import Responsavel
 from flask_login import login_required, logout_user, login_user
@@ -10,8 +10,8 @@ import requests
 
 @autenticacao_bp.route("/login", methods=["GET", "POST"])
 def login():
-    # Renderiza a página de login, passando a URL de autorização como contexto
-    # "autenticacao_URL()" Gera a URL de autorização para autenticação
+    # Log de acesso à página de login
+    current_app.logger.info("Acessando página de login")
     return render_template("/autenticacao/autenticacao_login.html", auth_url=autenticacao_URL())
 
 
@@ -20,6 +20,7 @@ def login():
 def get_token():
     code = request.args.get("code")
     if not code:
+        current_app.logger.warning("Nenhum código de autorização encontrado")
         return "No authorization code found", 400
 
     # Adquire o token de acesso usando o código de autorização
@@ -63,21 +64,26 @@ def get_token():
                     )
                     db.session.add(user)
                     db.session.commit()  # Salva o novo usuário no banco
+                    current_app.logger.info(f"Novo usuário cadastrado: {user_email}")
 
                 # Faz login do usuário
                 login_user(user)
                 session['_user_permissao'] = user.permissao
+                current_app.logger.info(f"Usuário {user_email} logado com sucesso")
                 return redirect(url_for("menu.menu"))
             else:
                 # O usuário não faz parte do grupo
                 flash(f"Você não tem permissão para acessar a aplicação!", "warning")
+                current_app.logger.warning(f"Usuário {user_email} não tem permissão para acessar o sistema")
                 return redirect(url_for("autenticacao.login"))
         else:
             # Erro ao acessar a API do Microsoft Graph
+            current_app.logger.error(f"Falha ao recuperar membros do grupo: {response.status_code} - {response.text}")
             return f"Failed to retrieve group members: {response.status_code} - {response.text}", 500
     else:
         error = result.get("error")
         error_description = result.get("error_description")
+        current_app.logger.error(f"Falha no login: {error} - {error_description}")
         return f"Login failed: {error} - {error_description}", 401
 
 
@@ -85,6 +91,7 @@ def get_token():
 @autenticacao_bp.route("/logout")
 @login_required
 def logout():
+    current_app.logger.info("Usuário deslogado com sucesso")
     logout_user()
     session.clear()
     return redirect(url_for("autenticacao.login"))
@@ -93,4 +100,5 @@ def logout():
 # Usuário não autenticado
 @login_manager.unauthorized_handler
 def unauthorized():
-    return redirect(url_for("autenticacao.login", _external=True))
+    flash("Você precisa estar autenticado para acessar essa página.", "danger")
+    return redirect(url_for("autenticacao.login"))
