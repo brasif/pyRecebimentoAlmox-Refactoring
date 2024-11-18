@@ -48,7 +48,7 @@ def tabela_todos_registros_por_filial(filial):
         registros_query = todos_registros_por_filial_filtro(NotaFiscal, Registro, Responsavel, query_base, **filtros)
 
         # Paginação e ordenação
-        registros = registros_query.order_by(Registro.id_registro.asc()).paginate(page=page, per_page=per_page, error_out=False)
+        registros = registros_query.order_by(Registro.id_registro.desc()).paginate(page=page, per_page=per_page, error_out=False)
 
         current_app.logger.info("Consulta realizada com sucesso.")
         return render_template('/tabelas/associacoes/tabela_todos_registros_por_filial.html', registros=registros, filial=filial_enum)
