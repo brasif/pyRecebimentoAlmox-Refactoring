@@ -39,9 +39,11 @@ class Registro(db.Model):
 
     @classmethod
     def criar_registro(cls, id_nota_fiscal, id_responsavel, status):
+
         # Verifica se a nota fiscal tem algum registro
         registro = cls.query.filter_by(id_nota_fiscal=id_nota_fiscal).first()
-        if registro:
+
+        if registro and registro.status_registro != "Estornado":
             data_recebimento = registro.data_recebimento
         else:
             data_recebimento = datetime.utcnow()
