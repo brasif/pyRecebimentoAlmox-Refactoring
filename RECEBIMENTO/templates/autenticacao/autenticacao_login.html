@@ -4,15 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login Recebimento</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
 <body>
-    <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-4">
-                <h1 class="text-center">Login</h1>
+    <section class="main">
+
+        <div class="card_principal">
+
+            <div class="card_left">
+                <h1>Login</h1>
 
                 <!-- Seção para exibir mensagens flash -->
                 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -28,14 +32,24 @@
                 {% endif %}
                 {% endwith %}
 
-                <div class="login_access">
-                    <a href="{{ auth_url }}">MICROSOFT</a>
-                </div>
+                <a href="{{ auth_url }}">
+                    <img src="{{ url_for('static', filename='assets/icons/login_microsoft.svg') }}" alt="">
+                </a>
             </div>
+
+            <div class="card_right">
+                <span>&rarr;</span>
+                <h2>Recebimento</h2>
+                <h3>Sistema para o setor de almoxarifado, destinado ao controle de status das Notas Fiscais.</h3>
+            </div>
+
         </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    </section>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 </body>
 
 </html>
